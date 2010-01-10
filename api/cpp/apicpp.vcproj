@@ -15,6 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			>
 			<Tool
@@ -74,6 +76,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			>
 			<Tool
@@ -138,10 +141,30 @@
 		<Filter
 			Name="interface"
 			>
+			<File
+				RelativePath=".\interface\CommandModel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\ObjectModel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\Solution.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\WorldModel.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="source"
 			>
+			<File
+				RelativePath=".\source\ObjectModel.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
