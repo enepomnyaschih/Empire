@@ -6,7 +6,7 @@ function applyHTMLLocale()
 function initLoginPanel()
 {
     if (Data.memberId)
-        showLogoffCard();
+        showLogoutCard();
     else
         showLoginCard();
 }

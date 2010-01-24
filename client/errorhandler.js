@@ -7,10 +7,10 @@ function stdErrorHandler(response, config)
         try
         {
             var json = jsonDecode(text);
-            if (!json || !json.errorId || !(typeof json == "string"))
+            if (!json || !json.errorId || !(typeof json.errorId == "string"))
                 return text;
             
-            return Locale.errors[json.errorId] || json.errorId;
+            return applyTemplate(Locale.errors[json.errorId] || json.errorId);
         }
         catch(e)
         {

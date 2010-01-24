@@ -22,6 +22,12 @@ h2
 	margin-bottom		: 2px;
 }
 
+h3
+{
+	margin-top			: 0px;
+	margin-bottom		: 2px;
+}
+
 div.empire-frame
 {
 	width				: 1220px;
@@ -158,6 +164,13 @@ div.empire-login-card
 
 div.empire-logout-card
 {
+}
+
+h2.empire-memberid
+{
+	width				: 150px;
+	height				: 200px;
+	color				: #004400;
 }
 
 div.empire-registration-card

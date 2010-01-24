@@ -4,9 +4,10 @@ function showLoginCard()
     $("loginLoginField").focus();
 }
 
-function showLogoffCard()
+function showLogoutCard()
 {
-    showCard($("logoffCard"));
+    $("logoutMemberIdField").innerHTML = Data.memberId;
+    showCard($("logoutCard"));
 }
 
 function showRegistrationCard()
@@ -22,7 +23,7 @@ function hideLoginCard()
 
 function hideLogoffCard()
 {
-    hideCard($("logoffCard"));
+    hideCard($("logoutCard"));
 }
 
 function hideRegistrationCard()
@@ -177,6 +178,7 @@ function applyLoginPanelLocale()
     $("loginRememberLabel"          ).innerHTML = Locale.remember + ":&nbsp;";
     $("loginSubmit"                 ).value     = Locale.login;
     $("loginRegisterLink"           ).innerHTML = Locale.register;
+    $("logoutLink"                  ).innerHTML = Locale.logout;
     $("registrationFormTitle"       ).innerHTML = Locale.registration;
     $("registrationLoginLabel"      ).innerHTML = Locale.login + ":&nbsp;";
     $("registrationPasswordLabel"   ).innerHTML = Locale.password + ":&nbsp;";
