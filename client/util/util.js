@@ -1,3 +1,8 @@
+function $(id)
+{
+    return document.getElementById(id);
+}
+
 function hideCard(el)
 {
     el.style.visibility = "hidden";
@@ -21,7 +26,10 @@ function isArray(o)
     return (typeof o == "object") && (o.length !== undefined);
 }
 
-function $(id)
+// Standard item comparison function.
+function compare(a, b)
 {
-    return document.getElementById(id);
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
 }

@@ -2,10 +2,13 @@
     <head>
         <title>Empire - Rise of Despotism</title>
         <link rel="stylesheet" type="text/css" href="index.css" />
-        <script type="text/javascript" src="util.js"></script>
-        <script type="text/javascript" src="ajax.js"></script>
+        <script type="text/javascript" src="util/util.js"></script>
+        <script type="text/javascript" src="util/json.js"></script>
+        <script type="text/javascript" src="util/array.js"></script>
+        <script type="text/javascript" src="util/ajax.js"></script>
         <script type="text/javascript" src="locale.js"></script>
         <script type="text/javascript" src="api.js"></script>
+        <script type="text/javascript" src="errorhandler.js"></script>
         <script type="text/javascript" src="loginpanel.js"></script>
         <script type="text/javascript" src="application.js"></script>
     </head>
@@ -82,7 +85,7 @@
                                 <div id="registrationCard" class="empire-registration-card" style="visibility: hidden; height: 0px;">
                                     <h2 id="registrationFormTitle">&nbsp;</h2>
                                     
-                                    <form id="registrationForm" action="#">
+                                    <form id="registrationForm" action="#" onsubmit="onRegistrationSubmit()">
                                         <table cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td id="registrationLoginLabel" class="empire-form-label">&nbsp;</td>
@@ -94,14 +97,14 @@
                                             <tr>
                                                 <td id="registrationPasswordLabel" class="empire-form-label">&nbsp;</td>
                                                 <td class="empire-text-field">
-                                                    <input type="password" />
+                                                    <input type="password" id="registrationPasswordField" />
                                                 </td>
                                             </tr>
                                             
                                             <tr>
                                                 <td id="registrationConfirmLabel" class="empire-form-label">&nbsp;</td>
                                                 <td class="empire-text-field">
-                                                    <input type="password" />
+                                                    <input type="password" id="registrationConfirmField" />
                                                 </td>
                                             </tr>
                                             

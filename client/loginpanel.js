@@ -1,32 +1,32 @@
 function onRegisterClick()
 {
-    hideCard(document.getElementById("loginCard"));
-    showCard(document.getElementById("registrationCard"));
+    hideCard($("loginCard"));
+    showCard($("registrationCard"));
     
-    document.getElementById("registrationLoginField").focus();
+    $("registrationLoginField").focus();
 }
 
 function onRegisterBackClick()
 {
-    hideCard(document.getElementById("registrationCard"));
-    showCard(document.getElementById("loginCard"));
+    hideCard($("registrationCard"));
+    showCard($("loginCard"));
     
-    document.getElementById("loginLoginField").focus();
+    $("loginLoginField").focus();
 }
 
 function updateLoginCheckboxes()
 {
-    var useCookieCheckbox   = document.getElementById("loginUseCookieCheckbox");
-    var rememberCheckbox    = document.getElementById("loginRememberCheckbox");
+    var useCookieCheckbox   = $("loginUseCookieCheckbox");
+    var rememberCheckbox    = $("loginRememberCheckbox");
     
     rememberCheckbox.disabled = !useCookieCheckbox.checked;
 }
 
 function updateRegistrationCheckboxes()
 {
-    var startCheckbox       = document.getElementById("registrationStartCheckbox");
-    var useCookieCheckbox   = document.getElementById("registrationUseCookieCheckbox");
-    var rememberCheckbox    = document.getElementById("registrationRememberCheckbox");
+    var startCheckbox       = $("registrationStartCheckbox");
+    var useCookieCheckbox   = $("registrationUseCookieCheckbox");
+    var rememberCheckbox    = $("registrationRememberCheckbox");
     
     useCookieCheckbox   .disabled = !startCheckbox.checked;
     rememberCheckbox    .disabled = !startCheckbox.checked || !useCookieCheckbox.checked;
@@ -47,8 +47,31 @@ function onRegistrationUseCookieChange()
     updateRegistrationCheckboxes();
 }
 
+function validateLogin(login)
+{
+    if (login.length < 2)
+        throw new Error("ERROR_MEMBER_ID_TOO_SHORT");
+}
+
+function validatePassword(password)
+{
+    if (password.length < 6)
+        throw new Error("ERROR_PASSWORD_TOO_SHORT");
+}
+
 function onLoginSubmit()
 {
+    try
+    {
+        validateLogin($("loginLoginField").value);
+    }
+    catch(e)
+    {
+        alert(Locale.errors[e.message]);
+        $("loginLoginField").focus();
+        return;
+    }
+    
     Ajax.request({
         url     : Api.login,
         params  : {
@@ -56,35 +79,86 @@ function onLoginSubmit()
             password    : $("loginPasswordField").value,
             remember    : $("loginRememberCheckbox").checked
         },
-        method  : "GET",
+        method  : "POST",
         success : function() { alert("success!"); },
-        failure : function() { alert("failure!"); }
+        failure : stdErrorHandler
     });
     
     return false;
 }
 
+function loginAfterRegistration()
+{
+}
+
+function onRegistrationSubmit()
+{
+    try
+    {
+        validateLogin($("registrationLoginField").value);
+    }
+    catch(e)
+    {
+        alert(Locale.errors[e.message]);
+        $("registrationLoginField").focus();
+        return;
+    }
+    
+    if ($("registrationPasswordField").value != $("registrationConfirmField").value)
+    {
+        alert(Locale.errors["ERROR_PASSWORDS_DIFFERENT"]);
+        $("registrationPasswordField").value = "";
+        $("registrationConfirmField").value = "";
+        $("registrationPasswordField").focus();
+        return;
+    }
+    
+    try
+    {
+        validatePassword($("registrationPasswordField").value);
+    }
+    catch(e)
+    {
+        alert(Locale.errors[e.message]);
+        $("registrationPasswordField").value = "";
+        $("registrationConfirmField").value = "";
+        $("registrationPasswordField").focus();
+        return;
+    }
+    
+    Ajax.request({
+        url     : Api.register,
+        params  : {
+            memberId    : $("registrationLoginField").value,
+            password    : $("registrationPasswordField").value
+        },
+        method  : "POST",
+        success : loginAfterRegistration,
+        failure : stdErrorHandler
+    });
+}
+
 function applyLoginPanelLocale()
 {
-    document.getElementById("loginFormTitle").innerHTML = Locale.authorization;
-    document.getElementById("loginLoginLabel").innerHTML = Locale.login + ":&nbsp;";
-    document.getElementById("loginPasswordLabel").innerHTML = Locale.password + ":&nbsp;";
-    document.getElementById("loginUseCookieTR").title = Locale.useCookieTip;
-    document.getElementById("loginUseCookieLabel").innerHTML = Locale.useCookie + ":&nbsp;";
-    document.getElementById("loginRememberTR").title = Locale.rememberTip;
-    document.getElementById("loginRememberLabel").innerHTML = Locale.remember + ":&nbsp;";
-    document.getElementById("loginSubmit").value = Locale.login;
-    document.getElementById("loginRegisterLink").innerHTML = Locale.register;
-    document.getElementById("registrationFormTitle").innerHTML = Locale.registration;
-    document.getElementById("registrationLoginLabel").innerHTML = Locale.login + ":&nbsp;";
-    document.getElementById("registrationPasswordLabel").innerHTML = Locale.password + ":&nbsp;";
-    document.getElementById("registrationConfirmLabel").innerHTML = Locale.confirm + ":&nbsp;";
-    document.getElementById("registrationStartTR").title = Locale.startTip;
-    document.getElementById("registrationStartLabel").innerHTML = Locale.start + ":&nbsp;";
-    document.getElementById("registrationUseCookieTR").title = Locale.useCookieTip;
-    document.getElementById("registrationUseCookieLabel").innerHTML = Locale.useCookie + ":&nbsp;";
-    document.getElementById("registrationRememberTR").title = Locale.rememberTip;
-    document.getElementById("registrationRememberLabel").innerHTML = Locale.remember + ":&nbsp;";
-    document.getElementById("registrationSubmit").value = Locale.register;
-    document.getElementById("registrationBackLink").innerHTML = "<< " + Locale.back;
+    $("loginFormTitle"              ).innerHTML = Locale.authorization;
+    $("loginLoginLabel"             ).innerHTML = Locale.login + ":&nbsp;";
+    $("loginPasswordLabel"          ).innerHTML = Locale.password + ":&nbsp;";
+    $("loginUseCookieTR"            ).title     = Locale.useCookieTip;
+    $("loginUseCookieLabel"         ).innerHTML = Locale.useCookie + ":&nbsp;";
+    $("loginRememberTR"             ).title     = Locale.rememberTip;
+    $("loginRememberLabel"          ).innerHTML = Locale.remember + ":&nbsp;";
+    $("loginSubmit"                 ).value     = Locale.login;
+    $("loginRegisterLink"           ).innerHTML = Locale.register;
+    $("registrationFormTitle"       ).innerHTML = Locale.registration;
+    $("registrationLoginLabel"      ).innerHTML = Locale.login + ":&nbsp;";
+    $("registrationPasswordLabel"   ).innerHTML = Locale.password + ":&nbsp;";
+    $("registrationConfirmLabel"    ).innerHTML = Locale.confirm + ":&nbsp;";
+    $("registrationStartTR"         ).title     = Locale.startTip;
+    $("registrationStartLabel"      ).innerHTML = Locale.start + ":&nbsp;";
+    $("registrationUseCookieTR"     ).title     = Locale.useCookieTip;
+    $("registrationUseCookieLabel"  ).innerHTML = Locale.useCookie + ":&nbsp;";
+    $("registrationRememberTR"      ).title     = Locale.rememberTip;
+    $("registrationRememberLabel"   ).innerHTML = Locale.remember + ":&nbsp;";
+    $("registrationSubmit"          ).value     = Locale.register;
+    $("registrationBackLink"        ).innerHTML = "<< " + Locale.back;
 }
