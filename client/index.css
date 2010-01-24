@@ -1,0 +1,98 @@
+body
+{
+	background-color	: #FFEDAD;
+	font-family			: Tahoma;
+	font-size			: small;
+}
+
+div
+{
+	font-size			: small;
+}
+
+td
+{
+	font-size			: small;
+}
+
+h2
+{
+	margin-top			: 0px;
+	margin-bottom		: 2px;
+}
+
+div.empire-frame
+{
+	width				: 1000px;
+}
+
+div.empire-login-panel
+{
+	width				: 150px;
+	height				: 250px;
+}
+
+div.empire-login-card
+{
+}
+
+div.empire-logout-card
+{
+}
+
+div.empire-registration-card
+{
+}
+
+div.empire-flash-panel
+{
+	width				: 650px;
+	height				: 500px;
+}
+
+div.empire-gamelist-panel
+{
+	width				: 200px;
+	height				: 500px;
+}
+
+div.empire-gamelist-card
+{
+}
+
+div.empire-creategame-card
+{
+}
+
+div.empire-gameinfo-panel
+{
+	width				: 150px;
+	height				: 250px;
+}
+
+div.empire-gamechat-panel
+{
+	width				: 650px;
+	height				: 150px;
+}
+
+.empire-form-label
+{
+	width				: 75px;
+	text-align			: right;
+	vertical-align		: middle;
+}
+
+.empire-text-field input
+{
+	width				: 75px;
+	margin-top			: 3px;
+	margin-bottom		: 3px;
+	border				: 1px solid;
+}
+
+.empire-cb-field input
+{
+	margin-top			: 5px;
+	margin-bottom		: 5px;
+}
