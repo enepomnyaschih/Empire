@@ -1,17 +1,45 @@
-function onRegisterClick()
+function showLoginCard()
+{
+    showCard($("loginCard"));
+    $("loginLoginField").focus();
+}
+
+function showLogoffCard()
+{
+    showCard($("logoffCard"));
+}
+
+function showRegistrationCard()
+{
+    showCard($("registrationCard"));
+    $("registrationLoginField").focus();
+}
+
+function hideLoginCard()
 {
     hideCard($("loginCard"));
-    showCard($("registrationCard"));
-    
-    $("registrationLoginField").focus();
+}
+
+function hideLogoffCard()
+{
+    hideCard($("logoffCard"));
+}
+
+function hideRegistrationCard()
+{
+    hideCard($("registrationCard"));
+}
+
+function onRegisterClick()
+{
+    hideLoginCard();
+    showRegistrationCard();
 }
 
 function onRegisterBackClick()
 {
-    hideCard($("registrationCard"));
-    showCard($("loginCard"));
-    
-    $("loginLoginField").focus();
+    hideRegistrationCard();
+    showLoginCard();
 }
 
 function updateLoginCheckboxes()
