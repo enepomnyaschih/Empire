@@ -22,163 +22,214 @@
                 
                 <table cellpadding="0" cellspacing="0">
                     <tr>
-                        <td>
-                            <div id="loginPanel" class="empire-login-panel">
-                                <div id="loginCard" class="empire-login-card" style="height: auto;">
-                                    <h2 id="loginFormTitle">&nbsp;</h2>
-                                    
-                                    <form id="loginForm" action="#" onsubmit="onLoginSubmit()">
-                                        <table cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <td id="loginLoginLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-text-field">
-                                                    <input type="text" id="loginLoginField" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td id="loginPasswordLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-text-field">
-                                                    <input type="password" id="loginPasswordField" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr id="loginUseCookieTR">
-                                                <td id="loginUseCookieLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-cb-field">
-                                                    <input type="checkbox" id="loginUseCookieCheckbox" checked="checked" onchange="onLoginUseCookieChange()" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr id="loginRememberTR">
-                                                <td id="loginRememberLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-cb-field">
-                                                    <input type="checkbox" id="loginRememberCheckbox" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td></td>
-                                                <td>
-                                                    <input type="submit" id="loginSubmit" value="&nbsp;" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td style="height: 49px;">&nbsp;</td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td colspan="2">
-                                                    <center>
-                                                        <a id="loginRegisterLink" href="javascript:onRegisterClick()">&nbsp;</a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </form>
-                                </div>
+                        <td class="empire-login-panel">
+                            <div id="loginCard" class="empire-login-card" style="height: auto;">
+                                <h2 id="loginFormTitle">&nbsp;</h2>
                                 
-                                <div id="logoutCard" class="empire-logout-card" style="visibility: hidden; height: 0px;">
-                                </div>
+                                <form id="loginForm" action="#" onsubmit="onLoginSubmit()">
+                                    <table cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td id="loginLoginLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-text-field">
+                                                <input type="text" id="loginLoginField" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td id="loginPasswordLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-text-field">
+                                                <input type="password" id="loginPasswordField" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr id="loginUseCookieTR">
+                                            <td id="loginUseCookieLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-cb-field">
+                                                <input type="checkbox" id="loginUseCookieCheckbox" checked="checked" onchange="onLoginUseCookieChange()" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr id="loginRememberTR">
+                                            <td id="loginRememberLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-cb-field">
+                                                <input type="checkbox" id="loginRememberCheckbox" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input type="submit" id="loginSubmit" value="&nbsp;" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td colspan="2">
+                                                <center>
+                                                    <a id="loginRegisterLink" href="javascript:onRegisterClick()">&nbsp;</a>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                            
+                            <div id="logoutCard" class="empire-logout-card" style="visibility: hidden; height: 0px;">
+                            </div>
+                            
+                            <div id="registrationCard" class="empire-registration-card" style="visibility: hidden; height: 0px;">
+                                <h2 id="registrationFormTitle">&nbsp;</h2>
                                 
-                                <div id="registrationCard" class="empire-registration-card" style="visibility: hidden; height: 0px;">
-                                    <h2 id="registrationFormTitle">&nbsp;</h2>
-                                    
-                                    <form id="registrationForm" action="#" onsubmit="onRegistrationSubmit()">
-                                        <table cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <td id="registrationLoginLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-text-field">
-                                                    <input type="text" id="registrationLoginField" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td id="registrationPasswordLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-text-field">
-                                                    <input type="password" id="registrationPasswordField" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td id="registrationConfirmLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-text-field">
-                                                    <input type="password" id="registrationConfirmField" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr id="registrationStartTR">
-                                                <td id="registrationStartLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-cb-field">
-                                                    <input type="checkbox" id="registrationStartCheckbox" onchange="onRegistrationStartChange()" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr id="registrationUseCookieTR">
-                                                <td id="registrationUseCookieLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-cb-field">
-                                                    <input type="checkbox" id="registrationUseCookieCheckbox" checked="checked" disabled="disabled" onchange="onRegistrationUseCookieChange()" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr id="registrationRememberTR">
-                                                <td id="registrationRememberLabel" class="empire-form-label">&nbsp;</td>
-                                                <td class="empire-cb-field">
-                                                    <input type="checkbox" id="registrationRememberCheckbox" disabled="disabled" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td></td>
-                                                <td>
-                                                    <input type="submit" id="registrationSubmit" value="&nbsp;" />
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td colspan="2">
-                                                    <center>
-                                                        <a id="registrationBackLink" href="javascript:onRegisterBackClick()">&nbsp;</a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </form>
-                                </div>
+                                <form id="registrationForm" action="#" onsubmit="onRegistrationSubmit()">
+                                    <table cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td id="registrationLoginLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-text-field">
+                                                <input type="text" id="registrationLoginField" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td id="registrationPasswordLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-text-field">
+                                                <input type="password" id="registrationPasswordField" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td id="registrationConfirmLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-text-field">
+                                                <input type="password" id="registrationConfirmField" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr id="registrationStartTR">
+                                            <td id="registrationStartLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-cb-field">
+                                                <input type="checkbox" id="registrationStartCheckbox" onchange="onRegistrationStartChange()" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr id="registrationUseCookieTR">
+                                            <td id="registrationUseCookieLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-cb-field">
+                                                <input type="checkbox" id="registrationUseCookieCheckbox" checked="checked" disabled="disabled" onchange="onRegistrationUseCookieChange()" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr id="registrationRememberTR">
+                                            <td id="registrationRememberLabel" class="empire-form-label">&nbsp;</td>
+                                            <td class="empire-cb-field">
+                                                <input type="checkbox" id="registrationRememberCheckbox" disabled="disabled" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input type="submit" id="registrationSubmit" value="&nbsp;" />
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td colspan="2">
+                                                <center>
+                                                    <a id="registrationBackLink" href="javascript:onRegisterBackClick()">&nbsp;</a>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
                             </div>
                         </td>
                         
-                        <td rowspan="2">
-                            <div id="flashPanel" class="empire-flash-panel">
-                            </div>
+                        <td rowspan="2" class="empire-flash-panel">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="empire-corner-tl"></td>
+                                    <td class="empire-side-tb"></td>
+                                    <td class="empire-corner-tr"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-side-lr"></td>
+                                    <td class="empire-inner empire-flash-center"></td>
+                                    <td class="empire-side-lr"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-inner"></td>
+                                    <td class="empire-side-tb"></td>
+                                    <td class="empire-inner"></td>
+                                </tr>
+                            </table>
                         </td>
                         
-                        <td rowspan="2">
-                            <div id="gameListPanel" class="empire-gamelist-panel">
-                                <div id="gameListCard" class="empire-gamelist-card">
-                                </div>
-                                
-                                <div id="createGameCard" class="empire-creategame-card" style="visibility: hidden;">
-                                </div>
-                            </div>
+                        <td rowspan="3" class="empire-gamelist-splitter"></td>
+                        
+                        <td rowspan="2" class="empire-gamelist-panel">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="empire-corner-tl"></td>
+                                    <td class="empire-side-tb"></td>
+                                    <td class="empire-corner-tr"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-side-lr"></td>
+                                    <td class="empire-inner empire-gamelist-center">
+                                        <div id="gameListCard" class="empire-gamelist-card">
+                                        </div>
+                                        
+                                        <div id="createGameCard" class="empire-creategame-card" style="visibility: hidden;">
+                                        </div>
+                                    </td>
+                                    <td class="empire-side-lr"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-corner-bl"></td>
+                                    <td class="empire-side-tb"></td>
+                                    <td class="empire-corner-br"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="empire-gameinfo-panel">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="empire-corner-tl"></td>
+                                    <td class="empire-side-tb"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-side-lr"></td>
+                                    <td class="empire-inner empire-gameinfo-center">
+                                        <div>&nbsp;</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-corner-bl"></td>
+                                    <td class="empire-side-tb"></td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     
                     <tr>
                         <td>
-                            <div id="gameInfoPanel" class="empire-gameinfo-panel">
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>
                         </td>
                         
-                        <td>
-                            <div id="gameChatPanel" class="empire-gamechat-panel">
-                            </div>
+                        <td class="empire-gamechat-panel">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="empire-side-lr"></td>
+                                    <td class="empire-inner empire-gamechat-center"></td>
+                                    <td class="empire-side-lr"></td>
+                                </tr>
+                                <tr>
+                                    <td class="empire-corner-bl"></td>
+                                    <td class="empire-side-tb"></td>
+                                    <td class="empire-corner-br"></td>
+                                </tr>
+                            </table>
                         </td>
                         
                         <td>

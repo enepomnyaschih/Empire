@@ -13,6 +13,7 @@ div
 td
 {
 	font-size			: small;
+	vertical-align		: top;
 }
 
 h2
@@ -23,59 +24,112 @@ h2
 
 div.empire-frame
 {
-	width				: 1000px;
+	width				: 1220px;
 }
 
-div.empire-login-panel
+/* Utility corners/sides layouting */
+td.empire-corner-tl
 {
-	width				: 150px;
+	width				: 10px;
+	height				: 10px;
+	background-image	: url("resource/corner-tl.png");
+}
+
+td.empire-corner-tr
+{
+	width				: 10px;
+	height				: 10px;
+	background-image	: url("resource/corner-tr.png");
+}
+
+td.empire-corner-bl
+{
+	width				: 10px;
+	height				: 10px;
+	background-image	: url("resource/corner-bl.png");
+}
+
+td.empire-corner-br
+{
+	width				: 10px;
+	height				: 10px;
+	background-image	: url("resource/corner-br.png");
+}
+
+td.empire-side-tb
+{
+	height				: 10px;
+	background-color	: #C6AA55;
+}
+
+td.empire-side-lr
+{
+	width				: 10px;
+	background-color	: #C6AA55;
+}
+
+td.empire-inner
+{
+	background			: #C6AA55;
+}
+
+/* Empire master page layouting */
+td.empire-login-panel
+{
+	width				: 165px;
 	height				: 250px;
 }
 
-div.empire-login-card
+td.empire-flash-panel
 {
+	width				: 820px;
+	height				: 620px;
 }
 
-div.empire-logout-card
+td.empire-flash-center
 {
+	width				: 800px;
+	height				: 600px;
 }
 
-div.empire-registration-card
+td.empire-gamelist-splitter
 {
+	width				: 20px;
 }
 
-div.empire-flash-panel
-{
-	width				: 650px;
-	height				: 500px;
-}
-
-div.empire-gamelist-panel
+td.empire-gamelist-panel
 {
 	width				: 200px;
-	height				: 500px;
 }
 
-div.empire-gamelist-card
+td.empire-gamelist-center
+{
+	width				: 180px;
+	height				: 600px;
+}
+
+td.empire-gameinfo-panel
 {
 }
 
-div.empire-creategame-card
+td.empire-gameinfo-center
 {
+	width				: 155px;
+	height				: 350px;
 }
 
-div.empire-gameinfo-panel
+td.empire-gamechat-panel
 {
-	width				: 150px;
-	height				: 250px;
+	height				: 120px;
 }
 
-div.empire-gamechat-panel
+td.empire-gamechat-center
 {
-	width				: 650px;
-	height				: 150px;
+	width				: 800px;
+	height				: 110px;
 }
 
+/* Utility form layouting */
 .empire-form-label
 {
 	width				: 75px;
@@ -95,4 +149,26 @@ div.empire-gamechat-panel
 {
 	margin-top			: 5px;
 	margin-bottom		: 5px;
+}
+
+/* Login panel styles */
+div.empire-login-card
+{
+}
+
+div.empire-logout-card
+{
+}
+
+div.empire-registration-card
+{
+}
+
+/* Game list panel styles */
+div.empire-gamelist-card
+{
+}
+
+div.empire-creategame-card
+{
 }
