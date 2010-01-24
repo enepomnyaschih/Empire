@@ -35,6 +35,9 @@ window.Ajax = {
         {
             var value = params[key];
             
+            if (value === null)
+                continue;
+            
             if (isArray(value))
             {
                 for (var i = 0; i < value.length; ++i)

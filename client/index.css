@@ -33,6 +33,17 @@ div.empire-frame
 	width				: 1220px;
 }
 
+div.empire-mask
+{
+	position			: absolute;
+	top					: 0px;
+	left				: 0px;
+	width				: 100%;
+	height				: 100%;
+	opacity				: 0.5;
+	background-color	: #FFFFFF;
+}
+
 /* Utility corners/sides layouting */
 td.empire-corner-tl
 {
@@ -164,12 +175,12 @@ div.empire-login-card
 
 div.empire-logout-card
 {
+	height				: 200px;
 }
 
 h2.empire-memberid
 {
 	width				: 150px;
-	height				: 200px;
 	color				: #004400;
 }
 

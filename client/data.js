@@ -1,6 +1,6 @@
 window.Data = window.Data || {};
 
 apply(window.Data, {
-    ticket      : "no-ticket",
+    ticket      : null,
     memberId    : null
 });

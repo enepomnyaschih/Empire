@@ -21,7 +21,7 @@ function hideLoginCard()
     hideCard($("loginCard"));
 }
 
-function hideLogoffCard()
+function hideLogoutCard()
 {
     hideCard($("logoutCard"));
 }
@@ -78,14 +78,20 @@ function onRegistrationUseCookieChange()
 
 function validateLogin(login)
 {
-    if (login.length < 2)
+    if (login.length < Const.minLoginLength)
         throw new Error("ERROR_MEMBER_ID_TOO_SHORT");
+    
+    if (login.length > Const.maxLoginLength)
+        throw new Error("ERROR_MEMBER_ID_TOO_LONG");
 }
 
 function validatePassword(password)
 {
-    if (password.length < 6)
+    if (password.length < Const.minPasswordLength)
         throw new Error("ERROR_PASSWORD_TOO_SHORT");
+    
+    if (password.length > Const.maxPasswordLength)
+        throw new Error("ERROR_PASSWORD_TOO_LONG");
 }
 
 function onLoginSubmit()
@@ -96,7 +102,7 @@ function onLoginSubmit()
     }
     catch(e)
     {
-        alert(Locale.errors[e.message]);
+        alert(getErrorText(e.message));
         $("loginLoginField").focus();
         return;
     }
@@ -116,6 +122,30 @@ function onLoginSubmit()
     return false;
 }
 
+function onLogoutSuccess()
+{
+    deleteCookie("ticket");
+    Data.ticket = null;
+    
+    hideLogoutCard();
+    showLoginCard();
+}
+
+function onLogoutClick()
+{
+    showMask();
+    
+    Ajax.request({
+        url     : Api.logout,
+        params  : {
+            ticket  : Data.ticket
+        },
+        method  : "POST",
+        success : onLogoutSuccess,
+        failure : stdErrorHandlerHideMask
+    });
+}
+
 function loginAfterRegistration()
 {
 }
@@ -128,14 +158,14 @@ function onRegistrationSubmit()
     }
     catch(e)
     {
-        alert(Locale.errors[e.message]);
+        alert(getErrorText(e.message));
         $("registrationLoginField").focus();
         return;
     }
     
     if ($("registrationPasswordField").value != $("registrationConfirmField").value)
     {
-        alert(Locale.errors["ERROR_PASSWORDS_DIFFERENT"]);
+        alert(getErrorText("ERROR_PASSWORDS_DIFFERENT"));
         $("registrationPasswordField").value = "";
         $("registrationConfirmField").value = "";
         $("registrationPasswordField").focus();
@@ -148,7 +178,7 @@ function onRegistrationSubmit()
     }
     catch(e)
     {
-        alert(Locale.errors[e.message]);
+        alert(getErrorText(e.message));
         $("registrationPasswordField").value = "";
         $("registrationConfirmField").value = "";
         $("registrationPasswordField").focus();

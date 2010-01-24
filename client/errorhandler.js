@@ -1,3 +1,8 @@
+function getErrorText(errorId)
+{
+    return applyTemplate(Locale.errors[errorId]);
+}
+
 function stdErrorHandler(response, config)
 {
     function excludeText()
@@ -7,10 +12,10 @@ function stdErrorHandler(response, config)
         try
         {
             var json = jsonDecode(text);
-            if (!json || !json.errorId || !(typeof json.errorId == "string"))
+            if (!json || !json.errorId || !(typeof json.errorId == "string") || !Locale.errors[json.errorId])
                 return text;
             
-            return applyTemplate(Locale.errors[json.errorId] || json.errorId);
+            return getErrorText(json.errorId);
         }
         catch(e)
         {
@@ -19,4 +24,10 @@ function stdErrorHandler(response, config)
     }
     
     alert(excludeText());
+}
+
+function stdErrorHandlerHideMask()
+{
+    stdErrorHandler.apply(this, arguments);
+    hideMask();
 }
