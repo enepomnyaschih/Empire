@@ -22,11 +22,6 @@ function updateLoginCheckboxes()
     rememberCheckbox.disabled = !useCookieCheckbox.checked;
 }
 
-function onLoginUseCookieChange()
-{
-    updateLoginCheckboxes();
-}
-
 function updateRegistrationCheckboxes()
 {
     var startCheckbox       = document.getElementById("registrationStartCheckbox");
@@ -35,6 +30,11 @@ function updateRegistrationCheckboxes()
     
     useCookieCheckbox   .disabled = !startCheckbox.checked;
     rememberCheckbox    .disabled = !startCheckbox.checked || !useCookieCheckbox.checked;
+}
+
+function onLoginUseCookieChange()
+{
+    updateLoginCheckboxes();
 }
 
 function onRegistrationStartChange()
@@ -47,27 +47,44 @@ function onRegistrationUseCookieChange()
     updateRegistrationCheckboxes();
 }
 
+function onLoginSubmit()
+{
+    Ajax.request({
+        url     : Api.login,
+        params  : {
+            memberId    : $("loginLoginField").value,
+            password    : $("loginPasswordField").value,
+            remember    : $("loginRememberCheckbox").checked
+        },
+        method  : "GET",
+        success : function() { alert("success!"); },
+        failure : function() { alert("failure!"); }
+    });
+    
+    return false;
+}
+
 function applyLoginPanelLocale()
 {
-    document.getElementById("loginFormTitle").innerHTML = locale.authorization;
-    document.getElementById("loginLoginLabel").innerHTML = locale.login + ":&nbsp;";
-    document.getElementById("loginPasswordLabel").innerHTML = locale.password + ":&nbsp;";
-    document.getElementById("loginUseCookieTR").title = locale.useCookieTip;
-    document.getElementById("loginUseCookieLabel").innerHTML = locale.useCookie + ":&nbsp;";
-    document.getElementById("loginRememberTR").title = locale.rememberTip;
-    document.getElementById("loginRememberLabel").innerHTML = locale.remember + ":&nbsp;";
-    document.getElementById("loginSubmit").value = locale.login;
-    document.getElementById("loginRegisterLink").innerHTML = locale.register;
-    document.getElementById("registrationFormTitle").innerHTML = locale.registration;
-    document.getElementById("registrationLoginLabel").innerHTML = locale.login + ":&nbsp;";
-    document.getElementById("registrationPasswordLabel").innerHTML = locale.password + ":&nbsp;";
-    document.getElementById("registrationConfirmLabel").innerHTML = locale.confirm + ":&nbsp;";
-    document.getElementById("registrationStartTR").title = locale.startTip;
-    document.getElementById("registrationStartLabel").innerHTML = locale.start + ":&nbsp;";
-    document.getElementById("registrationUseCookieTR").title = locale.useCookieTip;
-    document.getElementById("registrationUseCookieLabel").innerHTML = locale.useCookie + ":&nbsp;";
-    document.getElementById("registrationRememberTR").title = locale.rememberTip;
-    document.getElementById("registrationRememberLabel").innerHTML = locale.remember + ":&nbsp;";
-    document.getElementById("registrationSubmit").value = locale.register;
-    document.getElementById("registrationBackLink").innerHTML = "<< " + locale.back;
+    document.getElementById("loginFormTitle").innerHTML = Locale.authorization;
+    document.getElementById("loginLoginLabel").innerHTML = Locale.login + ":&nbsp;";
+    document.getElementById("loginPasswordLabel").innerHTML = Locale.password + ":&nbsp;";
+    document.getElementById("loginUseCookieTR").title = Locale.useCookieTip;
+    document.getElementById("loginUseCookieLabel").innerHTML = Locale.useCookie + ":&nbsp;";
+    document.getElementById("loginRememberTR").title = Locale.rememberTip;
+    document.getElementById("loginRememberLabel").innerHTML = Locale.remember + ":&nbsp;";
+    document.getElementById("loginSubmit").value = Locale.login;
+    document.getElementById("loginRegisterLink").innerHTML = Locale.register;
+    document.getElementById("registrationFormTitle").innerHTML = Locale.registration;
+    document.getElementById("registrationLoginLabel").innerHTML = Locale.login + ":&nbsp;";
+    document.getElementById("registrationPasswordLabel").innerHTML = Locale.password + ":&nbsp;";
+    document.getElementById("registrationConfirmLabel").innerHTML = Locale.confirm + ":&nbsp;";
+    document.getElementById("registrationStartTR").title = Locale.startTip;
+    document.getElementById("registrationStartLabel").innerHTML = Locale.start + ":&nbsp;";
+    document.getElementById("registrationUseCookieTR").title = Locale.useCookieTip;
+    document.getElementById("registrationUseCookieLabel").innerHTML = Locale.useCookie + ":&nbsp;";
+    document.getElementById("registrationRememberTR").title = Locale.rememberTip;
+    document.getElementById("registrationRememberLabel").innerHTML = Locale.remember + ":&nbsp;";
+    document.getElementById("registrationSubmit").value = Locale.register;
+    document.getElementById("registrationBackLink").innerHTML = "<< " + Locale.back;
 }

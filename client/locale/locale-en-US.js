@@ -1,6 +1,6 @@
-window.locale = window.locale || {};
+window.Locale = window.Locale || {};
 
-apply(locale, {
+apply(Locale, {
     authorization               : "Authorization",
     back                        : "Back",
     confirm                     : "Confirm",

@@ -3,7 +3,9 @@
         <title>Empire - Rise of Despotism</title>
         <link rel="stylesheet" type="text/css" href="index.css" />
         <script type="text/javascript" src="util.js"></script>
+        <script type="text/javascript" src="ajax.js"></script>
         <script type="text/javascript" src="locale.js"></script>
+        <script type="text/javascript" src="api.js"></script>
         <script type="text/javascript" src="loginpanel.js"></script>
         <script type="text/javascript" src="application.js"></script>
     </head>
@@ -22,7 +24,7 @@
                                 <div id="loginCard" class="empire-login-card" style="height: auto;">
                                     <h2 id="loginFormTitle">&nbsp;</h2>
                                     
-                                    <form id="loginForm" action="#">
+                                    <form id="loginForm" action="#" onsubmit="onLoginSubmit()">
                                         <table cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td id="loginLoginLabel" class="empire-form-label">&nbsp;</td>
@@ -34,7 +36,7 @@
                                             <tr>
                                                 <td id="loginPasswordLabel" class="empire-form-label">&nbsp;</td>
                                                 <td class="empire-text-field">
-                                                    <input type="password" />
+                                                    <input type="password" id="loginPasswordField" />
                                                 </td>
                                             </tr>
                                             

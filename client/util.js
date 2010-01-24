@@ -15,3 +15,13 @@ function apply(host, server)
     for (var key in server)
         host[key] = server[key];
 }
+
+function isArray(o)
+{
+    return (typeof o == "object") && (o.length !== undefined);
+}
+
+function $(id)
+{
+    return document.getElementById(id);
+}
