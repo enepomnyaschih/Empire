@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" styleName="application" creationComplete="onCreationComplete(event)">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			private var _frame:Frame;
+			
+			private function onCreationComplete(e:FlexEvent):void
+			{
+				_frame = new Frame();
+				addChild(_frame);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		.application
+		{
+			background-color: #000000;
+		}
+	</mx:Style>
+</mx:Application>
