@@ -4,12 +4,9 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			private var _frame:Frame;
-			
 			private function onCreationComplete(e:FlexEvent):void
 			{
-				_frame = new Frame();
-				addChild(_frame);
+				addChild(Frame.instance);
 			}
 		]]>
 	</mx:Script>

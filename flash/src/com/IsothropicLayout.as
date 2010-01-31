@@ -2,7 +2,6 @@ package com
 {
 	import flash.display.DisplayObject;
 	
-	import mx.controls.Alert;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.events.ResizeEvent;
@@ -13,7 +12,6 @@ package com
 	{
 		private var _layoutOnCreationComplete:Boolean = false;
 		private var _layoutOnResize:Boolean = false;
-		private var _wh:Number = 1;
 		
 		public function IsothropicLayout(config:Object = null)
 		{
@@ -67,30 +65,25 @@ package com
 				addEventListener(ResizeEvent.RESIZE, this.onResize_layout, false, 0, true);
 		}
 		
-		[Bindable]
-		public function get wh():Number
-		{
-			return _wh;
-		}
-		
-		public function set wh(value:Number):void
-		{
-			_wh = value;
-		}
-		
 		public function doLayout():void
 		{
-			var w:Number = Math.min(width, height * wh);
-			var h:Number = w / wh;
-			
 			for (var i:int = 0; i < numChildren; ++i)
 			{
 				var child:DisplayObject = this.getChildAt(i);
+				var cw:Number = child.width  / child.scaleX;
+				var ch:Number = child.height / child.scaleY;
 				
-				child.x			= (width - w) / 2;
+				if (cw == 0 || ch == 0)
+					throw new Error("All children in IsothropicLayout must have non-zero width and height.");
+				
+				var s:Number = Math.min(width / cw, height / ch);
+				var w:Number = s * cw;
+				var h:Number = s * ch;
+				
+				child.x			= (width  - w) / 2;
 				child.y			= (height - h) / 2;
-				child.width		= w;
-				child.height	= h;
+				child.scaleX	= s;
+				child.scaleY	= s;
 			}
 		}
 		
