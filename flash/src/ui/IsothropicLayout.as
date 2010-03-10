@@ -1,4 +1,4 @@
-package com
+package ui
 {
 	import flash.display.DisplayObject;
 	
