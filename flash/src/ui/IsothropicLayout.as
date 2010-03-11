@@ -1,5 +1,7 @@
 package ui
 {
+	import common.View;
+	
 	import flash.display.DisplayObject;
 	
 	import mx.core.UIComponent;
@@ -70,8 +72,13 @@ package ui
 			for (var i:int = 0; i < numChildren; ++i)
 			{
 				var child:DisplayObject = this.getChildAt(i);
-				var cw:Number = child.width  / child.scaleX;
-				var ch:Number = child.height / child.scaleY;
+				if (!(child is View))
+					continue;
+				
+				var view:View = View(child);
+				
+				var cw:Number = view.initialWidth;
+				var ch:Number = view.initialHeight;
 				
 				if (cw == 0 || ch == 0)
 					throw new Error("All children in IsothropicLayout must have non-zero width and height.");
@@ -84,6 +91,8 @@ package ui
 				child.y			= (height - h) / 2;
 				child.scaleX	= s;
 				child.scaleY	= s;
+				
+//				trace(width, height, cw, ch, s);
 			}
 		}
 		

@@ -7,9 +7,37 @@
 		private var _isValidGraphics:Boolean = true;
 		private var _isValidPosition:Boolean = true;
 		
+		private var _initialWidth	:Number = 0;
+		private var _initialHeight	:Number = 0;
+		
 		public function View()
 		{
 			super();
+			
+			_initialWidth	= width;
+			_initialHeight	= height;
+		}
+		
+		override public function set width(value:Number):void
+		{
+			_initialWidth = value;
+			super.width = value;
+		}
+		
+		override public function set height(value:Number):void
+		{
+			_initialHeight = value;
+			super.height = value;
+		}
+		
+		public function get initialWidth():Number
+		{
+			return _initialWidth;
+		}
+		
+		public function get initialHeight():Number
+		{
+			return _initialHeight;
 		}
 		
 		public function get isValidGraphics():Boolean
