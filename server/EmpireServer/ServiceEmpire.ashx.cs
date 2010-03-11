@@ -11,7 +11,11 @@ using Jayrock;
 using Jayrock.Json;
 using Jayrock.JsonRpc;
 using Jayrock.JsonRpc.Web;
-
+using MySql;
+using MySql.Data;
+using MySql.Web;
+using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace EmpireServer
 {
@@ -24,6 +28,13 @@ namespace EmpireServer
         public object LoginRequest(string login, string password, bool remember)
         {
             Hashtable hashtable = new Hashtable();
+
+            MySqlConnection myConnection = new MySqlConnection(ConfigurationManager.ConnectionStrings["Empire"].ConnectionString);
+            MySqlCommand myCommand = new MySqlCommand("INSERT INTO members VALUES('123', '234', '235');");
+            myCommand.Connection = myConnection;
+            myConnection.Open();
+            myCommand.ExecuteNonQuery();
+            myCommand.Connection.Close();
 
             hashtable["success"] = true;
             hashtable["ticket"] = 123456;
