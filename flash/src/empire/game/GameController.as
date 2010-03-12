@@ -5,6 +5,7 @@ package empire.game
 	
 	import empire.map.MapController;
 	
+	import flash.events.Event;
 	import flash.events.TimerEvent;
 	
 	import util.Ticker;
@@ -30,11 +31,12 @@ package empire.game
 			_game = game;
 			_gameView = new GameView(game);
 			
-			_mapController = new MapController(game);
-			
-			_gameView.addChild(_mapController.mapView);
-			_gameView.width  = _mapController.mapView.initialWidth;
-			_gameView.height = _mapController.mapView.initialHeight;
+			_game.addEventListener(Game.EVENT_GAME_JOINED,		onGameJoined,	false, 0, true);
+			_game.addEventListener(Game.EVENT_GAME_STARTED,		onGameStarted,	false, 0, true);
+			_game.addEventListener(Game.EVENT_GAME_FINISHED,	onGameFinished,	false, 0, true);
+			_game.addEventListener(Game.EVENT_MAP_GENERATED,	onMapGenerated,	false, 0, true);
+			_game.addEventListener(Game.EVENT_PLAYER_JOINED,	onPlayerJoined,	false, 0, true);
+			_game.addEventListener(Game.EVENT_PLAYER_LEFT,		onPlayerLeft,	false, 0, true);
 			
 			_mainTicker.addEventListener(TimerEvent.TIMER, onTicker, false, 0, true);
 			_mainTicker.start();
@@ -51,14 +53,91 @@ package empire.game
 			_mapController.switchState(turn);
 		}
 		
+		private function onGameJoined(e:Event):void
+		{
+		}
+		
+		private function onGameStarted(e:Event):void
+		{
+		}
+		
+		private function onGameFinished(e:Event):void
+		{
+		}
+		
+		private function onMapGenerated(e:Event):void
+		{
+			_mapController = new MapController(_game);
+			
+			_gameView.addChild(_mapController.mapView);
+			_gameView.width  = _mapController.mapView.initialWidth;
+			_gameView.height = _mapController.mapView.initialHeight;
+			
+			Frame.instance.doLayout();
+		}
+		
+		private function onPlayerJoined(e:PlayerInfoChangeEvent):void
+		{
+		}
+		
+		private function onPlayerLeft(e:PlayerInfoChangeEvent):void
+		{
+		}
+		
 		private function onTicker(e:TimerEvent):void
 		{
-			_mapController.onTicker();
+			if (_mapController)
+				_mapController.onTicker();
 			
 			ViewManager.instance.validateAllViewsGraphics();
 			ViewManager.instance.validateAllViewsPosition();
 			
 			++_tick;
+			
+			if (_tick == 60)
+			{
+				_game.updateGameInfo({
+					gameId			: "daspddpiapf",
+					gameName		: "Empire Game",
+					turnDuration	: 0,
+					isStarted		: true,
+					isJoined		: true,
+					winnerIndex		: -1,
+					turnCount		: 0,
+					players			: [
+						{
+							memberId	: "YoGA"
+						}, {
+							memberId	: "NightMR"
+						}, {
+							memberId	: "Enotniy"
+						}
+					],
+					
+					mapWidth		: 10,
+					mapHeight		: 10,
+					landscape		: "/AAAA//////AAAAAA/////AAAAABBBCCCCAABBBBCCCC/BBBBB/CCC//BBBBCCCCDDDD//////DDDDD//////DDD/////DDDDD//",
+					provinces		: [
+						{
+							nearProvinces	: [1, 2],
+							income			: 1,
+							recruits		: []
+						}, {
+							nearProvinces	: [0, 2],
+							income			: 1,
+							recruits		: []
+						}, {
+							nearProvinces	: [0, 1],
+							income			: 1,
+							recruits		: []
+						}, {
+							nearProvinces	: [2],
+							income			: 1,
+							recruits		: []
+						}
+					]
+				})
+			}
 			
 			if (_tick % 120 == 0)
 			{
