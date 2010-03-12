@@ -1,7 +1,5 @@
 package
 {
-	import common.ViewManager;
-	
 	import empire.game.Game;
 	import empire.game.GameController;
 	
@@ -28,7 +26,7 @@ package
 			
 			addChild(_layout);
 			
-			_game = new Game({
+			var data:Object = {
 				gameId			: "daspddpiapf",
 				gameName		: "Empire Game",
 				turnDuration	: 0,
@@ -45,37 +43,18 @@ package
 						memberId	: "Enotniy"
 					}
 				],
-				mapWidth		: 10,
-				mapHeight		: 10,
-				landscape		: "/AAAA//////AAAAAA/////AAAAABBBCCCCAABBBBCCCC/BBBBB/CCC//BBBBCCCCDDDD//////DDDDD//////DDD/////DDDDD//",
-				provinces		: [
-					{
-						nearProvinces	: [1, 2],
-						income			: 1,
-						recruits		: []
-					}, {
-						nearProvinces	: [0, 2],
-						income			: 1,
-						recruits		: []
-					}, {
-						nearProvinces	: [0, 1],
-						income			: 1,
-						recruits		: []
-					}, {
-						nearProvinces	: [2],
-						income			: 1,
-						recruits		: []
-					}
-				]
-			});
+				
+				mapWidth		: null,
+				mapHeight		: null,
+				landscape		: null,
+				provinces		: null
+			};
 			
+			_game = new Game(data);
 			_gameController = new GameController(_game);
+			_game.updateGameInfo(data);
 			
 			_layout.addChild(_gameController.gameView);
-			
-			ViewManager.instance.validateAllViewsGraphics();
-			
-			doLayout();
 			
 			Application.application.addEventListener(ResizeEvent.RESIZE, this.onAppResize);
 		}

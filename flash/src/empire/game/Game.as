@@ -4,17 +4,20 @@ package empire.game
 	
 	import empire.map.Map;
 	import empire.map.MapState;
-	import empire.player.Player;
 	import empire.province.ProvinceState;
+	
+	import flash.events.Event;
 	
 	import util.ArrayUtil;
 	
 	public class Game extends Model
 	{
+		public static const EVENT_PLAYER_JOINED	:String = "playerJoined";
+		public static const EVENT_PLAYER_LEFT	:String = "playerLeft";
+		public static const EVENT_MAP_GENERATED	:String = "mapGenerated";
 		public static const EVENT_GAME_JOINED	:String = "gameJoined";
 		public static const EVENT_GAME_STARTED	:String = "gameStarted";
 		public static const EVENT_GAME_FINISHED	:String = "gameFinished";
-		public static const EVENT_TURN_ADDED	:String = "turnAdded";
 		
 		
 		
@@ -48,22 +51,9 @@ package empire.game
 			_gameId			= data.gameId;
 			_gameName		= data.gameName;
 			_turnDuration	= data.turnDuration;
-			
-			_isStarted		= data.isStarted;
-			_isJoined		= data.isJoined;
-			
-			_winnerIndex	= data.winnerIndex;
 			_turnCount		= data.turnCount;
 			
 			_players		= new Array(data.players.length);
-			
-			for (var i:int = 0; i < data.players.length; ++i)
-			{
-				if (data.players[i])
-					_players[i] = new Player(data.players[i]);
-			}
-			
-			_map			= new Map(data);
 		}
 		
 		public function get gameId():String
@@ -146,6 +136,54 @@ package empire.game
 				return null;
 			
 			return mapState.provinces[provinceIndex];
+		}
+		
+		public function updateGameInfo(data:Object):void
+		{
+			var events:Array = new Array();
+			var i:int;
+			
+			for (i = 0; i < _players.length; ++i)
+			{
+				if (_players[i])
+				{
+					if (data.players[i] && (data.players[i].memberId == _players[i].memberId))
+						continue;
+					
+					_players[i] = null;
+					events.push(new PlayerInfoChangeEvent(EVENT_PLAYER_LEFT, i));
+				}
+				
+				if (data.players[i])
+					events.push(new PlayerInfoChangeEvent(EVENT_PLAYER_JOINED, i));
+			}
+			
+			if (!map && data.landscape)
+			{
+				_map = new Map(data);
+				events.push(new Event(EVENT_MAP_GENERATED));
+			}
+			
+			if (!_isJoined && data.isJoined)
+			{
+				_isJoined = true;
+				events.push(new Event(EVENT_GAME_JOINED));
+			}
+			
+			if (!_isStarted && data.isStarted)
+			{
+				_isStarted = true;
+				events.push(new Event(EVENT_GAME_STARTED));
+			}
+			
+			if (_winnerIndex == -1 && data.winnerIndex != -1)
+			{
+				_winnerIndex = data.winnerIndex;
+				events.push(new Event(EVENT_GAME_FINISHED));
+			}
+			
+			for (i = 0; i < events.length; ++i)
+				dispatchEvent(events[i]);
 		}
 	}
 }

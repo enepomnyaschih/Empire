@@ -81,7 +81,8 @@ package ui
 				var ch:Number = view.initialHeight;
 				
 				if (cw == 0 || ch == 0)
-					throw new Error("All children in IsothropicLayout must have non-zero width and height.");
+					continue;
+//					throw new Error("All children in IsothropicLayout must have non-zero width and height.");
 				
 				var s:Number = Math.min(width / cw, height / ch);
 				var w:Number = s * cw;
@@ -91,8 +92,6 @@ package ui
 				child.y			= (height - h) / 2;
 				child.scaleX	= s;
 				child.scaleY	= s;
-				
-//				trace(width, height, cw, ch, s);
 			}
 		}
 		
