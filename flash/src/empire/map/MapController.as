@@ -1,9 +1,9 @@
-package game.map
+package empire.map
 {
 	import common.Controller;
 	
-	import game.province.ProvinceController;
-	import game.province.ProvinceControllerCollection;
+	import empire.province.ProvinceController;
+	import empire.province.ProvinceControllerCollection;
 
 	public class MapController extends Controller
 	{
@@ -36,7 +36,7 @@ package game.map
 			{
 				for (var y:int = 0; y < _map.height; ++y)
 				{
-					var cell:int = _map.getCell(x, y);
+					var cell:int = _map.cells[x][y];
 					if (cell == -1)
 						continue;
 					

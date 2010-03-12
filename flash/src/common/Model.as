@@ -6,16 +6,9 @@ package common
 
 	public class Model extends EventDispatcher
 	{
-		public function Model(data:Object = null)
+		public function Model()
 		{
 			super();
-			
-			loadData(data);
-		}
-		
-		virtual public function loadData(data:Object):void
-		{
-			ConfigUtil.apply(this, data);
 		}
 	}
 }

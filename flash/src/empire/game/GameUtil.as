@@ -1,4 +1,4 @@
-package game.game
+package empire.game
 {
 	public class GameUtil
 	{

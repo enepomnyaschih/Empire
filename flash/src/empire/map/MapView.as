@@ -1,8 +1,8 @@
-package game.map
+package empire.map
 {
 	import common.View;
 	
-	import game.province.ProvinceView;
+	import empire.province.ProvinceView;
 
 	public class MapView extends View
 	{

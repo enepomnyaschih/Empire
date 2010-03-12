@@ -1,4 +1,4 @@
-package game.map
+package empire.map
 {
 	public class MapViewMetrics
 	{

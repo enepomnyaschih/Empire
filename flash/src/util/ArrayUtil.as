@@ -32,5 +32,21 @@ package util
 		{
 			array.splice(findBy(array, field, value), 1);
 		}
+		
+		public static function fillItems(dest:Array, source:Array):void
+		{
+			removeAll(dest);
+			for (var i:int = 0; i < source.length; ++i)
+				dest.push(source[i]);
+		}
+		
+		public static function setLength(array:Array, length:int):void
+		{
+			while (array.length > length)
+				array.pop();
+			
+			while (array.length < length)
+				array.push(null);
+		}
 	}
 }

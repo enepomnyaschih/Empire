@@ -1,4 +1,4 @@
-package game.province
+package empire.province
 {
 	import common.Collection;
 

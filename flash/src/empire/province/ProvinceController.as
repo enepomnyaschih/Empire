@@ -1,9 +1,9 @@
-package game.province
+package empire.province
 {
 	import common.Controller;
 	
-	import game.map.Map;
-	import game.map.MapViewMetrics;
+	import empire.map.Map;
+	import empire.map.MapViewMetrics;
 
 	public class ProvinceController extends Controller
 	{

@@ -2,8 +2,8 @@ package
 {
 	import common.ViewManager;
 	
-	import game.map.Map;
-	import game.map.MapController;
+	import empire.game.Game;
+	import empire.game.GameController;
 	
 	import mx.core.Application;
 	import mx.core.UIComponent;
@@ -17,8 +17,8 @@ package
 		
 		private var _layout:IsothropicLayout;
 		
-		private var _map:Map;
-		private var _mapController:MapController;
+		private var _game:Game;
+		private var _gameController:GameController;
 		
 		public function Frame()
 		{
@@ -28,28 +28,50 @@ package
 			
 			addChild(_layout);
 			
-			_map = new Map(
-				10, 10, "/AAAA//////AAAAAA/////AAAAABBBCCCCAABBBBCCCC/BBBBB/CCC//BBBBCCCCDDDD//////DDDDD//////DDD/////DDDDD//",
-				[
+			_game = new Game({
+				gameId			: "daspddpiapf",
+				gameName		: "Empire Game",
+				turnDuration	: 0,
+				isStarted		: true,
+				isJoined		: true,
+				winnerIndex		: -1,
+				turnCount		: 0,
+				players			: [
+					{
+						memberId	: "YoGA"
+					}, {
+						memberId	: "NightMR"
+					}, {
+						memberId	: "Enotniy"
+					}
+				],
+				mapWidth		: 10,
+				mapHeight		: 10,
+				landscape		: "/AAAA//////AAAAAA/////AAAAABBBCCCCAABBBBCCCC/BBBBB/CCC//BBBBCCCCDDDD//////DDDDD//////DDD/////DDDDD//",
+				provinces		: [
 					{
 						nearProvinces	: [1, 2],
-						owner			: 0
+						income			: 1,
+						recruits		: []
 					}, {
 						nearProvinces	: [0, 2],
-						owner			: 1
+						income			: 1,
+						recruits		: []
 					}, {
 						nearProvinces	: [0, 1],
-						owner			: 2
+						income			: 1,
+						recruits		: []
 					}, {
 						nearProvinces	: [2],
-						owner			: -1
+						income			: 1,
+						recruits		: []
 					}
 				]
-			);
+			});
 			
-			_mapController = new MapController(_map);
+			_gameController = new GameController(_game);
 			
-			_layout.addChild(_mapController.mapView);
+			_layout.addChild(_gameController.gameView);
 			
 			ViewManager.instance.validateAllViewsGraphics();
 			

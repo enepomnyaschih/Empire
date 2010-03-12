@@ -1,9 +1,9 @@
-package game.map
+package empire.map
 {
 	import common.Model;
 	
-	import game.province.Province;
-	import game.province.ProvinceCollection;
+	import empire.province.Province;
+	import empire.province.ProvinceCollection;
 	
 	import util.Base64;
 	
@@ -14,33 +14,33 @@ package game.map
 		
 		private var _cells:Array;
 		
-		private var _provinces:ProvinceCollection = new ProvinceCollection();
+		private var _provinces:Array = new Array();
 		
 		
 		
 		
 		
 		
-		public function Map(width:int, height:int, landscape:String, provincesData:Array)
+		public function Map(data:Object)
 		{
 			super();
 			
-			_width	= width;
-			_height	= height;
+			_width	= data.mapWidth;
+			_height	= data.mapHeight;
 			
-			_cells = new Array(_width);
+			_cells	= new Array(_width);
 			for (var x:int = 0; x < _width; ++x)
 			{
 				_cells[x] = new Array(_height);
 				for (var y:int = 0; y < _height; ++y)
 				{
-					var char:String = landscape.charAt(x + y * _width);
+					var char:String = data.landscape.charAt(x + y * _width);
 					_cells[x][y] = (char == "/") ? -1 : Base64.instance.getBaseIndex(char);
 				}
 			}
 			
-			for (var i:int = 0; i < provincesData.length; ++i)
-				_provinces.addItem(new Province(i, provincesData[i]));
+			for (var i:int = 0; i < data.provinces.length; ++i)
+				_provinces.push(new Province(data.provinces[i]));
 		}
 		
 		public function get width():int
@@ -53,12 +53,12 @@ package game.map
 			return _height;
 		}
 		
-		public function getCell(x:int, y:int):int
+		public function get cells():Array
 		{
-			return _cells[x][y];
+			return _cells;
 		}
 		
-		public function get provinces():ProvinceCollection
+		public function get provinces():Array
 		{
 			return _provinces;
 		}

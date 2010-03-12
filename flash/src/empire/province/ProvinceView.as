@@ -1,10 +1,10 @@
-package game.province
+package empire.province
 {
 	import common.View;
 	
-	import game.game.GameUtil;
-	import game.map.Map;
-	import game.map.MapViewMetrics;
+	import empire.game.GameUtil;
+	import empire.map.Map;
+	import empire.map.MapViewMetrics;
 	
 	import util.ColorUtil;
 	import util.Dir6;
@@ -38,7 +38,7 @@ package game.province
 			
 			_map = map;
 			_index = index;
-			_color = GameUtil.getOwnerColor(province.owner);
+			_color = GameUtil.getOwnerColor(-1/*province.owner*/);
 			
 			_metrics = metrics;
 			
@@ -47,7 +47,7 @@ package game.province
 		
 		public function get province():Province
 		{
-			return _map.provinces.getProvinceAt(_index);
+			return _map.provinces[_index];
 		}
 		
 		public function addCell(x:int, y:int):void
@@ -78,10 +78,10 @@ package game.province
 			super.validateGraphics();
 			
 			var province:Province = this.province;
-			var owner:int = province.owner;
+			var owner:int = -1;//province.owner;
 			
 			var provinceColor:uint =
-				(owner == -1) ? GameUtil.NEUTRAL_COLOR : GameUtil.PLAYER_COLORS[province.owner];
+				(owner == -1) ? GameUtil.NEUTRAL_COLOR : GameUtil.PLAYER_COLORS[owner];
 			
 			var colorMain:uint = ColorUtil.averageColor(
 				provinceColor, _transitionColor, _transitionProgress / MAX_TRANSITION_PROGRESS)
@@ -124,7 +124,7 @@ package game.province
 				var x:int = point.x;
 				var y:int = point.y;
 				
-				var cell:int = _map.getCell(x, y);
+				var cell:int = _map.cells[x][y];
 				
 				var dx:Number = (y % 2 == 0) ? (_metrics.cellWidth / 2) : 0;
 				
@@ -140,7 +140,7 @@ package game.province
 					
 					if (tx >= 0 && tx < _map.width  &&
 						ty >= 0 && ty < _map.height &&
-						_map.getCell(tx, ty) == cell)
+						_map.cells[tx][ty] == cell)
 						continue;
 					
 					graphics.beginFill(color);
