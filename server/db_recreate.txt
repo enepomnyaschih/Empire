@@ -1,97 +1,99 @@
-
-DROP TABLE IF EXISTS members;
-CREATE TABLE members (
-	'memberId'			VARCHAR(31)		NOT NULL,
-	'password'			VARCHAR(31)		NOT NULL,
+DROP TABLE IF EXISTS `members`;
+CREATE TABLE `members` (
+	`memberShortId`			CHAR(16)		NOT NULL,
+	`memberId`			VARCHAR(31)		NOT NULL,
+	`password`			VARCHAR(31)		NOT NULL,
 	
-	PRIMARY KEY('memberId')
+	PRIMARY KEY(`memberShortId`)
 );
 
-DROP TABLE IF EXISTS tickets;
-CREATE TABLE tickets (
-	'ticket'			CHAR(16)		NOT NULL,
-	'memberId'			VARCHAR(31)		NOT NULL,
-	'expireTime'		DATETIME		NULL,
+DROP TABLE IF EXISTS `tickets`;
+CREATE TABLE `tickets` (
+	`ticket`			CHAR(16)		NOT NULL,
+	`memberShortId`			CHAR(16)		NOT NULL,
+	`expireTime`			DATETIME		NULL,
 	
-	PRIMARY KEY('ticket')
+	PRIMARY KEY(`ticket`)
 );
 
-DROP TABLE IF EXISTS games;
-CREATE TABLE games (
-	'gameId'			CHAR(16)		NOT NULL,
-	'gameName'			VARCHAR(255)	NOT NULL,
-	'totalPlayerCount'	INT				NOT NULL,
-	'turnDuration'		INT				NOT NULL,
-	'isInPlay'			BOOL			NOT NULL,
-	'isFinished'		BOOL			NOT NULL,
-	'turn'				INT				NOT NULL,
-	'turnCount'			INT				NOT NULL,
-	'landscape'			TEXT			NOT NULL,
+DROP TABLE IF EXISTS `games`;
+CREATE TABLE `games` (
+	`gameId`			CHAR(16)		NOT NULL,
+	`gameName`			VARCHAR(255)		NOT NULL,
+	`totalPlayerCount`		INT			NOT NULL,
+	`turnDuration`			INT			NOT NULL,
+	`isInPlay`			BOOL			NOT NULL,
+	`isFinished`			BOOL			NOT NULL,
+	`turnCount`			INT			NOT NULL,
+	`landscape`			TEXT			NOT NULL,
+	`mapHeight`			INT			NOT NULL,
+	`mapWight`			INT			NOT NULL,
 	
-	PRIMARY KEY('gameId')
+	PRIMARY KEY(`gameId`)
 );
 
 DROP TABLE IF EXISTS gameJoins;
 CREATE TABLE gameJoins (
-	'gameId'			CHAR(16)		NOT NULL,
-	'slot'				INT				NOT NULL,
-	'memberId'			VARCHAR(31)		NULL,
-	'isTurnEnded'		BOOL			NOT NULL,
+	`gameId`			CHAR(16)		NOT NULL,
+	`slot`				INT			NOT NULL,
+	`memberId`			VARCHAR(31)		NULL,
+	`isTurnEnded`			BOOL			NOT NULL,
 	
-	PRIMARY KEY('gameId'),
-	KEY('slot')
+	PRIMARY KEY(`gameId`, `slot`)
 );
 
 DROP TABLE IF EXISTS gameTurns;
 CREATE TABLE gameTurns (
-	'gameId'			CHAR(16)		NOT NULL,
-	'turn'				INT				NOT NULL,
-	'startTime'			DATETIME		NOT NULL,
+	`gameId`			CHAR(16)		NOT NULL,
+	`turn`				INT			NOT NULL,
+	`startTime`			DATETIME		NOT NULL,
 	
-	PRIMARY KEY('gameId'),
-	KEY('turn')
+	PRIMARY KEY(`gameId`, `turn`)
 );
 
 DROP TABLE IF EXISTS gamePlayerTurns;
 CREATE TABLE gamePlayerTurns (
-	'gameId'			CHAR(16)		NOT NULL,
-	'turn'				INT				NOT NULL,
-	'slot'				INT				NOT NULL,
-	'isPlaying'			BOOL			NOT NULL,
-	'gold'				INT				NOT NULL,
+	`gameId`			CHAR(16)		NOT NULL,
+	`turn`				INT			NOT NULL,
+	`slot`				INT			NOT NULL,
+	`isPlaying`			BOOL			NOT NULL,
+	`gold`				INT			NOT NULL,
 	
-	PRIMARY KEY('gameId'),
-	KEY('turn'),
-	KEY('slot')
+	PRIMARY KEY(`gameId`, `turn`, `slot`)
 );
 
 DROP TABLE IF EXISTS gameProvinces;
 CREATE TABLE gameProvinces (
-	'gameId'			
+	`gameId`			CHAR(16)		NOT NULL,
+	`province`			INT			NOT NULL,
+	`income`			INT			NOT NULL,
+	`recruits`			CHAR(16)		NOT NULL,
+
+	PRIMARY KEY(`gameId`, `province`)
 );
 
-DROP TABLE IF EXISTS gameProvinceBoundaries;
-CREATE TABLE gameProvinceBoundaries (
-	'gameId'			CHAR(16)		NOT NULL,
-	'province'			INT				NOT NULL,
-	'income'			INT				NOT NULL,
-	'recruits'			CHAR(16)		NOT NULL,
-	
-	PRIMARY KEY('gameId'),
-	KEY('province')
-);
+--
+-- DROP TABLE IF EXISTS gameProvinceBoundaries;
+-- CREATE TABLE gameProvinceBoundaries (
+-- 	`gameId`			CHAR(16)		NOT NULL,
+-- 	`province`			INT			NOT NULL,
+-- 	`income`			INT			NOT NULL,
+-- 	`recruits`			CHAR(16)		NOT NULL,
+-- 	
+-- 	PRIMARY KEY(`gameId`),
+-- 	KEY(`province`)
+-- );
+--
 
 DROP TABLE IF EXISTS gameProvinceTurns;
 CREATE TABLE gameProvinceTurns (
-	'gameId'			CHAR(16)		NOT NULL,
-	'province'			INT				NOT NULL,
-	'turn'				INT				NOT NULL,
-	'owner'				INT				NOT NULL,
-	'units'				CHAR(16)		NOT NULL,
-	'fortLevel'			INT				NOT NULL,
-	'fortHealth'		INT				NOT NULL,
+	`gameId`			CHAR(16)		NOT NULL,
+	`province`			INT			NOT NULL,
+	`turn`				INT			NOT NULL,
+	`owner`				INT			NOT NULL,
+	`units`				CHAR(16)		NOT NULL,
+	`fortLevel`			INT			NOT NULL,
+	`fortHealth`			INT			NOT NULL,
 	
-	PRIMARY KEY('gameId'),
-	KEY('province'),
-	KEY('turn')
+	PRIMARY KEY(`gameId`, `province`, `turn`)
 );
