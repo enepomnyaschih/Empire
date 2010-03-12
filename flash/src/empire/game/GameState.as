@@ -3,6 +3,7 @@ package empire.game
 	import common.Model;
 	
 	import empire.map.MapState;
+	import empire.player.PlayerState;
 	
 	public class GameState extends Model
 	{

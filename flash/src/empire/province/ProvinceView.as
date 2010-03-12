@@ -2,6 +2,7 @@ package empire.province
 {
 	import common.View;
 	
+	import empire.game.Game;
 	import empire.game.GameUtil;
 	import empire.map.Map;
 	import empire.map.MapViewMetrics;
@@ -12,15 +13,18 @@ package empire.province
 
 	public class ProvinceView extends View
 	{
-		private static const MAX_TRANSITION_PROGRESS:int = 100;
+		private static const MAX_TRANSITION_PROGRESS:int = 80;
 		
 		private static const BORDER_WIDTH_COEF:Number = 0.3;
 		
-		private var _map:Map;
+		private var _game:Game;
 		private var _index:int;
 		
 		private var _cells:Array = new Array(); // of {x, y} objects
 		
+		private var _turn:int = -1;
+		
+		private var _owner				:int = -1;
 		private var _color				:uint;
 		private var _transitionColor	:uint = 0;
 		private var _transitionProgress	:uint = 0;
@@ -32,22 +36,37 @@ package empire.province
 		
 		
 		
-		public function ProvinceView(map:Map, index:int, metrics:MapViewMetrics)
+		public function ProvinceView(game:Game, index:int, metrics:MapViewMetrics)
 		{
 			super();
 			
-			_map = map;
+			_game = game;
 			_index = index;
-			_color = GameUtil.getOwnerColor(-1/*province.owner*/);
+			_color = GameUtil.getOwnerColor(_owner);
 			
 			_metrics = metrics;
 			
 			invalidateGraphics(); 
 		}
 		
+		public function get game():Game
+		{
+			return _game;
+		}
+		
+		public function get map():Map
+		{
+			return _game.map;
+		}
+		
 		public function get province():Province
 		{
-			return _map.provinces[_index];
+			return map.provinces[_index];
+		}
+		
+		public function get provinceState():ProvinceState
+		{
+			return _game.getProvinceState(_turn, _index);
 		}
 		
 		public function addCell(x:int, y:int):void
@@ -58,18 +77,28 @@ package empire.province
 			});
 		}
 		
-		public function beginColorTransition():void
+		public function switchState(turn:int):void
 		{
-			_transitionColor = _color;
-			_transitionProgress = MAX_TRANSITION_PROGRESS;
+			_turn = turn;
+			
+			var state:ProvinceState = provinceState;
+			switchOwner(state ? state.owner : -1);
 		}
 		
-		public function processColorTransition():void
+		public function animate():void
 		{
 			if (_transitionProgress == 0)
 				return;
 			
 			--_transitionProgress;
+			
+			var coef:Number = _transitionProgress / MAX_TRANSITION_PROGRESS;
+			
+			if (coef > 0.5)
+				_color = ColorUtil.brightColor(_transitionColor, coef * 2 - 1);
+			else
+				_color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
+			
 			invalidateGraphics();
 		}
 		
@@ -77,21 +106,10 @@ package empire.province
 		{
 			super.validateGraphics();
 			
-			var province:Province = this.province;
-			var owner:int = -1;//province.owner;
-			
-			var provinceColor:uint =
-				(owner == -1) ? GameUtil.NEUTRAL_COLOR : GameUtil.PLAYER_COLORS[owner];
-			
-			var colorMain:uint = ColorUtil.averageColor(
-				provinceColor, _transitionColor, _transitionProgress / MAX_TRANSITION_PROGRESS)
-			
-			var colorDark:uint = ColorUtil.darkColor(colorMain, 0.5);
-			
 			graphics.clear();
 			
-			drawCells	(colorMain);
-			drawBorders	(colorDark);
+			drawCells	(_color);
+			drawBorders	(ColorUtil.darkColor(_color, 0.5));
 		}
 		
 		private function drawCells(color:uint):void
@@ -117,14 +135,13 @@ package empire.province
 		
 		private function drawBorders(color:uint):void
 		{
-			
 			for (var i:int = 0; i < _cells.length; ++i)
 			{
 				var point:Object = _cells[i];
 				var x:int = point.x;
 				var y:int = point.y;
 				
-				var cell:int = _map.cells[x][y];
+				var cell:int = map.cells[x][y];
 				
 				var dx:Number = (y % 2 == 0) ? (_metrics.cellWidth / 2) : 0;
 				
@@ -138,9 +155,9 @@ package empire.province
 					var tx:int = Dir6.getTargetX(x, y, d);
 					var ty:int = Dir6.getTargetY(x, y, d);
 					
-					if (tx >= 0 && tx < _map.width  &&
-						ty >= 0 && ty < _map.height &&
-						_map.cells[tx][ty] == cell)
+					if (tx >= 0 && tx < map.width  &&
+						ty >= 0 && ty < map.height &&
+						map.cells[tx][ty] == cell)
 						continue;
 					
 					graphics.beginFill(color);
@@ -148,6 +165,16 @@ package empire.province
 					graphics.endFill();
 				}
 			}
+		}
+		
+		private function switchOwner(owner:int):void
+		{
+			if (owner == _owner)
+				return;
+			
+			_owner = owner;
+			_transitionColor = _color;
+			_transitionProgress = MAX_TRANSITION_PROGRESS;
 		}
 	}
 }

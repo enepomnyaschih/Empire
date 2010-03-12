@@ -42,9 +42,18 @@ package util
 		
 		public static function setLength(array:Array, length:int):void
 		{
+			cut(array, length);
+			lng(array, length);
+		}
+		
+		public static function cut(array:Array, length:int):void
+		{
 			while (array.length > length)
 				array.pop();
-			
+		}
+		
+		public static function lng(array:Array, length:int):void
+		{
 			while (array.length < length)
 				array.push(null);
 		}

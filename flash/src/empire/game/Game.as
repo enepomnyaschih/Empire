@@ -3,7 +3,11 @@ package empire.game
 	import common.Model;
 	
 	import empire.map.Map;
+	import empire.map.MapState;
 	import empire.player.Player;
+	import empire.province.ProvinceState;
+	
+	import util.ArrayUtil;
 	
 	public class Game extends Model
 	{
@@ -110,6 +114,38 @@ package empire.game
 		public function get states():Array
 		{
 			return _states;
+		}
+		
+		public function setState(turn:int, state:GameState):void
+		{
+			ArrayUtil.lng(_states, turn + 1);
+			_states[turn] = state;
+		}
+		
+		public function getState(turn:int):GameState
+		{
+			if (turn < 0 || turn >= _states.length)
+				return null;
+			
+			return _states[turn];
+		}
+		
+		public function getMapState(turn:int):MapState
+		{
+			var gameState:GameState = getState(turn);
+			if (!gameState)
+				return null;
+			
+			return gameState.map;
+		}
+		
+		public function getProvinceState(turn:int, provinceIndex:int):ProvinceState
+		{
+			var mapState:MapState = getMapState(turn);
+			if (!mapState)
+				return null;
+			
+			return mapState.provinces[provinceIndex];
 		}
 	}
 }
