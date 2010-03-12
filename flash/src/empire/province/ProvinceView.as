@@ -1,11 +1,16 @@
 package empire.province
 {
+	import common.IntPoint;
 	import common.View;
 	
+	import empire.army.ArmyView;
 	import empire.game.Game;
 	import empire.game.GameUtil;
 	import empire.map.Map;
+	import empire.map.MapView;
 	import empire.map.MapViewMetrics;
+	
+	import flash.geom.Point;
 	
 	import util.ColorUtil;
 	import util.Dir6;
@@ -21,6 +26,7 @@ package empire.province
 		private var _index:int;
 		
 		private var _cells:Array = new Array(); // of {x, y} objects
+		private var _center:IntPoint = null;
 		
 		private var _turn:int = -1;
 		
@@ -28,6 +34,8 @@ package empire.province
 		private var _color				:uint;
 		private var _transitionColor	:uint = 0;
 		private var _transitionProgress	:uint = 0;
+		
+		private var _armyView:ArmyView;
 		
 		private var _metrics:MapViewMetrics;
 		
@@ -71,10 +79,9 @@ package empire.province
 		
 		public function addCell(x:int, y:int):void
 		{
-			_cells.push({
-				x: x,
-				y: y
-			});
+			_cells.push(new IntPoint(x, y));
+			
+			_center = null;
 		}
 		
 		public function switchState(turn:int):void
@@ -83,6 +90,9 @@ package empire.province
 			
 			var state:ProvinceState = provinceState;
 			switchOwner(state ? state.owner : -1);
+			switchArmy(state);
+			
+			invalidateGraphics();
 		}
 		
 		public function animate():void
@@ -106,6 +116,8 @@ package empire.province
 		{
 			super.validateGraphics();
 			
+			validateCenter();
+			
 			graphics.clear();
 			
 			drawCells	(_color);
@@ -120,12 +132,12 @@ package empire.province
 				var x:int = point.x;
 				var y:int = point.y;
 				
-				var dx:Number = (y % 2 == 0) ? (_metrics.cellWidth / 2) : 0;
+				var cellPoint:Point = MapView.getCellCenter(x, y, _metrics);
 				
-				var x1:Number = _metrics.marginLeft	+ _metrics.cellWidth	* x + dx;
-				var y1:Number = _metrics.marginTop	+ _metrics.cellHeight	* y;
-				var x2:Number = x1 + _metrics.cellWidth;
-				var y2:Number = y1 + _metrics.cellHeight;
+				var x1:Number = cellPoint.x - _metrics.cellWidth  / 2;
+				var y1:Number = cellPoint.y - _metrics.cellHeight / 2;
+				var x2:Number = cellPoint.x + _metrics.cellWidth  / 2;
+				var y2:Number = cellPoint.y + _metrics.cellHeight / 2;
 				
 				graphics.beginFill(color);
 				GraphicsUtil.drawHexoid(graphics, x1, y1, x2, y2);
@@ -137,18 +149,18 @@ package empire.province
 		{
 			for (var i:int = 0; i < _cells.length; ++i)
 			{
-				var point:Object = _cells[i];
+				var point:IntPoint = _cells[i];
 				var x:int = point.x;
 				var y:int = point.y;
 				
 				var cell:int = map.cells[x][y];
 				
-				var dx:Number = (y % 2 == 0) ? (_metrics.cellWidth / 2) : 0;
+				var cellPoint:Point = MapView.getCellCenter(x, y, _metrics);
 				
-				var x1:Number = _metrics.marginLeft	+ _metrics.cellWidth	* x + dx;
-				var y1:Number = _metrics.marginTop	+ _metrics.cellHeight	* y;
-				var x2:Number = x1 + _metrics.cellWidth;
-				var y2:Number = y1 + _metrics.cellHeight;
+				var x1:Number = cellPoint.x - _metrics.cellWidth  / 2;
+				var y1:Number = cellPoint.y - _metrics.cellHeight / 2;
+				var x2:Number = cellPoint.x + _metrics.cellWidth  / 2;
+				var y2:Number = cellPoint.y + _metrics.cellHeight / 2;
 				
 				for (var d:int = 0; d < 6; ++d)
 				{
@@ -175,6 +187,40 @@ package empire.province
 			_owner = owner;
 			_transitionColor = _color;
 			_transitionProgress = MAX_TRANSITION_PROGRESS;
+		}
+		
+		private function switchArmy(state:ProvinceState):void
+		{
+			if (_armyView)
+				removeChild(_armyView);
+			
+			if (!state)
+				return;
+			
+			var centerPoint:Point = MapView.getCellCenter(_center.x, _center.y, _metrics);
+			
+			_armyView = new ArmyView(state.units, state.fortLevel, state.fortHealth);
+			_armyView.x = centerPoint.x;
+			_armyView.y = centerPoint.y + 100;
+			
+			addChild(_armyView);
+		}
+		
+		private function validateCenter():void
+		{
+			var cx:int = 0;
+			var cy:int = 0;
+			
+			for (var i:int = 0; i < _cells.length; ++i)
+			{
+				cx += _cells[i].x;
+				cy += _cells[i].y;
+			}
+			
+			_center = new IntPoint(
+				Math.round(cx / _cells.length),
+				Math.round(cy / _cells.length)
+			);
 		}
 	}
 }

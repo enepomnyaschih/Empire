@@ -125,9 +125,9 @@ package empire.game
 					provinces	: [
 						{
 							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [0, 0, 0, 0, 0, 0, 0],
-							fortLevel		: 0,
-							fortHealth		: 0
+							units			: [3, 6, 9, 12, 15, 18, 21],
+							fortLevel		: 2,
+							fortHealth		: 250
 						}, {
 							owner			: Math.floor(Math.random() * 16) - 1,
 							units			: [0, 0, 0, 0, 0, 0, 0],

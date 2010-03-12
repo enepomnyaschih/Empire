@@ -3,6 +3,8 @@ package empire.map
 	import common.View;
 	
 	import empire.province.ProvinceView;
+	
+	import flash.geom.Point;
 
 	public class MapView extends View
 	{
@@ -49,6 +51,16 @@ package empire.map
 		public function addProvinceView(provinceView:ProvinceView):void
 		{
 			_provinceViewContainer.addChild(provinceView);
+		}
+		
+		public static function getCellCenter(x:int, y:int, metrics:MapViewMetrics):Point
+		{
+			var dx:Number = (y % 2 == 0) ? (metrics.cellWidth / 2) : 0;
+			
+			return new Point(
+				metrics.marginLeft + metrics.cellWidth  * (x + 0.5) + dx,
+				metrics.marginTop  + metrics.cellHeight * (y + 0.5)
+			);
 		}
 	}
 }

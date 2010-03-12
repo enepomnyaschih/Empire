@@ -84,6 +84,8 @@ package
 		private var _game:Game;
 		private var _gameController:GameController;
 		
+		private var _masterId:String;
+		
 		public function Frame()
 		{
 			super();
@@ -109,6 +111,16 @@ package
 		{
 			init();
 			return _instance;
+		}
+		
+		public function get masterId():String
+		{
+			return _masterId;
+		}
+		
+		public function setMasterId(masterId:String):void
+		{
+			_masterId = masterId;
 		}
 		
 		public function openGame(data:Object):void

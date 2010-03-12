@@ -1,5 +1,7 @@
 package empire.game
 {
+	import util.ColorUtil;
+	
 	public class GameUtil
 	{
 		/**
@@ -17,5 +19,21 @@ package empire.game
 		{
 			return (owner < 0 || owner >= PLAYER_COLORS.length) ? NEUTRAL_COLOR : PLAYER_COLORS[owner];
 		}
+		
+		public static const UNIT_POWER_COLOR:uint = 0xB0FFB0;
+		public static const UNIT_HEALTH_MAX_COLOR:uint = 0x80FF80;
+		public static const UNIT_HEALTH_MIN_COLOR:uint = 0xFF2040;
+		
+		public static function getHealthColor(amount:Number):uint
+		{
+			return ColorUtil.averageColor(UNIT_HEALTH_MIN_COLOR, UNIT_HEALTH_MAX_COLOR, amount);
+		}
+		
+		/**
+		 * Particular game rules.
+		 */
+		public static const UNIT_TYPE_COUNT:int = 7;
+		
+		public static const FORT_MAX_HEALTH:Array = [300, 700, 1200];
 	}
 }
