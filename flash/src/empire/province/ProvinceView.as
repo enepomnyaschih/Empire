@@ -3,7 +3,8 @@ package empire.province
 	import common.IntPoint;
 	import common.View;
 	
-	import empire.army.ArmyView;
+	import empire.army.ArmyBoardView;
+	import empire.army.ProvinceBoardView;
 	import empire.game.Game;
 	import empire.game.GameUtil;
 	import empire.map.Map;
@@ -35,7 +36,8 @@ package empire.province
 		private var _transitionColor	:uint = 0;
 		private var _transitionProgress	:uint = 0;
 		
-		private var _armyView:ArmyView;
+		private var _boardView:ProvinceBoardView;
+		private var _armyView:ArmyBoardView;
 		
 		private var _metrics:MapViewMetrics;
 		
@@ -199,15 +201,18 @@ package empire.province
 			
 			var centerPoint:Point = MapView.getCellCenter(_center.x, _center.y, _metrics);
 			
-			_armyView = new ArmyView(state.units, state.fortLevel, state.fortHealth);
+			_armyView = new ArmyBoardView(state.units, state.fortLevel, state.fortHealth);
 			_armyView.x = centerPoint.x;
-			_armyView.y = centerPoint.y + 100;
+			_armyView.y = centerPoint.y - 50;
 			
 			addChild(_armyView);
 		}
 		
 		private function validateCenter():void
 		{
+			if (_center)
+				return;
+			
 			var cx:int = 0;
 			var cy:int = 0;
 			
@@ -219,8 +224,21 @@ package empire.province
 			
 			_center = new IntPoint(
 				Math.round(cx / _cells.length),
-				Math.round(cy / _cells.length)
+				Math.ceil(cy / _cells.length)
 			);
+			
+			addBoardView();
+		}
+		
+		private function addBoardView():void
+		{
+			var centerPoint:Point = MapView.getCellCenter(_center.x, _center.y, _metrics);
+			
+			_boardView = new ProvinceBoardView(province.income, province.recruits);
+			_boardView.x = centerPoint.x;
+			_boardView.y = centerPoint.y + 20;
+			
+			addChild(_boardView);
 		}
 	}
 }

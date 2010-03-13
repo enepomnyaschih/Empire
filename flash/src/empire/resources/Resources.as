@@ -47,5 +47,8 @@ package empire.resources
 			CITADEL,
 			FORTRESS
 		];
+		
+		[Embed(source="../resources/gold.png")]
+		public static const GOLD:Class;
 	}
 }
