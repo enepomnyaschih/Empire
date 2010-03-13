@@ -3,10 +3,16 @@ package empire.map
 	import common.View;
 	
 	import empire.province.ProvinceView;
+	
+	import flash.geom.Point;
 
 	public class MapView extends View
 	{
-		private static const MIN_MARGIN		:Number = 20;
+		private static const MARGIN_LEFT	:Number = 20;
+		private static const MARGIN_RIGHT	:Number = 20;
+		private static const MARGIN_TOP		:Number = 100;
+		private static const MARGIN_BOTTOM	:Number = 20;
+		
 		private static const CELL_WIDTH		:Number = 173.21; // 100 * sqrt(3)
 		private static const CELL_HEIGHT	:Number = 120.00;
 		
@@ -39,16 +45,26 @@ package empire.map
 		{
 			_metrics.cellWidth	= CELL_WIDTH;
 			_metrics.cellHeight	= CELL_HEIGHT;
-			_metrics.marginLeft	= MIN_MARGIN;
-			_metrics.marginTop	= MIN_MARGIN + CELL_HEIGHT / 6;
+			_metrics.marginLeft	= MARGIN_LEFT;
+			_metrics.marginTop	= MARGIN_TOP + CELL_HEIGHT / 6;
 			
-			width  = _metrics.cellWidth  * (_map.width  + 0.5) + 2 * MIN_MARGIN;
-			height = _metrics.cellHeight * (_map.height + 1/3) + 2 * MIN_MARGIN;
+			width  = _metrics.cellWidth  * (_map.width  + 0.5) + MARGIN_LEFT + MARGIN_RIGHT;
+			height = _metrics.cellHeight * (_map.height + 1/3) + MARGIN_TOP  + MARGIN_BOTTOM;
 		}
 		
 		public function addProvinceView(provinceView:ProvinceView):void
 		{
 			_provinceViewContainer.addChild(provinceView);
+		}
+		
+		public static function getCellCenter(x:int, y:int, metrics:MapViewMetrics):Point
+		{
+			var dx:Number = (y % 2 == 0) ? (metrics.cellWidth / 2) : 0;
+			
+			return new Point(
+				metrics.marginLeft + metrics.cellWidth  * (x + 0.5) + dx,
+				metrics.marginTop  + metrics.cellHeight * (y + 0.5)
+			);
 		}
 	}
 }

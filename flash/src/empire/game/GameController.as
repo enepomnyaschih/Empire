@@ -42,6 +42,13 @@ package empire.game
 			_mainTicker.start();
 		}
 		
+		override public function free():void
+		{
+			super.free();
+			
+			_mainTicker.stop();
+		}
+		
 		public function get gameView():GameView
 		{
 			return _gameView;
@@ -96,47 +103,7 @@ package empire.game
 			
 			if (_tick == 60)
 			{
-				_game.updateGameInfo({
-					gameId			: "daspddpiapf",
-					gameName		: "Empire Game",
-					turnDuration	: 0,
-					isStarted		: true,
-					isJoined		: true,
-					winnerIndex		: -1,
-					turnCount		: 0,
-					players			: [
-						{
-							memberId	: "YoGA"
-						}, {
-							memberId	: "NightMR"
-						}, {
-							memberId	: "Enotniy"
-						}
-					],
-					
-					mapWidth		: 10,
-					mapHeight		: 10,
-					landscape		: "/AAAA//////AAAAAA/////AAAAABBBCCCCAABBBBCCCC/BBBBB/CCC//BBBBCCCCDDDD//////DDDDD//////DDD/////DDDDD//",
-					provinces		: [
-						{
-							nearProvinces	: [1, 2],
-							income			: 1,
-							recruits		: []
-						}, {
-							nearProvinces	: [0, 2],
-							income			: 1,
-							recruits		: []
-						}, {
-							nearProvinces	: [0, 1],
-							income			: 1,
-							recruits		: []
-						}, {
-							nearProvinces	: [2],
-							income			: 1,
-							recruits		: []
-						}
-					]
-				})
+				_game.updateGameInfo(Frame.GAME_INFO_UPDATED);
 			}
 			
 			if (_tick % 120 == 0)
@@ -158,9 +125,9 @@ package empire.game
 					provinces	: [
 						{
 							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [0, 0, 0, 0, 0, 0, 0],
-							fortLevel		: 0,
-							fortHealth		: 0
+							units			: [3, 6, 9, 12, 15, 18, 21],
+							fortLevel		: 2,
+							fortHealth		: 250
 						}, {
 							owner			: Math.floor(Math.random() * 16) - 1,
 							units			: [0, 0, 0, 0, 0, 0, 0],
@@ -183,6 +150,11 @@ package empire.game
 				_game.setState(_turn + 1, state);
 				
 				switchState(_turn + 1);
+			}
+			
+			if (_tick == 350)
+			{
+				Frame.instance.openGame(Frame.GAME_INFO_INITIAL);
 			}
 		}
 	}
