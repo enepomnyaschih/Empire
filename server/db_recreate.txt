@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `members`;
 CREATE TABLE `members` (
-	`memberShortId`			CHAR(16)		NOT NULL,
+	`memberShortId`			CHAR(32)		NOT NULL,
 	`memberId`			VARCHAR(31)		NOT NULL,
 	`password`			VARCHAR(31)		NOT NULL,
 	
@@ -9,16 +9,16 @@ CREATE TABLE `members` (
 
 DROP TABLE IF EXISTS `tickets`;
 CREATE TABLE `tickets` (
-	`ticket`			CHAR(16)		NOT NULL,
-	`memberShortId`			CHAR(16)		NOT NULL,
+	`ticket`			CHAR(32)		NOT NULL,
+	`memberShortId`			CHAR(32)		NOT NULL,
 	`expireTime`			DATETIME		NULL,
 	
-	PRIMARY KEY(`ticket`)
+	PRIMARY KEY(`ticket`,`memberShortId`)
 );
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`gameName`			VARCHAR(255)		NOT NULL,
 	`totalPlayerCount`		INT			NOT NULL,
 	`turnDuration`			INT			NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE `games` (
 
 DROP TABLE IF EXISTS gameJoins;
 CREATE TABLE gameJoins (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`slot`				INT			NOT NULL,
 	`memberId`			VARCHAR(31)		NULL,
 	`isTurnEnded`			BOOL			NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE gameJoins (
 
 DROP TABLE IF EXISTS gameTurns;
 CREATE TABLE gameTurns (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`turn`				INT			NOT NULL,
 	`startTime`			DATETIME		NOT NULL,
 	
@@ -53,7 +53,7 @@ CREATE TABLE gameTurns (
 
 DROP TABLE IF EXISTS gamePlayerTurns;
 CREATE TABLE gamePlayerTurns (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`turn`				INT			NOT NULL,
 	`slot`				INT			NOT NULL,
 	`isPlaying`			BOOL			NOT NULL,
@@ -64,10 +64,10 @@ CREATE TABLE gamePlayerTurns (
 
 DROP TABLE IF EXISTS gameProvinces;
 CREATE TABLE gameProvinces (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`province`			INT			NOT NULL,
 	`income`			INT			NOT NULL,
-	`recruits`			CHAR(16)		NOT NULL,
+	`recruits`			CHAR(32)		NOT NULL,
 
 	PRIMARY KEY(`gameId`, `province`)
 );
@@ -75,10 +75,10 @@ CREATE TABLE gameProvinces (
 --
 -- DROP TABLE IF EXISTS gameProvinceBoundaries;
 -- CREATE TABLE gameProvinceBoundaries (
--- 	`gameId`			CHAR(16)		NOT NULL,
+-- 	`gameId`			CHAR(32)		NOT NULL,
 -- 	`province`			INT			NOT NULL,
 -- 	`income`			INT			NOT NULL,
--- 	`recruits`			CHAR(16)		NOT NULL,
+-- 	`recruits`			CHAR(32)		NOT NULL,
 -- 	
 -- 	PRIMARY KEY(`gameId`),
 -- 	KEY(`province`)
@@ -87,11 +87,11 @@ CREATE TABLE gameProvinces (
 
 DROP TABLE IF EXISTS gameProvinceTurns;
 CREATE TABLE gameProvinceTurns (
-	`gameId`			CHAR(16)		NOT NULL,
+	`gameId`			CHAR(32)		NOT NULL,
 	`province`			INT			NOT NULL,
 	`turn`				INT			NOT NULL,
 	`owner`				INT			NOT NULL,
-	`units`				CHAR(16)		NOT NULL,
+	`units`				CHAR(32)		NOT NULL,
 	`fortLevel`			INT			NOT NULL,
 	`fortHealth`			INT			NOT NULL,
 	
