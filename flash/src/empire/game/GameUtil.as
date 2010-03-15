@@ -8,8 +8,8 @@ package empire.game
 		 * Game colors.
 		 */
 		public static const PLAYER_COLORS:Array = [
-			0xFF0000, 0x00FF00, 0xFFD800, 0xFF00DC, 0x00FFFF,
-			0xFF6A00, 0x0072FF, 0xCE7171, 0x71CE71, 0xCECE71,
+			0xFF0000, 0x00B000, 0xFFD800, 0xFF00DC, 0x00FFFF,
+			0xFF6A00, 0x0072FF, 0xCE7171, 0x41A041, 0xCECE71,
 			0xC671CE, 0x71CEA4, 0xCE9171, 0x7179CE, 0xDAFF7F
 		];
 		
@@ -20,7 +20,27 @@ package empire.game
 			return (owner < 0 || owner >= PLAYER_COLORS.length) ? NEUTRAL_COLOR : PLAYER_COLORS[owner];
 		}
 		
-		public static const UNIT_POWER_COLOR:uint = 0xB0FFB0;
+		public static const UNIT_COUNT_COLORS:Array = [
+			0xB0FFB0,	// awaiting
+			0xFFB0B0,	// left
+			0xB0FFB0	// came
+		];
+		
+		public static const UNIT_COUNT_ALPHAS:Array = [
+			1.0,		// awaiting
+			0.5,		// left
+			0.5			// came
+		];
+		
+		public static function getUnitCountIndex(n:int, count:int, left:int, came:int):int
+		{
+			if (n < count - left)
+				return 0;
+			if (n < count)
+				return 1;
+			return 2;
+		}
+		
 		public static const UNIT_HEALTH_MAX_COLOR:uint = 0x80FF80;
 		public static const UNIT_HEALTH_MIN_COLOR:uint = 0xFF2040;
 		

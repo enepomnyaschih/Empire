@@ -1,6 +1,6 @@
 package empire.map
 {
-	import common.Model;
+	import common.mvc.Model;
 	
 	import empire.province.ProvinceState;
 

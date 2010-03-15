@@ -1,6 +1,6 @@
 package empire.map
 {
-	import common.View;
+	import common.mvc.View;
 	
 	import empire.province.ProvinceView;
 	

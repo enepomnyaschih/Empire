@@ -1,4 +1,4 @@
-﻿package common
+﻿package common.mvc
 {
 	import mx.core.UIComponent;
 	
@@ -82,6 +82,10 @@
 		{
 			while (numChildren != 0)
 				removeChildAt(0);
+		}
+		
+		virtual public function animate():void
+		{
 		}
 	}
 }

@@ -1,9 +1,10 @@
 package empire.game
 {
-	import common.Model;
+	import common.mvc.Model;
 	
 	import empire.map.Map;
 	import empire.map.MapState;
+	import empire.ordermodel.ProvinceOrderModel;
 	import empire.province.ProvinceState;
 	
 	import flash.events.Event;
@@ -136,6 +137,15 @@ package empire.game
 				return null;
 			
 			return mapState.provinces[provinceIndex];
+		}
+		
+		public function getProvinceOrderModel(turn:int, provinceIndex:int):ProvinceOrderModel
+		{
+			var gameState:GameState = getState(turn);
+			if (!gameState)
+				return null;
+			
+			return gameState.orderModel.provinces[provinceIndex];
 		}
 		
 		public function updateGameInfo(data:Object):void

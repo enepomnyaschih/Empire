@@ -1,7 +1,7 @@
 package empire.province
 {
-	import common.IntPoint;
-	import common.View;
+	import common.geom.IntPoint;
+	import common.mvc.View;
 	
 	import empire.army.ArmyBoardView;
 	import empire.army.ProvinceBoardView;
@@ -10,7 +10,9 @@ package empire.province
 	import empire.map.Map;
 	import empire.map.MapView;
 	import empire.map.MapViewMetrics;
+	import empire.ordermodel.ProvinceOrderModel;
 	
+	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import util.ColorUtil;
@@ -26,8 +28,10 @@ package empire.province
 		private var _game:Game;
 		private var _index:int;
 		
+		private var _state:ProvinceState;
+		private var _orderModel:ProvinceOrderModel;
+		
 		private var _cells:Array = new Array(); // of {x, y} objects
-		private var _center:IntPoint = null;
 		
 		private var _turn:int = -1;
 		
@@ -56,7 +60,9 @@ package empire.province
 			
 			_metrics = metrics;
 			
-			invalidateGraphics(); 
+			invalidateGraphics();
+			
+			addBoardView();
 		}
 		
 		public function get game():Game
@@ -74,30 +80,23 @@ package empire.province
 			return map.provinces[_index];
 		}
 		
-		public function get provinceState():ProvinceState
-		{
-			return _game.getProvinceState(_turn, _index);
-		}
-		
 		public function addCell(x:int, y:int):void
 		{
 			_cells.push(new IntPoint(x, y));
-			
-			_center = null;
 		}
 		
 		public function switchState(turn:int):void
 		{
 			_turn = turn;
 			
-			var state:ProvinceState = provinceState;
-			switchOwner(state ? state.owner : -1);
-			switchArmy(state);
+			_state = _game.getProvinceState(_turn, _index);
+			switchOwner();
+			switchOrderModel();
 			
 			invalidateGraphics();
 		}
 		
-		public function animate():void
+		override public function animate():void
 		{
 			if (_transitionProgress == 0)
 				return;
@@ -117,8 +116,6 @@ package empire.province
 		override public function validateGraphics():void
 		{
 			super.validateGraphics();
-			
-			validateCenter();
 			
 			graphics.clear();
 			
@@ -181,8 +178,9 @@ package empire.province
 			}
 		}
 		
-		private function switchOwner(owner:int):void
+		private function switchOwner():void
 		{
+			var owner:int = _state ? _state.owner : -1;
 			if (owner == _owner)
 				return;
 			
@@ -191,54 +189,88 @@ package empire.province
 			_transitionProgress = MAX_TRANSITION_PROGRESS;
 		}
 		
-		private function switchArmy(state:ProvinceState):void
+		private function switchOrderModel():void
+		{
+			var orderModel:ProvinceOrderModel = _game.getState(_turn).orderModel.provinces[_index];
+			if (orderModel == _orderModel)
+				return;
+			
+			freeOrderModel();
+			_orderModel = orderModel;
+			initOrderModel();
+			
+			switchArmy();
+		}
+		
+		private function initOrderModel():void
+		{
+			if (!_orderModel)
+				return;
+			
+			_orderModel.addEventListener(ProvinceOrderModel.EVENT_UNITS_LEFT,		onUnitsLeft,		false, 0, true);
+			_orderModel.addEventListener(ProvinceOrderModel.EVENT_UNITS_CAME,		onUnitsCame,		false, 0, true);
+			_orderModel.addEventListener(ProvinceOrderModel.EVENT_RECRUIT_TRAINED,	onRecruitTrained,	false, 0, true);
+			_orderModel.addEventListener(ProvinceOrderModel.EVENT_FORT_BUILT,		onFortBuilt,		false, 0, true);
+		}
+		
+		private function freeOrderModel():void
+		{
+			if (!_orderModel)
+				return;
+			
+			_orderModel.removeEventListener(ProvinceOrderModel.EVENT_UNITS_LEFT,		onUnitsLeft);
+			_orderModel.removeEventListener(ProvinceOrderModel.EVENT_UNITS_CAME,		onUnitsCame);
+			_orderModel.removeEventListener(ProvinceOrderModel.EVENT_RECRUIT_TRAINED,	onRecruitTrained);
+			_orderModel.removeEventListener(ProvinceOrderModel.EVENT_FORT_BUILT,		onFortBuilt);
+		}
+		
+		private function switchArmy():void
 		{
 			if (_armyView)
 				removeChild(_armyView);
 			
-			if (!state)
+			if (!_state || !_orderModel)
 				return;
 			
-			var centerPoint:Point = MapView.getCellCenter(_center.x, _center.y, _metrics);
+			var centerPoint:Point = MapView.getCellCenter(province.getCenter().x, province.getCenter().y, _metrics);
 			
-			_armyView = new ArmyBoardView(state.units, state.fortLevel, state.fortHealth);
+			_armyView = new ArmyBoardView(
+				_state.units, _orderModel.unitsLeft, _orderModel.unitsCame,
+				_state.fortLevel, _state.fortHealth);
+			
 			_armyView.x = centerPoint.x;
 			_armyView.y = centerPoint.y - 50;
 			
 			addChild(_armyView);
 		}
 		
-		private function validateCenter():void
-		{
-			if (_center)
-				return;
-			
-			var cx:int = 0;
-			var cy:int = 0;
-			
-			for (var i:int = 0; i < _cells.length; ++i)
-			{
-				cx += _cells[i].x;
-				cy += _cells[i].y;
-			}
-			
-			_center = new IntPoint(
-				Math.round(cx / _cells.length),
-				Math.ceil(cy / _cells.length)
-			);
-			
-			addBoardView();
-		}
-		
 		private function addBoardView():void
 		{
-			var centerPoint:Point = MapView.getCellCenter(_center.x, _center.y, _metrics);
+			var centerPoint:Point = MapView.getCellCenter(province.getCenter().x, province.getCenter().y, _metrics);
 			
 			_boardView = new ProvinceBoardView(province.income, province.recruits);
 			_boardView.x = centerPoint.x;
 			_boardView.y = centerPoint.y + 20;
 			
 			addChild(_boardView);
+		}
+		
+		private function onUnitsLeft(e:Event):void
+		{
+			switchArmy();
+		}
+		
+		private function onUnitsCame(e:Event):void
+		{
+			switchArmy();
+		}
+		
+		private function onRecruitTrained(e:Event):void
+		{
+		}
+		
+		private function onFortBuilt(e:Event):void
+		{
 		}
 	}
 }

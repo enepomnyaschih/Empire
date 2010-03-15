@@ -1,7 +1,7 @@
 package empire.province
 {
-	import common.Collection;
-	import common.Model;
+	import common.geom.IntPoint;
+	import common.mvc.Model;
 
 	public class Province extends Model
 	{
@@ -9,18 +9,22 @@ package empire.province
 		private var _income:int;
 		private var _recruits:Array; // index - recruit number, value - unit type
 		
+		private var _center:IntPoint;
 		
 		
 		
 		
 		
-		public function Province(data:Object = null)
+		
+		public function Province(data:Object = null, center:IntPoint = null)
 		{
 			super();
 			
 			_nearProvinces	= data.nearProvinces;
 			_income			= data.income;
 			_recruits		= data.recruits;
+			
+			_center			= center;
 		}
 		
 		[Bindable]
@@ -54,6 +58,11 @@ package empire.province
 		public function set recruits(value:Array):void
 		{
 			_recruits = value;
+		}
+		
+		public function getCenter():IntPoint
+		{
+			return _center;
 		}
 	}
 }

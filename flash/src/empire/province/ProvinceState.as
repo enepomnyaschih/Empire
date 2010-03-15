@@ -1,8 +1,6 @@
 package empire.province
 {
-	import common.Model;
-	
-	import util.ArrayUtil;
+	import common.mvc.Model;
 
 	public class ProvinceState extends Model
 	{

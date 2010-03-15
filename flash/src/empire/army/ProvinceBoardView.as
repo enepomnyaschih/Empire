@@ -20,10 +20,10 @@ package empire.army
 			var i:int;
 			
 			for (i = 0; i < _gold; ++i)
-				views.push(new UnitView(Resources.GOLD, 0, 0));
+				views.push(new UnitView(Resources.GOLD, 0, 0, 0, 0));
 			
 			for (i = 0; i < _recruits.length; ++i)
-				views.push(new UnitView(Resources.UNITS[_recruits[i]], 0, 0));
+				views.push(new UnitView(Resources.UNITS[_recruits[i]], 0, 0, 0, 0));
 		}
 	}
 }

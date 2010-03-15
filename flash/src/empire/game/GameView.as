@@ -1,8 +1,6 @@
 package empire.game
 {
-	import common.View;
-	
-	import empire.map.MapView;
+	import common.mvc.View;
 
 	public class GameView extends View
 	{

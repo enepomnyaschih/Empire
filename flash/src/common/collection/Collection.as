@@ -1,4 +1,4 @@
-package common
+package common.collection
 {
 	import mx.collections.ArrayCollection;
 	

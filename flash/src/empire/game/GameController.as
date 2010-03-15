@@ -1,9 +1,10 @@
 package empire.game
 {
-	import common.Controller;
-	import common.ViewManager;
+	import common.mvc.Controller;
+	import common.mvc.ViewManager;
 	
 	import empire.map.MapController;
+	import empire.orders.MoveOrder;
 	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
@@ -108,51 +109,64 @@ package empire.game
 			
 			if (_tick % 120 == 0)
 			{
-				var state:GameState = new GameState({
-					winnerIndex	: -1,
-					players		: [
-						{
-							alive		: true,
-							gold		: 5
-						}, {
-							alive		: true,
-							gold		: 5
-						}, {
-							alive		: true,
-							gold		: 5
-						}
-					],
-					provinces	: [
-						{
-							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [3, 6, 9, 12, 15, 18, 21],
-							fortLevel		: 2,
-							fortHealth		: 250
-						}, {
-							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [0, 0, 0, 0, 0, 0, 0],
-							fortLevel		: 0,
-							fortHealth		: 0
-						}, {
-							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [0, 0, 0, 0, 0, 0, 0],
-							fortLevel		: 0,
-							fortHealth		: 0
-						}, {
-							owner			: Math.floor(Math.random() * 16) - 1,
-							units			: [0, 0, 0, 0, 0, 0, 0],
-							fortLevel		: 0,
-							fortHealth		: 0
-						}
-					]
-				});
+				var state:GameState = new GameState(
+					_game,
+					_tick / 120 - 1,
+					{
+						winnerIndex	: -1,
+						players		: [
+							{
+								alive		: true,
+								gold		: 5
+							}, {
+								alive		: true,
+								gold		: 5
+							}, {
+								alive		: true,
+								gold		: 5
+							}
+						],
+						provinces	: [
+							{
+								owner			: Math.floor(Math.random() * 16) - 1,
+								units			: [3, 6, 9, 12, 15, 18, 21],
+								fortLevel		: 2,
+								fortHealth		: 250
+							}, {
+								owner			: Math.floor(Math.random() * 16) - 1,
+								units			: [1, 1, 0, 0, 0, 0, 0],
+								fortLevel		: 0,
+								fortHealth		: 0
+							}, {
+								owner			: Math.floor(Math.random() * 16) - 1,
+								units			: [0, 0, 0, 0, 0, 0, 0],
+								fortLevel		: 0,
+								fortHealth		: 0
+							}, {
+								owner			: Math.floor(Math.random() * 16) - 1,
+								units			: [0, 0, 0, 0, 0, 0, 0],
+								fortLevel		: 0,
+								fortHealth		: 0
+							}
+						]
+					}
+				);
 				
 				_game.setState(_turn + 1, state);
 				
 				switchState(_turn + 1);
 			}
 			
-			if (_tick == 350)
+			if (_tick == 160)
+			{
+				_game.getState(_turn).orderModel.addOrder(new MoveOrder({
+					provinceFrom	: 0,
+					provinceTo		: 1,
+					units			: [3, 4, 3, 5, 3, 4, 5]
+				}));
+			}
+			
+			if (_tick == 500)
 			{
 				Frame.instance.openGame(Frame.GAME_INFO_INITIAL);
 			}

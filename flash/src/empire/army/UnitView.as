@@ -1,6 +1,6 @@
 package empire.army
 {
-	import common.View;
+	import common.mvc.View;
 	
 	import empire.game.GameUtil;
 	
@@ -8,7 +8,7 @@ package empire.army
 
 	public class UnitView extends View
 	{
-		private static const MAX_HEIGHT:int = 200;
+		private static const MAX_HEIGHT		:Number = 200;
 		
 		private static const IMAGE_SIZE		:Number = 50;
 		
@@ -20,7 +20,7 @@ package empire.army
 		
 		private var _image:DisplayObject;
 		
-		public function UnitView(imageCls:Class, count:int, power:Number)
+		public function UnitView(imageCls:Class, count:int, left:int, came:int, power:Number)
 		{
 			super();
 			
@@ -33,23 +33,26 @@ package empire.army
 			
 			addChild(_image);
 			
-			drawCount(count);
+			drawCount(count, left, came);
 			drawPower(power);
 		}
 		
-		private function drawCount(count:int):void
+		private function drawCount(count:int, left:int, came:int):void
 		{
-			if (count <= 0)
+			var total:int = count + came;
+			if (total <= 0)
 				return;
 			
-			var ht:Number = count * (COUNT_HEIGHT + COUNT_GAP) - COUNT_GAP;
+			var ht:Number = total * (COUNT_HEIGHT + COUNT_GAP) - COUNT_GAP;
 			var cf:Number = (ht > MAX_HEIGHT) ? (MAX_HEIGHT / ht) : 1;
 			var ch:Number = cf * COUNT_HEIGHT;
 			var cg:Number = cf * COUNT_GAP;
 			
-			for (var i:int = 0; i < count; ++i)
+			for (var i:int = 0; i < total; ++i)
 			{
-				graphics.beginFill(GameUtil.UNIT_POWER_COLOR);
+				var index:int = GameUtil.getUnitCountIndex(i, count, left, came);
+				
+				graphics.beginFill(GameUtil.UNIT_COUNT_COLORS[index], GameUtil.UNIT_COUNT_ALPHAS[index]);
 				graphics.drawRect(
 					-COUNT_WIDTH / 2,
 					_image.y - i * (ch + cg) - ch - 5,

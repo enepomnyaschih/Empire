@@ -1,4 +1,4 @@
-package common
+package common.geom
 {
 	public class IntPoint
 	{

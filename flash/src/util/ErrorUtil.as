@@ -11,7 +11,7 @@ package util
 			ExternalInterface.call("console.log", msg);
 		}
 		
-		public static function throwMsg(msg:*):void
+		public static function throwMsg(msg:*):*
 		{
 			log(msg);
 			throw new Error(msg);

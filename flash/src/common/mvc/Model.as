@@ -1,4 +1,4 @@
-package common
+package common.mvc
 {
 	import flash.events.EventDispatcher;
 	
