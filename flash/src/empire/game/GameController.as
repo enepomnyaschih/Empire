@@ -3,11 +3,17 @@ package empire.game
 	import common.mvc.Controller;
 	import common.mvc.ViewManager;
 	
+	import empire.army.MarchView;
 	import empire.map.MapController;
+	import empire.ordermodel.OrderModel;
+	import empire.orders.BuildOrder;
 	import empire.orders.MoveOrder;
+	import empire.orders.OrderEvent;
+	import empire.orders.TrainOrder;
 	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.utils.Dictionary;
 	
 	import util.Ticker;
 
@@ -25,6 +31,8 @@ package empire.game
 		private var _mainTicker:Ticker = new Ticker(MAIN_MS_PERIOD);
 		private var _tick:int = 0;
 		
+		private var _orderAddedHandlers:Dictionary = new Dictionary();
+		
 		public function GameController(game:Game)
 		{
 			super();
@@ -41,6 +49,10 @@ package empire.game
 			
 			_mainTicker.addEventListener(TimerEvent.TIMER, onTicker, false, 0, true);
 			_mainTicker.start();
+			
+			_orderAddedHandlers[MoveOrder .TYPE] = onMoveOrderAdded;
+			_orderAddedHandlers[TrainOrder.TYPE] = onTrainOrderAdded;
+			_orderAddedHandlers[BuildOrder.TYPE] = onBuildOrderAdded;
 		}
 		
 		override public function free():void
@@ -57,8 +69,12 @@ package empire.game
 		
 		public function switchState(turn:int):void
 		{
+			freeOrderModel();
+			
 			_turn = turn;
 			_mapController.switchState(turn);
+			
+			initOrderModel();
 		}
 		
 		private function onGameJoined(e:Event):void
@@ -107,7 +123,7 @@ package empire.game
 				_game.updateGameInfo(Frame.GAME_INFO_UPDATED);
 			}
 			
-			if (_tick % 120 == 0)
+			if (_tick == 120)
 			{
 				var state:GameState = new GameState(
 					_game,
@@ -170,6 +186,50 @@ package empire.game
 			{
 				Frame.instance.openGame(Frame.GAME_INFO_INITIAL);
 			}
+		}
+		
+		private function initOrderModel():void
+		{
+			var state:GameState = _game.getState(_turn);
+			if (!state)
+				return;
+			
+			var orderModel:OrderModel = state.orderModel;
+			
+			orderModel.addEventListener(OrderModel.EVENT_ORDER_ADDED, onOrderAdded, false, 0, true);
+		}
+		
+		private function freeOrderModel():void
+		{
+			var state:GameState = _game.getState(_turn);
+			if (!state)
+				return;
+			
+			var orderModel:OrderModel = state.orderModel;
+			
+			orderModel.removeEventListener(OrderModel.EVENT_ORDER_ADDED, onOrderAdded);
+		}
+		
+		private function onOrderAdded(e:OrderEvent):void
+		{
+			var handler:Function = _orderAddedHandlers[e.order.type];
+			if (handler != null)
+				handler(e.order);
+		}
+		
+		private function onMoveOrderAdded(order:MoveOrder):void
+		{
+			_mapController.mapView.addMarchView(new MarchView(
+				_game.map, _game.getProvinceState(_turn, order.provinceFrom).owner,
+				order.provinceFrom, order.provinceTo, order.units, _mapController.mapView.metrics));
+		}
+		
+		private function onTrainOrderAdded(order:TrainOrder):void
+		{
+		}
+		
+		private function onBuildOrderAdded(order:BuildOrder):void
+		{
 		}
 	}
 }

@@ -2,6 +2,7 @@ package empire.map
 {
 	import common.mvc.View;
 	
+	import empire.army.MarchView;
 	import empire.province.ProvinceView;
 	
 	import flash.geom.Point;
@@ -21,6 +22,7 @@ package empire.map
 		private var _metrics:MapViewMetrics = new MapViewMetrics();
 		
 		private var _provinceViewContainer:View = new View();
+		private var _marchViewContainer:View = new View();
 		
 		public function MapView(map:Map)
 		{
@@ -29,6 +31,7 @@ package empire.map
 			_map = map;
 			
 			addChild(_provinceViewContainer);
+			addChild(_marchViewContainer);
 		}
 		
 		public function get map():Map
@@ -55,6 +58,11 @@ package empire.map
 		public function addProvinceView(provinceView:ProvinceView):void
 		{
 			_provinceViewContainer.addChild(provinceView);
+		}
+		
+		public function addMarchView(marchView:MarchView):void
+		{
+			_marchViewContainer.addChild(marchView);
 		}
 		
 		public static function getCellCenter(x:int, y:int, metrics:MapViewMetrics):Point

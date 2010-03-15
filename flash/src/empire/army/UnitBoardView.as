@@ -4,8 +4,8 @@ package empire.army
 
 	public class UnitBoardView extends View
 	{
-		private var VIEW_WIDTH	:Number = 50;
-		private var VIEW_GAP	:Number = 10;
+		private var VIEW_WIDTH	:Number = 25;
+		private var VIEW_GAP	:Number = 5;
 		
 		private var _views:Array = new Array();
 		

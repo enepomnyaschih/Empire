@@ -28,6 +28,8 @@ package empire.army
 		{
 			super();
 			
+			alpha = 0.6;
+			
 			_map			= map;
 			_player			= player;
 			_provinceFrom	= provinceFrom;
@@ -47,14 +49,14 @@ package empire.army
 		
 		private function drawArrow(p1:Point, p2:Point):void
 		{
-			graphics.beginFill(ColorUtil.darkColor(GameUtil.getOwnerColor(_player), 0.5));
+			graphics.beginFill(ColorUtil.brightColor(GameUtil.getOwnerColor(_player), 0.5));
 			GraphicsUtil.drawArrow(graphics, p1.x, p1.y, p2.x, p2.y);
 			graphics.endFill();
 		}
 		
 		private function drawArmy(p1:Point, p2:Point):void
 		{
-			_armyView = new ArmyBoardView(_units, 0, 0);
+			_armyView = new ArmyBoardView(_units, null, null, 0, 0);
 			_armyView.x = p1.x * 0.7 + p2.x * 0.3;
 			_armyView.y = p1.y * 0.7 + p2.y * 0.3;
 			

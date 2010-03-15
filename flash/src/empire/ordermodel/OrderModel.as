@@ -6,12 +6,15 @@ package empire.ordermodel
 	import empire.orders.BuildOrder;
 	import empire.orders.MoveOrder;
 	import empire.orders.Order;
+	import empire.orders.OrderEvent;
 	import empire.orders.TrainOrder;
 	
 	import flash.utils.Dictionary;
 
 	public class OrderModel extends Model
 	{
+		public static const EVENT_ORDER_ADDED:String = "orderAdded";
+		
 		private var _game:Game;
 		private var _turn:int;
 		
@@ -49,7 +52,13 @@ package empire.ordermodel
 		
 		public function addOrder(order:Order):void
 		{
-			_addOrderHandlers[order.type](order);
+			_orders.push(order);
+			
+			var handler:Function = _addOrderHandlers[order.type];
+			if (handler != null)
+				handler(order);
+			
+			dispatchEvent(new OrderEvent(EVENT_ORDER_ADDED, order));
 		}
 		
 		/**
@@ -58,7 +67,9 @@ package empire.ordermodel
 		private function addMoveOrder(order:MoveOrder):void
 		{
 			getProvinceOrderModel(order.provinceFrom).leaveUnits(order.units);
-			getProvinceOrderModel(order.provinceTo  ).comeUnits (order.units);
+			if (_game.getProvinceState(_turn, order.provinceFrom).owner ==
+				_game.getProvinceState(_turn, order.provinceTo  ).owner)
+				getProvinceOrderModel(order.provinceTo  ).comeUnits (order.units);
 			
 			_moveOrders.push(order);
 		}
