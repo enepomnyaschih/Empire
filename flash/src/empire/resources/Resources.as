@@ -50,5 +50,8 @@ package empire.resources
 		
 		[Embed(source="../resources/gold.png")]
 		public static const GOLD:Class;
+		
+		[Embed(source="../resources/cancel.png")]
+		public static const CANCEL:Class;
 	}
 }

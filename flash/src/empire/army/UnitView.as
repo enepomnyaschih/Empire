@@ -8,15 +8,15 @@ package empire.army
 
 	public class UnitView extends View
 	{
-		private static const MAX_HEIGHT		:Number = 100;
+		public static const MAX_HEIGHT		:Number = 100;
 		
-		private static const IMAGE_SIZE		:Number = 25;
+		public static const IMAGE_SIZE		:Number = 25;
 		
-		private static const COUNT_WIDTH	:Number = 25;
-		private static const COUNT_HEIGHT	:Number = 10;
-		private static const COUNT_GAP		:Number = 3;
+		public static const COUNT_WIDTH		:Number = 25;
+		public static const COUNT_HEIGHT	:Number = 10;
+		public static const COUNT_GAP		:Number = 3;
 		
-		private static const POWER_WIDTH	:Number = 25;
+		public static const POWER_WIDTH		:Number = 25;
 		
 		private var _image:DisplayObject;
 		

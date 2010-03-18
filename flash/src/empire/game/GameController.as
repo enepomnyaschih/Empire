@@ -33,6 +33,9 @@ package empire.game
 		
 		private var _orderAddedHandlers:Dictionary = new Dictionary();
 		
+		private var _selectedProvince:int = -1;
+		private var _selectedUnits:Array = null;
+		
 		public function GameController(game:Game)
 		{
 			super();
@@ -75,6 +78,18 @@ package empire.game
 			_mapController.switchState(turn);
 			
 			initOrderModel();
+		}
+		
+		public function openProvinceScreen(province:int):void
+		{
+		}
+		
+		public function selectArmy(province:int = -1, units:Array = null):void
+		{
+			_selectedProvince = province;
+			_selectedUnits = units;
+			
+			_gameView.mouseSwitcher.status = (province == -1) ? "select" : "move";
 		}
 		
 		private function onGameJoined(e:Event):void

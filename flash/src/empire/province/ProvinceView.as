@@ -1,6 +1,7 @@
 package empire.province
 {
 	import common.geom.IntPoint;
+	import common.mouse.MouseWrapper;
 	import common.mvc.View;
 	
 	import empire.army.ArmyBoardView;
@@ -11,6 +12,7 @@ package empire.province
 	import empire.map.MapView;
 	import empire.map.MapViewMetrics;
 	import empire.ordermodel.ProvinceOrderModel;
+	import empire.player.Player;
 	
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -22,6 +24,7 @@ package empire.province
 	public class ProvinceView extends View
 	{
 		private static const MAX_TRANSITION_PROGRESS:int = 80;
+		private static const MAX_BLICK:int = 50;
 		
 		private static const BORDER_WIDTH_COEF:Number = 0.3;
 		
@@ -40,10 +43,15 @@ package empire.province
 		private var _transitionColor	:uint = 0;
 		private var _transitionProgress	:uint = 0;
 		
+		private var _isBlick:Boolean = false;
+		private var _blick:int = 0;
+		
 		private var _boardView:ProvinceBoardView;
 		private var _armyView:ArmyBoardView;
 		
 		private var _metrics:MapViewMetrics;
+		
+		private var _mouseWrapper:MouseWrapper;
 		
 		
 		
@@ -60,6 +68,8 @@ package empire.province
 			
 			_metrics = metrics;
 			
+			_mouseWrapper = new MouseWrapper(this, "Province");
+			
 			invalidateGraphics();
 			
 			addBoardView();
@@ -73,6 +83,11 @@ package empire.province
 		public function get map():Map
 		{
 			return _game.map;
+		}
+		
+		public function get provinceIndex():int
+		{
+			return _index;
 		}
 		
 		public function get province():Province
@@ -96,12 +111,27 @@ package empire.province
 			invalidateGraphics();
 		}
 		
+		[Bindable]
+		public function get isBlick():Boolean
+		{
+			return _isBlick;
+		}
+		
+		public function set isBlick(value:Boolean):void
+		{
+			_isBlick = value;
+		}
+		
 		override public function animate():void
 		{
-			if (_transitionProgress == 0)
+			if (_transitionProgress == 0 && !_isBlick && _blick == 0)
 				return;
 			
-			--_transitionProgress;
+			if (_transitionProgress != 0)
+				--_transitionProgress;
+			
+			if (_isBlick || _blick != 0)
+				_blick = (_blick + 1) % MAX_BLICK;
 			
 			var coef:Number = _transitionProgress / MAX_TRANSITION_PROGRESS;
 			
@@ -109,6 +139,8 @@ package empire.province
 				_color = ColorUtil.brightColor(_transitionColor, coef * 2 - 1);
 			else
 				_color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
+			
+			_color = ColorUtil.brightColor(_color, Math.abs(2 * _blick / MAX_BLICK - 1));
 			
 			invalidateGraphics();
 		}
@@ -184,9 +216,27 @@ package empire.province
 			if (owner == _owner)
 				return;
 			
+			freeOwner();
+			
 			_owner = owner;
 			_transitionColor = _color;
 			_transitionProgress = MAX_TRANSITION_PROGRESS;
+			
+			initOwner();
+		}
+		
+		private function initOwner():void
+		{
+			if (_owner == -1)
+				return;
+			
+			var player:Player = _game.players[_owner];
+			if (!player || player.memberId != Frame.instance.masterId)
+				return;
+		}
+		
+		private function freeOwner():void
+		{
 		}
 		
 		private function switchOrderModel():void

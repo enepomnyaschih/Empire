@@ -2,11 +2,13 @@ package util
 {
 	public class ArrayUtil
 	{
-		public static function removeItem(array:Array, item:Object):void
+		public static function removeItem(array:Array, item:Object):int
 		{
 			var index:int = array.indexOf(item);
 			if (index != -1)
 				array.splice(index, 1);
+			
+			return index;
 		}
 		
 		public static function removeAll(array:Array):void
@@ -25,7 +27,8 @@ package util
 		
 		public static function getBy(array:Array, field:String, value:*):*
 		{
-			return array[findBy(array, field, value)];
+			var index:int = findBy(array, field, value);
+			return (index == -1) ? null : array[index];
 		}
 		
 		public static function removeBy(array:Array, field:String, value:*):void

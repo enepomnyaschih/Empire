@@ -1,13 +1,19 @@
 package
 {
+	import common.mouse.MouseManager;
+	import common.mouse.MouseWrapper;
+	
 	import empire.game.Game;
 	import empire.game.GameController;
+	import empire.province.ProvinceSelectMouseTool;
+	import empire.provincescreen.ProvinceScreen;
 	
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.events.ResizeEvent;
 	
 	import ui.IsothropicLayout;
+	import ui.Mask;
 
 	public class Frame extends UIComponent
 	{
@@ -79,7 +85,13 @@ package
 		
 		private static var _instance:Frame;
 		
-		private var _layout:IsothropicLayout;
+		private var _mapLayout:IsothropicLayout;
+		private var _mask:Mask;
+		private var _provinceScreenLayout:IsothropicLayout;
+		private var _provinceScreen:ProvinceScreen;
+		
+		private var _permanentMouseWrapper	:MouseWrapper;
+		private var _frameMouseWrapper		:MouseWrapper;
 		
 		private var _game:Game;
 		private var _gameController:GameController;
@@ -90,9 +102,18 @@ package
 		{
 			super();
 			
-			_layout = new IsothropicLayout();
+			initMouse();
 			
-			addChild(_layout);
+			_mapLayout = new IsothropicLayout();
+			_mask = new Mask();
+			_provinceScreenLayout = new IsothropicLayout();
+			_provinceScreen = new ProvinceScreen();
+			
+			addChild(_mapLayout);
+//			addChild(_mask);
+//			addChild(_provinceScreenLayout);
+			
+			_provinceScreenLayout.addChild(_provinceScreen);
 			
 			Application.application.addEventListener(ResizeEvent.RESIZE, this.onAppResize);
 		}
@@ -113,9 +134,24 @@ package
 			return _instance;
 		}
 		
+		public function get permanentMouseWrapper():MouseWrapper
+		{
+			return _permanentMouseWrapper;
+		}
+		
+		public function get frameMouseWrapper():MouseWrapper
+		{
+			return _frameMouseWrapper;
+		}
+		
 		public function get masterId():String
 		{
 			return _masterId;
+		}
+		
+		public function get provinceScreen():ProvinceScreen
+		{
+			return _provinceScreen;
 		}
 		
 		public function setMasterId(masterId:String):void
@@ -131,7 +167,7 @@ package
 			_gameController = new GameController(_game);
 			_game.updateGameInfo(data);
 			
-			_layout.addChild(_gameController.gameView);
+			_mapLayout.addChild(_gameController.gameView);
 		}
 		
 		public function closeGame():void
@@ -139,7 +175,7 @@ package
 			if (!_gameController)
 				return;
 			
-			_layout.removeChild(_gameController.gameView);
+			_mapLayout.removeChild(_gameController.gameView);
 			
 			_gameController.free();
 			
@@ -153,8 +189,22 @@ package
 			var h:Number = Application.application.height;
 			
 			setActualSize(w, h);
-			_layout.setActualSize(w, h);
-			_layout.doLayout();
+			_mapLayout.setActualSize(w, h);
+			_mapLayout.doLayout();
+			_mask.setActualSize(w, h);
+			_provinceScreenLayout.setActualSize(w, h);
+			_provinceScreenLayout.doLayout();
+		}
+		
+		private function initMouse():void
+		{
+			_permanentMouseWrapper	= new MouseWrapper(null, "Permanent");
+			_frameMouseWrapper		= new MouseWrapper(this, "Frame");
+			
+			MouseManager.instance.addRule("Game.select Province.own",	new ProvinceSelectMouseTool());
+//			MouseManager.instance.addRule("Game.move Province.near",	new ArmyMoveMouseTool());
+			
+			_permanentMouseWrapper.activate();
 		}
 		
 		private function onAppResize(e:ResizeEvent):void

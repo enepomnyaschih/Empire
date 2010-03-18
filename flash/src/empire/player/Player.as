@@ -1,6 +1,6 @@
 package empire.player
 {
-	import common.Model;
+	import common.mvc.Model;
 
 	public class Player extends Model
 	{
