@@ -126,6 +126,7 @@ package
 			_instance = new Frame();
 			
 			_instance.openGame(GAME_INFO_INITIAL);
+			_instance.setMasterId("YoGA");
 		}
 		
 		public static function get instance():Frame

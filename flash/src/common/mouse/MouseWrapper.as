@@ -120,5 +120,10 @@ package common.mouse
 		{
 			deactivate();
 		}
+		
+		public function toString():String
+		{
+			return (_name || "") + (_statuses.length ? ("." + _statuses.join(".")) : "");
+		}
 	}
 }

@@ -76,6 +76,7 @@ package empire.game
 			
 			_turn = turn;
 			_mapController.switchState(turn);
+			_gameView.mouseSwitcher.status = "select";
 			
 			initOrderModel();
 		}
@@ -159,7 +160,7 @@ package empire.game
 						],
 						provinces	: [
 							{
-								owner			: Math.floor(Math.random() * 16) - 1,
+								owner			: 0,
 								units			: [3, 6, 9, 12, 15, 18, 21],
 								fortLevel		: 2,
 								fortHealth		: 250
@@ -188,7 +189,7 @@ package empire.game
 				switchState(_turn + 1);
 			}
 			
-			if (_tick == 160)
+/*			if (_tick == 160)
 			{
 				_game.getState(_turn).orderModel.addOrder(new MoveOrder({
 					provinceFrom	: 0,
@@ -201,7 +202,7 @@ package empire.game
 			{
 				Frame.instance.openGame(Frame.GAME_INFO_INITIAL);
 			}
-		}
+*/		}
 		
 		private function initOrderModel():void
 		{

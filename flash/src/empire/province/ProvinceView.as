@@ -12,7 +12,6 @@ package empire.province
 	import empire.map.MapView;
 	import empire.map.MapViewMetrics;
 	import empire.ordermodel.ProvinceOrderModel;
-	import empire.player.Player;
 	
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -227,16 +226,24 @@ package empire.province
 		
 		private function initOwner():void
 		{
-			if (_owner == -1)
+			var memberId:String = _game.getMemberId(_owner);
+			if (memberId == null)
 				return;
 			
-			var player:Player = _game.players[_owner];
-			if (!player || player.memberId != Frame.instance.masterId)
-				return;
+			if (memberId == Frame.instance.masterId)
+			{
+				_mouseWrapper.addStatus("own");
+			}
+			else
+			{
+				_mouseWrapper.addStatus("foe");
+			}
 		}
 		
 		private function freeOwner():void
 		{
+			_mouseWrapper.removeStatus("own");
+			_mouseWrapper.removeStatus("foe");
 		}
 		
 		private function switchOrderModel():void

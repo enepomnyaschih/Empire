@@ -5,6 +5,7 @@ package empire.game
 	import empire.map.Map;
 	import empire.map.MapState;
 	import empire.ordermodel.ProvinceOrderModel;
+	import empire.player.Player;
 	import empire.province.ProvinceState;
 	
 	import flash.events.Event;
@@ -165,7 +166,10 @@ package empire.game
 				}
 				
 				if (data.players[i])
+				{
+					_players[i] = new Player(data.players[i]);
 					events.push(new PlayerInfoChangeEvent(EVENT_PLAYER_JOINED, i));
+				}
 			}
 			
 			if (!map && data.landscape)
@@ -194,6 +198,18 @@ package empire.game
 			
 			for (i = 0; i < events.length; ++i)
 				dispatchEvent(events[i]);
+		}
+		
+		public function getMemberId(slot:int):String
+		{
+			if (slot == -1)
+				return null;
+			
+			var player:Player = _players[slot];
+			if (!player)
+				return null;
+			
+			return player.memberId;
 		}
 	}
 }
