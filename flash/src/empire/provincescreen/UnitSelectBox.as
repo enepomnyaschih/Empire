@@ -6,6 +6,8 @@ package empire.provincescreen
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	
+	import util.ColorUtil;
+	
 	public class UnitSelectBox extends UnitBox
 	{
 		private var _unitType	:int;
@@ -22,6 +24,8 @@ package empire.provincescreen
 			super();
 			
 			_unitType = unitType;
+			
+			update(0);
 		}
 		
 		public function get value():int
@@ -47,13 +51,11 @@ package empire.provincescreen
 				view.addEventListener(MouseEvent.ROLL_OVER, getUnitRollOverHandler(i), false, 0, true);
 				view.addEventListener(MouseEvent.ROLL_OUT,  getUnitRollOutHandler (i), false, 0, true);
 				view.addEventListener(MouseEvent.CLICK,     getUnitClickHandler   (i), false, 0, true);
-				view.alpha = 0.5;
+				view.alpha = (i == 0) ? 1.0 : 0.5;
 				
-				_views.push(view);
-				addChild(view);
+				_views[i] = view;
+				addItem(view);
 			}
-			
-			setPreview(0);
 		}
 		
 		private function setValue(value:int):void
@@ -61,12 +63,12 @@ package empire.provincescreen
 			var i:int;
 			
 			for (i = value; i < _value; ++i)
-				_views[i].filters = [];
+				_views[i + 1].filters = [];
 			
 			for (i = _value; i < value; ++i)
 			{
-				var filter:GlowFilter = new GlowFilter();
-				_views[i].filters = [filter];
+				var filter:GlowFilter = new GlowFilter(ColorUtil.WHITE, 1, 12, 12);
+				_views[i + 1].filters = [filter];
 			}
 			
 			_value = value;
@@ -77,10 +79,10 @@ package empire.provincescreen
 			var i:int;
 			
 			for (i = preview; i < _preview; ++i)
-				_views[i].alpha = 0.5;
+				_views[i + 1].alpha = 0.5;
 			
 			for (i = _preview; i < preview; ++i)
-				_views[i].alpha = 1.0;
+				_views[i + 1].alpha = 1.0;
 			
 			_preview = preview;
 		}
@@ -89,7 +91,7 @@ package empire.provincescreen
 		{
 			return function(e:MouseEvent):void
 			{
-				setPreview(index + 1);
+				setPreview(index);
 			}
 		}
 		
@@ -97,7 +99,7 @@ package empire.provincescreen
 		{
 			return function(e:MouseEvent):void
 			{
-				setPreview(1);
+				setPreview(0);
 			}
 		}
 		

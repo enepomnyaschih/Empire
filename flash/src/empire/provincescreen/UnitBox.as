@@ -2,13 +2,12 @@ package empire.provincescreen
 {
 	import common.mvc.View;
 	
-	import empire.army.UnitView;
-	
 	import util.ColorUtil;
 
 	public class UnitBox extends View
 	{
-		private static const GAP:Number = 5;
+		private static const ITEM_WIDTH:Number = 30;
+		private static const ITEM_HEIGHT:Number = 50;
 		
 		public function UnitBox()
 		{
@@ -24,8 +23,12 @@ package empire.provincescreen
 		
 		public function addItem(item:View):void
 		{
-			item.x = height / 2 + numChildren * (UnitView.IMAGE_SIZE + GAP);
+			item.x = height / 2 + numChildren * ITEM_WIDTH;
 			item.y = height / 2;
+			
+			item.graphics.beginFill(0, 0);
+			item.graphics.drawRect(-ITEM_WIDTH / 2, -ITEM_HEIGHT / 2, ITEM_WIDTH, ITEM_HEIGHT);
+			item.graphics.endFill();
 			
 			addChild(item);
 		}

@@ -110,8 +110,8 @@ package
 			_provinceScreen = new ProvinceScreen();
 			
 			addChild(_mapLayout);
-//			addChild(_mask);
-//			addChild(_provinceScreenLayout);
+			addChild(_mask);
+			addChild(_provinceScreenLayout);
 			
 			_provinceScreenLayout.addChild(_provinceScreen);
 			

@@ -110,6 +110,9 @@ package empire.game
 		
 		public function setState(turn:int, state:GameState):void
 		{
+			if (_turnCount < turn + 1)
+				_turnCount = turn + 1;
+			
 			ArrayUtil.lng(_states, turn + 1);
 			_states[turn] = state;
 		}
