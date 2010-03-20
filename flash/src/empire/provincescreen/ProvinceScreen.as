@@ -50,14 +50,18 @@ package empire.provincescreen
 			_marchButton.label = "March";
 			_marchButton.x = 50;
 			_marchButton.y = 50 + GameUtil.UNIT_TYPE_COUNT * 60;
+			_marchButton.width = 100;
+			_marchButton.height = 20;
 			_marchButton.addEventListener(MouseEvent.CLICK, onMarchClick, false, 0, true);
 			
 			addChild(_marchButton);
 			
 			_closeButton = new Button();
 			_closeButton.label = "Close";
-			_closeButton.x = 680;
+			_closeButton.x = 650;
 			_closeButton.y = 50 + GameUtil.UNIT_TYPE_COUNT * 60;
+			_closeButton.width = 100;
+			_closeButton.height = 20;
 			_closeButton.addEventListener(MouseEvent.CLICK, onCloseClick, false, 0, true);
 			
 			addChild(_closeButton);
@@ -85,12 +89,20 @@ package empire.provincescreen
 				unitSelectBox.update(state.units[i] - orderModel.unitsLeft[i]);
 			}
 			
-			visible = true;
+			if (!visible)
+			{
+				Frame.instance.mapMask.show();
+				visible = true;
+			}
 		}
 		
 		public function hide():void
 		{
-			visible = false;
+			if (visible)
+			{
+				Frame.instance.mapMask.hide();
+				visible = false;
+			}
 		}
 		
 		private function onMarchClick(e:MouseEvent):void
@@ -106,7 +118,7 @@ package empire.provincescreen
 			
 			if (count == 0)
 			{
-				Alert.show("Select at least one unit to march.");
+//				Alert.show("Select at least one unit to march.");
 				return;
 			}
 			

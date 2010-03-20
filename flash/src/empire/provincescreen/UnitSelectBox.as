@@ -1,5 +1,7 @@
 package empire.provincescreen
 {
+	import common.mvc.View;
+	
 	import empire.army.UnitView;
 	import empire.resources.Resources;
 	
@@ -60,31 +62,22 @@ package empire.provincescreen
 		
 		private function setValue(value:int):void
 		{
-			var i:int;
-			
-			for (i = value; i < _value; ++i)
-				_views[i + 1].filters = [];
-			
-			for (i = _value; i < value; ++i)
-			{
-				var filter:GlowFilter = new GlowFilter(ColorUtil.WHITE, 1, 12, 12);
-				_views[i + 1].filters = [filter];
-			}
+			if (value == _value)
+				return;
 			
 			_value = value;
+			
+			updateViews();
 		}
 		
 		private function setPreview(preview:int):void
 		{
-			var i:int;
-			
-			for (i = preview; i < _preview; ++i)
-				_views[i + 1].alpha = 0.5;
-			
-			for (i = _preview; i < preview; ++i)
-				_views[i + 1].alpha = 1.0;
+			if (preview == _preview)
+				return;
 			
 			_preview = preview;
+			
+			updateViews();
 		}
 		
 		private function getUnitRollOverHandler(index:int):Function
@@ -108,6 +101,19 @@ package empire.provincescreen
 			return function(e:MouseEvent):void
 			{
 				setValue(index);
+			}
+		}
+		
+		private function updateViews():void
+		{
+			for (var i:int = 0; i < _count; ++i)
+			{
+				var view:View = _views[i + 1];
+				var isAlpha :Boolean = _value > i;
+				var isFilter:Boolean = _preview > i;
+				
+				view.alpha = isAlpha ? 1.0 : 0.5;
+				view.filters = isFilter ? [ new GlowFilter(ColorUtil.WHITE, 1, 12, 12) ] : [];
 			}
 		}
 	}

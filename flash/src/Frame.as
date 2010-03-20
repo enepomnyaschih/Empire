@@ -86,7 +86,7 @@ package
 		private static var _instance:Frame;
 		
 		private var _mapLayout:IsothropicLayout;
-		private var _mask:Mask;
+		private var _mapMask:Mask;
 		private var _provinceScreenLayout:IsothropicLayout;
 		private var _provinceScreen:ProvinceScreen;
 		
@@ -105,12 +105,12 @@ package
 			initMouse();
 			
 			_mapLayout = new IsothropicLayout();
-			_mask = new Mask();
+			_mapMask = new Mask();
 			_provinceScreenLayout = new IsothropicLayout();
 			_provinceScreen = new ProvinceScreen();
 			
 			addChild(_mapLayout);
-			addChild(_mask);
+			addChild(_mapMask);
 			addChild(_provinceScreenLayout);
 			
 			_provinceScreenLayout.addChild(_provinceScreen);
@@ -148,6 +148,11 @@ package
 		public function get masterId():String
 		{
 			return _masterId;
+		}
+		
+		public function get mapMask():Mask
+		{
+			return _mapMask;
 		}
 		
 		public function get provinceScreen():ProvinceScreen
@@ -192,7 +197,7 @@ package
 			setActualSize(w, h);
 			_mapLayout.setActualSize(w, h);
 			_mapLayout.doLayout();
-			_mask.setActualSize(w, h);
+			_mapMask.setActualSize(w, h);
 			_provinceScreenLayout.setActualSize(w, h);
 			_provinceScreenLayout.doLayout();
 		}

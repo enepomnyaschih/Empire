@@ -6,8 +6,9 @@ package empire.provincescreen
 
 	public class UnitBox extends View
 	{
-		private static const ITEM_WIDTH:Number = 30;
-		private static const ITEM_HEIGHT:Number = 50;
+		private static const ITEM_WIDTH		:Number = 25;
+		private static const ITEM_HEIGHT	:Number = 50;
+		private static const GAP			:Number = 5;
 		
 		public function UnitBox()
 		{
@@ -23,7 +24,7 @@ package empire.provincescreen
 		
 		public function addItem(item:View):void
 		{
-			item.x = height / 2 + numChildren * ITEM_WIDTH;
+			item.x = height / 2 + numChildren * (ITEM_WIDTH + GAP);
 			item.y = height / 2;
 			
 			item.graphics.beginFill(0, 0);
