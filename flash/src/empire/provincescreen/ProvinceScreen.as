@@ -9,6 +9,8 @@ package empire.provincescreen
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import mx.controls.Button;
 
@@ -121,23 +123,30 @@ package empire.provincescreen
 		
 		private function onMarchClick(e:MouseEvent):void
 		{
-			var count:int = 0;
-			var units:Array = new Array(GameUtil.UNIT_TYPE_COUNT);
-			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+			function onTimer(e:TimerEvent):void
 			{
-				var unitSelectBox:UnitSelectBox = _unitSelectBoxes[i];
-				units[i] = unitSelectBox.value;
-				count += units[i];
+				var count:int = 0;
+				var units:Array = new Array(GameUtil.UNIT_TYPE_COUNT);
+				for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+				{
+					var unitSelectBox:UnitSelectBox = _unitSelectBoxes[i];
+					units[i] = unitSelectBox.value;
+					count += units[i];
+				}
+				
+				if (count == 0)
+					return;
+				
+				_marchUnits = units;
+				
+				hide();
+				
+				dispatchEvent(new Event(EVENT_MARCH_CLICKED));
 			}
 			
-			if (count == 0)
-				return;
-			
-			_marchUnits = units;
-			
-			hide();
-			
-			dispatchEvent(new Event(EVENT_MARCH_CLICKED));
+			var timer:Timer = new Timer(10, 1);
+			timer.addEventListener(TimerEvent.TIMER, onTimer);
+			timer.start();
 		}
 		
 		private function onCloseClick(e:MouseEvent):void

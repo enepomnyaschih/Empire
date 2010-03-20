@@ -11,13 +11,14 @@ package empire.game
 	import empire.orders.OrderEvent;
 	import empire.orders.TrainOrder;
 	import empire.province.ProvinceController;
+	import empire.province.ProvinceDeselectMouseTool;
 	import empire.province.ProvinceSelectMouseTool;
 	import empire.province.ProvinceView;
 	import empire.provincescreen.ProvinceScreen;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.net.sendToURL;
 	import flash.utils.Dictionary;
 	
 	import util.Ticker;
@@ -57,6 +58,7 @@ package empire.game
 			
 			provinceScreen.addEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked, false, 0, true);
 			provinceSelectMouseTool.addEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected, false, 0, true);
+			provinceDeselectMouseTool.addEventListener(MouseEvent.CLICK, onProvinceDeselected, false, 0, true);
 			
 			_orderAddedHandlers[MoveOrder .TYPE] = onMoveOrderAdded;
 			_orderAddedHandlers[TrainOrder.TYPE] = onTrainOrderAdded;
@@ -90,10 +92,6 @@ package empire.game
 			_gameView.mouseSwitcher.status = "select";
 			
 			initOrderModel();
-		}
-		
-		public function openProvinceScreen(province:int):void
-		{
 		}
 		
 		public function selectArmy(province:int = -1, units:Array = null):void
@@ -132,6 +130,11 @@ package empire.game
 		private function get provinceSelectMouseTool():ProvinceSelectMouseTool
 		{
 			return Frame.instance.provinceSelectMouseTool;
+		}
+		
+		private function get provinceDeselectMouseTool():ProvinceDeselectMouseTool
+		{
+			return Frame.instance.provinceDeselectMouseTool;
 		}
 		
 		private function onGameJoined(e:Event):void
@@ -345,6 +348,11 @@ package empire.game
 			}
 			
 			_game.getState(_turn).sendMoveOrder(_selectedProvince, target.provinceIndex, _selectedUnits);
+			selectArmy();
+		}
+		
+		private function onProvinceDeselected(e:Event):void
+		{
 			selectArmy();
 		}
 	}

@@ -10,12 +10,6 @@ package empire.game
 		
 		/**
 		 * Possible statuses:
-		 * control	- control is enabled
-		 */
-		private var _mouseWrapper:MouseWrapper;
-		
-		/**
-		 * Possible statuses:
 		 * select	- possible to select provinces and control them
 		 * move		- required to select province to move selected units into
 		 */
@@ -27,8 +21,7 @@ package empire.game
 			
 			_game = game;
 			
-			_mouseWrapper = new MouseWrapper(this, "Game");
-			_mouseSwitcher = new MouseSwitcher(_mouseWrapper, "select");
+			_mouseSwitcher = new MouseSwitcher(Frame.instance.permanentMouseWrapper, "select");
 		}
 		
 		public function get mouseSwitcher():MouseSwitcher

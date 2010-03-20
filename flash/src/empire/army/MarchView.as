@@ -28,7 +28,7 @@ package empire.army
 		{
 			super();
 			
-			alpha = 0.6;
+			alpha = 0.7;
 			
 			_map			= map;
 			_player			= player;
@@ -49,7 +49,7 @@ package empire.army
 		
 		private function drawArrow(p1:Point, p2:Point):void
 		{
-			graphics.beginFill(ColorUtil.brightColor(GameUtil.getOwnerColor(_player), 0.5));
+			graphics.beginFill(ColorUtil.brightColor(GameUtil.getOwnerColor(_player), 0.3));
 			GraphicsUtil.drawArrow(graphics, p1.x, p1.y, p2.x, p2.y);
 			graphics.endFill();
 		}

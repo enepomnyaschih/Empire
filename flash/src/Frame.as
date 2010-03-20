@@ -5,6 +5,7 @@ package
 	
 	import empire.game.Game;
 	import empire.game.GameController;
+	import empire.province.ProvinceDeselectMouseTool;
 	import empire.province.ProvinceSelectMouseTool;
 	import empire.provincescreen.ProvinceScreen;
 	
@@ -96,6 +97,7 @@ package
 		private var _frameMouseWrapper		:MouseWrapper;
 		
 		private var _provinceSelectMouseTool:ProvinceSelectMouseTool;
+		private var _provinceDeselectMouseTool:ProvinceDeselectMouseTool;
 		
 		private var _game:Game;
 		private var _gameController:GameController;
@@ -153,6 +155,11 @@ package
 		public function get provinceSelectMouseTool():ProvinceSelectMouseTool
 		{
 			return _provinceSelectMouseTool;
+		}
+		
+		public function get provinceDeselectMouseTool():ProvinceDeselectMouseTool
+		{
+			return _provinceDeselectMouseTool;
 		}
 		
 		public function get masterId():String
@@ -216,6 +223,11 @@ package
 			_mapMask.setActualSize(w, h);
 			_provinceScreenLayout.setActualSize(w, h);
 			_provinceScreenLayout.doLayout();
+			
+			graphics.clear();
+			graphics.beginFill(0, 0);
+			graphics.drawRect(0, 0, w, h);
+			graphics.endFill();
 		}
 		
 		public function createRequest(action:String, data:Object):URLRequest
@@ -231,9 +243,11 @@ package
 			_frameMouseWrapper		= new MouseWrapper(this, "Frame");
 			
 			_provinceSelectMouseTool = new ProvinceSelectMouseTool();
+			_provinceDeselectMouseTool = new ProvinceDeselectMouseTool();
 			
-			MouseManager.instance.addRule("Game.select Province.own",	_provinceSelectMouseTool);
-			MouseManager.instance.addRule("Game.move Province.near",	_provinceSelectMouseTool);
+			MouseManager.instance.addRule("Permanent.select Province.own",	_provinceSelectMouseTool);
+			MouseManager.instance.addRule("Permanent.move Province.near",	_provinceSelectMouseTool);
+			MouseManager.instance.addRule("Permanent.move",					_provinceDeselectMouseTool);
 			
 			_permanentMouseWrapper.activate();
 		}
