@@ -63,7 +63,7 @@ package common.mouse
 		
 		public function removeStatus(status:String):void
 		{
-			if (_isActive && ArrayUtil.removeItem(_statuses, status) != -1)
+			if (ArrayUtil.removeItem(_statuses, status) != -1 && _isActive)
 				MouseManager.instance.update();
 		}
 		

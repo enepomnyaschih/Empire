@@ -51,6 +51,11 @@ package empire.map
 			return _mapView;
 		}
 		
+		public function get provinceControllers():ProvinceControllerCollection
+		{
+			return _provinceControllers;
+		}
+		
 		public function switchState(turn:int):void
 		{
 			for (var i:int = 0; i < _provinceControllers.length; ++i)

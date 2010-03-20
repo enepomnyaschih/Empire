@@ -3,9 +3,12 @@ package common.mouse
 	import flash.events.EventDispatcher;
 	
 	import util.ArrayUtil;
+	import util.ErrorUtil;
 	
 	public class MouseManager
 	{
+		private static const DEBUG:Boolean = false;
+		
 		private static var _instance:MouseManager;
 		
 		private var _rules:Array = new Array();
@@ -70,6 +73,9 @@ package common.mouse
 		
 		public function update():void
 		{
+			if (DEBUG)
+				ErrorUtil.log("Update MouseManager: " + _activeWrappers.join(" "));
+			
 			var index:int = -1;
 			for (var i:int = 0; i < _rules.length; ++i)
 			{

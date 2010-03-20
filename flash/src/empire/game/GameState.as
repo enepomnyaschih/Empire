@@ -34,7 +34,7 @@ package empire.game
 			for (var i:int = 0; i < data.players.length; ++i)
 				_players.push(new PlayerState(data.players[i]));
 			
-			_map = new MapState(data);
+			_map = new MapState(game.map, data);
 			
 			_orderModel = new OrderModel(game, turn);
 		}

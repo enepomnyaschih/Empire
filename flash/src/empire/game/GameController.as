@@ -10,6 +10,8 @@ package empire.game
 	import empire.orders.MoveOrder;
 	import empire.orders.OrderEvent;
 	import empire.orders.TrainOrder;
+	import empire.province.ProvinceController;
+	import empire.provincescreen.ProvinceScreen;
 	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
@@ -50,12 +52,14 @@ package empire.game
 			_game.addEventListener(Game.EVENT_PLAYER_JOINED,	onPlayerJoined,	false, 0, true);
 			_game.addEventListener(Game.EVENT_PLAYER_LEFT,		onPlayerLeft,	false, 0, true);
 			
-			_mainTicker.addEventListener(TimerEvent.TIMER, onTicker, false, 0, true);
-			_mainTicker.start();
+			provinceScreen.addEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked, false, 0, true);
 			
 			_orderAddedHandlers[MoveOrder .TYPE] = onMoveOrderAdded;
 			_orderAddedHandlers[TrainOrder.TYPE] = onTrainOrderAdded;
 			_orderAddedHandlers[BuildOrder.TYPE] = onBuildOrderAdded;
+			
+			_mainTicker.addEventListener(TimerEvent.TIMER, onTicker, false, 0, true);
+			_mainTicker.start();
 		}
 		
 		override public function free():void
@@ -63,6 +67,8 @@ package empire.game
 			super.free();
 			
 			_mainTicker.stop();
+			
+			provinceScreen.removeEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked);
 		}
 		
 		public function get gameView():GameView
@@ -87,10 +93,35 @@ package empire.game
 		
 		public function selectArmy(province:int = -1, units:Array = null):void
 		{
-			_selectedProvince = province;
-			_selectedUnits = units;
+			clearMovement();
 			
-			_gameView.mouseSwitcher.status = (province == -1) ? "select" : "move";
+			_selectedProvince	= province;
+			_selectedUnits		= units;
+			
+			if (province == -1)
+			{
+				_gameView.mouseSwitcher.status = "select";
+				return;
+			}
+			
+			_gameView.mouseSwitcher.status = "move";
+			
+			var commonSpeed:int = 0;
+			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+			{
+				if (!_selectedUnits[i])
+					continue;
+				
+				if (commonSpeed > GameUtil.UNIT_TYPE_SPEED[i] || commonSpeed == 0)
+					commonSpeed = GameUtil.UNIT_TYPE_SPEED[i];
+			}
+			
+			setMovement(_selectedProvince, commonSpeed);
+		}
+		
+		private function get provinceScreen():ProvinceScreen
+		{
+			return Frame.instance.provinceScreen;
 		}
 		
 		private function onGameJoined(e:Event):void
@@ -165,17 +196,17 @@ package empire.game
 								fortLevel		: 2,
 								fortHealth		: 250
 							}, {
-								owner			: Math.floor(Math.random() * 16) - 1,
+								owner			: 1,
 								units			: [1, 1, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
 							}, {
-								owner			: Math.floor(Math.random() * 16) - 1,
+								owner			: 2,
 								units			: [0, 0, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
 							}, {
-								owner			: Math.floor(Math.random() * 16) - 1,
+								owner			: 2,
 								units			: [0, 0, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
@@ -246,6 +277,49 @@ package empire.game
 		
 		private function onBuildOrderAdded(order:BuildOrder):void
 		{
+		}
+		
+		private function onMarchClicked(e:Event):void
+		{
+			if (provinceScreen.game != _game)
+				return;
+			
+			selectArmy(provinceScreen.province, provinceScreen.marchUnits);
+		}
+		
+		private function setMovement(province:int, speed:int):void
+		{
+			var neighbours:Array = _game.getMapState(_turn).getNeighbours(province, speed);
+			neighbours.sort();
+			
+			var neighbourIndex:int = 0;
+			
+			for (var i:int = 0; i < _game.map.provinces.length; ++i)
+			{
+				var provinceController:ProvinceController = _mapController.provinceControllers.getProvinceControllerAt(i);
+				if (neighbourIndex == neighbours.length ||
+					neighbours[neighbourIndex] != i)
+				{
+					provinceController.provinceView.darken = true;
+					provinceController.provinceView.mouseWrapper.addStatus("far");
+				}
+				else
+				{
+					provinceController.provinceView.mouseWrapper.addStatus("near");
+					++neighbourIndex;
+				}
+			}
+		}
+		
+		private function clearMovement():void
+		{
+			for (var i:int = 0; i < _mapController.provinceControllers.length; ++i)
+			{
+				var provinceController:ProvinceController = _mapController.provinceControllers.getProvinceControllerAt(i);
+				provinceController.provinceView.darken = false;
+				provinceController.provinceView.mouseWrapper.removeStatus("near");
+				provinceController.provinceView.mouseWrapper.removeStatus("far");
+			}
 		}
 	}
 }

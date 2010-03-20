@@ -45,6 +45,8 @@ package empire.province
 		private var _blickAddend		:int = 0;
 		private var _blick				:int = 0;
 		
+		private var _darken				:Boolean = false;
+		
 		private var _boardView:ProvinceBoardView;
 		private var _armyView:ArmyBoardView;
 		
@@ -72,6 +74,11 @@ package empire.province
 			invalidateGraphics();
 			
 			addBoardView();
+		}
+		
+		public function get mouseWrapper():MouseWrapper
+		{
+			return _mouseWrapper;
 		}
 		
 		public function get game():Game
@@ -124,11 +131,19 @@ package empire.province
 			_blickAddend = value ? 1 : 0;
 		}
 		
+		[Bindable]
+		public function get darken():Boolean
+		{
+			return _darken;
+		}
+		
+		public function set darken(value:Boolean):void
+		{
+			_darken = value;
+		}
+		
 		override public function animate():void
 		{
-			if (_transitionProgress == 0 && _blickAddend == 0 && _blick == 0)
-				return;
-			
 			if (_transitionProgress != 0)
 				--_transitionProgress;
 			
@@ -149,14 +164,22 @@ package empire.province
 			}
 			
 			var coef:Number = _transitionProgress / MAX_TRANSITION_PROGRESS;
+			var color:uint;
 			
 			if (coef > 0.5)
-				_color = ColorUtil.brightColor(_transitionColor, coef * 2 - 1);
+				color = ColorUtil.brightColor(_transitionColor, coef * 2 - 1);
 			else
-				_color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
+				color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
 			
-			_color = ColorUtil.brightColor(_color, 1 - _blick / MAX_BLICK);
+			color = ColorUtil.brightColor(color, 1 - _blick / MAX_BLICK);
 			
+			if (_darken)
+				color = ColorUtil.darkColor(color, 0.3);
+			
+			if (color == _color)
+				return;
+			
+			_color = color;
 			invalidateGraphics();
 		}
 		

@@ -10,7 +10,6 @@ package empire.provincescreen
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import mx.controls.Alert;
 	import mx.controls.Button;
 
 	public class ProvinceScreen extends View
@@ -67,6 +66,21 @@ package empire.provincescreen
 			addChild(_closeButton);
 		}
 		
+		public function get game():Game
+		{
+			return _game;
+		}
+		
+		public function get turn():int
+		{
+			return _turn;
+		}
+		
+		public function get province():int
+		{
+			return _province;
+		}
+		
 		public function get marchUnits():Array
 		{
 			return _marchUnits;
@@ -117,12 +131,11 @@ package empire.provincescreen
 			}
 			
 			if (count == 0)
-			{
-//				Alert.show("Select at least one unit to march.");
 				return;
-			}
 			
 			_marchUnits = units;
+			
+			hide();
 			
 			dispatchEvent(new Event(EVENT_MARCH_CLICKED));
 		}

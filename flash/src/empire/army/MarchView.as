@@ -45,6 +45,9 @@ package empire.army
 			
 			drawArrow(p1, p2);
 			drawArmy (p1, p2);
+			
+			mouseEnabled	= false;
+			mouseChildren	= false;
 		}
 		
 		private function drawArrow(p1:Point, p2:Point):void

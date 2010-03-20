@@ -53,6 +53,7 @@ package empire.game
 		 * Particular game rules.
 		 */
 		public static const UNIT_TYPE_COUNT:int = 7;
+		public static const UNIT_TYPE_SPEED:Array = [1, 1, 1, 2, 2, 2, 1];
 		
 		public static const FORT_MAX_HEALTH:Array = [300, 700, 1200];
 	}

@@ -68,15 +68,15 @@ package
 					income			: 2,
 					recruits		: [6, 2]
 				}, {
-					nearProvinces	: [0, 2],
+					nearProvinces	: [0, 3],
 					income			: 1,
 					recruits		: [3, 3, 4]
 				}, {
-					nearProvinces	: [0, 1],
+					nearProvinces	: [0, 3],
 					income			: 3,
 					recruits		: [0]
 				}, {
-					nearProvinces	: [2],
+					nearProvinces	: [1, 2],
 					income			: 2,
 					recruits		: [1, 5]
 				}

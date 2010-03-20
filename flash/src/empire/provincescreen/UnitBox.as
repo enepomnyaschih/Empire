@@ -6,9 +6,9 @@ package empire.provincescreen
 
 	public class UnitBox extends View
 	{
-		private static const ITEM_WIDTH		:Number = 25;
+		private static const ITEM_WIDTH		:Number = 30;
 		private static const ITEM_HEIGHT	:Number = 50;
-		private static const GAP			:Number = 5;
+		private static const GAP			:Number = 0;
 		
 		public function UnitBox()
 		{
