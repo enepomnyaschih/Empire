@@ -3,10 +3,13 @@ package empire.province
 	import common.mouse.MouseManager;
 	import common.mouse.MouseTool;
 	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	public class ProvinceSelectMouseTool extends MouseTool
 	{
+		public static const EVENT_SELECTED:String = "selected";
+		
 		private var _target:ProvinceView;
 		
 		override public function activate():void
@@ -32,9 +35,14 @@ package empire.province
 			_target.removeEventListener(MouseEvent.CLICK, onClick);
 		}
 		
+		public function get target():ProvinceView
+		{
+			return _target;
+		}
+		
 		private function onClick(e:MouseEvent):void
 		{
-			Frame.instance.provinceScreen.show(_target.game, _target.game.turnCount - 1, _target.provinceIndex);
+			dispatchEvent(new Event(EVENT_SELECTED));
 		}
 	}
 }

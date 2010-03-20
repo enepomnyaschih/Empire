@@ -4,7 +4,14 @@ package empire.game
 	
 	import empire.map.MapState;
 	import empire.ordermodel.OrderModel;
+	import empire.orders.MoveOrder;
 	import empire.player.PlayerState;
+	
+	import flash.events.Event;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	
+	import mx.utils.UIDUtil;
 	
 	public class GameState extends Model
 	{
@@ -57,6 +64,36 @@ package empire.game
 		public function get orderModel():OrderModel
 		{
 			return _orderModel;
+		}
+		
+		public function sendMoveOrder(provinceFrom:int, provinceTo:int, units:Array):void
+		{
+			var turn:int = _turn;
+			
+			var data:Object = {
+				gameId			: _game.gameId,
+				turn			: turn,
+				provinceFrom	: provinceFrom,
+				provinceTo		: provinceTo,
+				units			: units
+			};
+			
+			var request:URLRequest = Frame.instance.createRequest("IssueMoveOrder", data);
+			var loader:URLLoader = new URLLoader();
+			
+			function onComplete(e:Event):void
+			{
+				if (turn != _turn)
+					return;
+				
+				data.orderId = UIDUtil.createUID();
+				_game.getState(_turn).orderModel.addOrder(new MoveOrder(data));
+			}
+			
+//			loader.addEventListener(Event.COMPLETE, onComplete);
+//			loader.load(request);
+			
+			onComplete(null);
 		}
 	}
 }

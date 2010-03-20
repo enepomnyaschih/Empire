@@ -32,6 +32,9 @@ package empire.map
 			
 			addChild(_provinceViewContainer);
 			addChild(_marchViewContainer);
+			
+			_marchViewContainer.mouseChildren = false;
+			_marchViewContainer.mouseEnabled = false;
 		}
 		
 		public function get map():Map

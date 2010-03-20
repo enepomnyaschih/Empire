@@ -101,6 +101,11 @@ package empire.province
 			return map.provinces[_index];
 		}
 		
+		public function get turn():int
+		{
+			return _turn;
+		}
+		
 		public function addCell(x:int, y:int):void
 		{
 			_cells.push(new IntPoint(x, y));

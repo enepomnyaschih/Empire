@@ -11,10 +11,13 @@ package empire.game
 	import empire.orders.OrderEvent;
 	import empire.orders.TrainOrder;
 	import empire.province.ProvinceController;
+	import empire.province.ProvinceSelectMouseTool;
+	import empire.province.ProvinceView;
 	import empire.provincescreen.ProvinceScreen;
 	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.net.sendToURL;
 	import flash.utils.Dictionary;
 	
 	import util.Ticker;
@@ -53,6 +56,7 @@ package empire.game
 			_game.addEventListener(Game.EVENT_PLAYER_LEFT,		onPlayerLeft,	false, 0, true);
 			
 			provinceScreen.addEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked, false, 0, true);
+			provinceSelectMouseTool.addEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected, false, 0, true);
 			
 			_orderAddedHandlers[MoveOrder .TYPE] = onMoveOrderAdded;
 			_orderAddedHandlers[TrainOrder.TYPE] = onTrainOrderAdded;
@@ -69,6 +73,7 @@ package empire.game
 			_mainTicker.stop();
 			
 			provinceScreen.removeEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked);
+			provinceSelectMouseTool.removeEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected);
 		}
 		
 		public function get gameView():GameView
@@ -122,6 +127,11 @@ package empire.game
 		private function get provinceScreen():ProvinceScreen
 		{
 			return Frame.instance.provinceScreen;
+		}
+		
+		private function get provinceSelectMouseTool():ProvinceSelectMouseTool
+		{
+			return Frame.instance.provinceSelectMouseTool;
 		}
 		
 		private function onGameJoined(e:Event):void
@@ -196,17 +206,17 @@ package empire.game
 								fortLevel		: 2,
 								fortHealth		: 250
 							}, {
-								owner			: 1,
+								owner			: 0,
 								units			: [1, 1, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
 							}, {
-								owner			: 2,
+								owner			: 1,
 								units			: [0, 0, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
 							}, {
-								owner			: 2,
+								owner			: 1,
 								units			: [0, 0, 0, 0, 0, 0, 0],
 								fortLevel		: 0,
 								fortHealth		: 0
@@ -320,6 +330,22 @@ package empire.game
 				provinceController.provinceView.mouseWrapper.removeStatus("near");
 				provinceController.provinceView.mouseWrapper.removeStatus("far");
 			}
+		}
+		
+		private function onProvinceSelected(e:Event):void
+		{
+			var target:ProvinceView = provinceSelectMouseTool.target;
+			if (target.game != _game)
+				return;
+			
+			if (_selectedProvince == -1)
+			{
+				Frame.instance.provinceScreen.show(_game, _turn, target.provinceIndex);
+				return;
+			}
+			
+			_game.getState(_turn).sendMoveOrder(_selectedProvince, target.provinceIndex, _selectedUnits);
+			selectArmy();
 		}
 	}
 }

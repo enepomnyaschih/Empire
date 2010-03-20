@@ -28,7 +28,7 @@ package empire.army
 			
 			for (i = 0; i < _units.length; ++i)
 			{
-				if (_units[i] == 0 && _came[i] == 0)
+				if (_units[i] == 0 && (!_came || _came[i] == 0))
 					continue;
 				
 				views.push(new UnitView(

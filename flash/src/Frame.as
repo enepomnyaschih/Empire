@@ -8,6 +8,8 @@ package
 	import empire.province.ProvinceSelectMouseTool;
 	import empire.provincescreen.ProvinceScreen;
 	
+	import flash.net.URLRequest;
+	
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.events.ResizeEvent;
@@ -93,10 +95,13 @@ package
 		private var _permanentMouseWrapper	:MouseWrapper;
 		private var _frameMouseWrapper		:MouseWrapper;
 		
+		private var _provinceSelectMouseTool:ProvinceSelectMouseTool;
+		
 		private var _game:Game;
 		private var _gameController:GameController;
 		
 		private var _masterId:String;
+		private var _baseUrl:String;
 		
 		public function Frame()
 		{
@@ -126,7 +131,7 @@ package
 			_instance = new Frame();
 			
 			_instance.openGame(GAME_INFO_INITIAL);
-			_instance.setMasterId("YoGA");
+			_instance.start("YoGA", "http://localhost");
 		}
 		
 		public static function get instance():Frame
@@ -145,9 +150,19 @@ package
 			return _frameMouseWrapper;
 		}
 		
+		public function get provinceSelectMouseTool():ProvinceSelectMouseTool
+		{
+			return _provinceSelectMouseTool;
+		}
+		
 		public function get masterId():String
 		{
 			return _masterId;
+		}
+		
+		public function get baseUrl():String
+		{
+			return _baseUrl;
 		}
 		
 		public function get mapMask():Mask
@@ -160,9 +175,10 @@ package
 			return _provinceScreen;
 		}
 		
-		public function setMasterId(masterId:String):void
+		public function start(masterId:String, baseUrl:String):void
 		{
-			_masterId = masterId;
+			_masterId	= masterId;
+			_baseUrl	= baseUrl;
 		}
 		
 		public function openGame(data:Object):void
@@ -202,13 +218,22 @@ package
 			_provinceScreenLayout.doLayout();
 		}
 		
+		public function createRequest(action:String, data:Object):URLRequest
+		{
+			var result:URLRequest = new URLRequest(_baseUrl + action);
+			result.data = data;
+			return result;
+		}
+		
 		private function initMouse():void
 		{
 			_permanentMouseWrapper	= new MouseWrapper(null, "Permanent");
 			_frameMouseWrapper		= new MouseWrapper(this, "Frame");
 			
-			MouseManager.instance.addRule("Game.select Province.own",	new ProvinceSelectMouseTool());
-//			MouseManager.instance.addRule("Game.move Province.near",	new ArmyMoveMouseTool());
+			_provinceSelectMouseTool = new ProvinceSelectMouseTool();
+			
+			MouseManager.instance.addRule("Game.select Province.own",	_provinceSelectMouseTool);
+			MouseManager.instance.addRule("Game.move Province.near",	_provinceSelectMouseTool);
 			
 			_permanentMouseWrapper.activate();
 		}

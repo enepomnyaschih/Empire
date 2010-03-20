@@ -1,6 +1,8 @@
 package common.mouse
 {
-	public class MouseTool
+	import flash.events.EventDispatcher;
+	
+	public class MouseTool extends EventDispatcher
 	{
 		virtual public function activate():void
 		{
