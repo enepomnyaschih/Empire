@@ -22,8 +22,8 @@ package empire.province
 
 	public class ProvinceView extends View
 	{
-		private static const MAX_TRANSITION_PROGRESS:int = 80;
-		private static const MAX_BLICK:int = 50;
+		private static const MAX_TRANSITION_PROGRESS:int = 50;
+		private static const MAX_BLICK:int = 20;
 		
 		private static const BORDER_WIDTH_COEF:Number = 0.3;
 		
@@ -42,8 +42,8 @@ package empire.province
 		private var _transitionColor	:uint = 0;
 		private var _transitionProgress	:uint = 0;
 		
-		private var _isBlick:Boolean = false;
-		private var _blick:int = 0;
+		private var _blickAddend		:int = 0;
+		private var _blick				:int = 0;
 		
 		private var _boardView:ProvinceBoardView;
 		private var _armyView:ArmyBoardView;
@@ -113,24 +113,40 @@ package empire.province
 		[Bindable]
 		public function get isBlick():Boolean
 		{
-			return _isBlick;
+			return _blickAddend != 0;
 		}
 		
 		public function set isBlick(value:Boolean):void
 		{
-			_isBlick = value;
+			if (isBlick == value)
+				return;
+			
+			_blickAddend = value ? 1 : 0;
 		}
 		
 		override public function animate():void
 		{
-			if (_transitionProgress == 0 && !_isBlick && _blick == 0)
+			if (_transitionProgress == 0 && _blickAddend == 0 && _blick == 0)
 				return;
 			
 			if (_transitionProgress != 0)
 				--_transitionProgress;
 			
-			if (_isBlick || _blick != 0)
-				_blick = (_blick + 1) % MAX_BLICK;
+			if (_blickAddend != 0)
+			{
+				if (_blick <= 0)
+					_blickAddend = 1;
+				
+				if (_blick >= MAX_BLICK)
+					_blickAddend = -1;
+				
+				_blick = _blick + _blickAddend;
+			}
+			else
+			{
+				if (_blick != 0)
+					_blick = _blick - 1;
+			}
 			
 			var coef:Number = _transitionProgress / MAX_TRANSITION_PROGRESS;
 			
@@ -139,7 +155,7 @@ package empire.province
 			else
 				_color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
 			
-			_color = ColorUtil.brightColor(_color, Math.abs(2 * _blick / MAX_BLICK - 1));
+			_color = ColorUtil.brightColor(_color, 1 - _blick / MAX_BLICK);
 			
 			invalidateGraphics();
 		}
