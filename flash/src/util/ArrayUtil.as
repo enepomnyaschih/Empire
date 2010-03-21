@@ -60,5 +60,14 @@ package util
 			while (array.length < length)
 				array.push(null);
 		}
+		
+		public static function sum(array:Array):Number
+		{
+			var result:Number = 0;
+			for (var i:int = 0; i < array.length; ++i)
+				result += array[i];
+			
+			return result;
+		}
 	}
 }

@@ -66,7 +66,7 @@ package util
 			return [yd, yc, yb, ya, yb, yc];
 		}
 		
-		public static function drawArrow(graphics:Graphics, x1:Number, y1:Number, x2:Number, y2:Number, w:Number = 0.25, l:Number = 0.7, h:Number = 0.7):void
+		public static function drawArrow(graphics:Graphics, x1:Number, y1:Number, x2:Number, y2:Number, opposite:Boolean = false, w:Number = 0.25, l:Number = 0.7, h:Number = 0.7):void
 		{
 			var dv:Point = new Point(x2 - x1, y2 - y1);
 			var ov:Point = dv.clone();
@@ -82,12 +82,30 @@ package util
 			pv.x *= w;
 			pv.y *= w;
 			
+			if (opposite)
+			{
+				x1 += 0.03 * pv.x;
+				y1 += 0.03 * pv.y;
+				
+				x2 += 0.03 * pv.x;
+				y2 += 0.03 * pv.y;
+			}
+			
 			var loop:LineLoop = new LineLoop(graphics);
 			
 			loop.loopTo(x2 - ov.x, y2 - ov.y);
-			loop.loopTo(x1 + ov.x + dv.x * l - pv.x * 0.6, y1 + ov.y + dv.y * l - pv.y * 0.6);
-			loop.loopTo(x1 + ov.x + dv.x * l - pv.x * 0.4, y1 + ov.y + dv.y * l - pv.y * 0.4);
-			loop.loopTo(x1 + ov.x - pv.x, y1 + ov.y - pv.y);
+			
+			if (opposite)
+			{
+				loop.loopTo(x1 + ov.x, y1 + ov.y);
+			}
+			else
+			{
+				loop.loopTo(x1 + ov.x + dv.x * l - pv.x * 0.6, y1 + ov.y + dv.y * l - pv.y * 0.6);
+				loop.loopTo(x1 + ov.x + dv.x * l - pv.x * 0.4, y1 + ov.y + dv.y * l - pv.y * 0.4);
+				loop.loopTo(x1 + ov.x - pv.x, y1 + ov.y - pv.y);
+			}
+			
 			loop.loopTo(x1 + ov.x + pv.x, y1 + ov.y + pv.y);
 			loop.loopTo(x1 + ov.x + dv.x * l + pv.x * 0.4, y1 + ov.y + dv.y * l + pv.y * 0.4);
 			loop.loopTo(x1 + ov.x + dv.x * l + pv.x * 0.6, y1 + ov.y + dv.y * l + pv.y * 0.6);

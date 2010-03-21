@@ -6,7 +6,7 @@ package empire.orders
 
 	public class Order extends Model
 	{
-		private var _orderId:int;
+		private var _orderId:String;
 		
 		public function Order(data:Object)
 		{
@@ -20,7 +20,7 @@ package empire.orders
 			return ErrorUtil.throwMsg(ErrorUtil.MUST_OVERRIDE);
 		}
 		
-		public function get orderId():int
+		public function get orderId():String
 		{
 			return _orderId;
 		}

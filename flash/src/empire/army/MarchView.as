@@ -7,24 +7,31 @@ package empire.army
 	import empire.map.Map;
 	import empire.map.MapView;
 	import empire.map.MapViewMetrics;
+	import empire.orders.MoveOrder;
 	
 	import flash.geom.Point;
 	
+	import util.ArrayUtil;
 	import util.ColorUtil;
-	import util.GraphicsUtil;
 	
 	public class MarchView extends View
 	{
 		private var _map			:Map;
 		private var _player			:int;
-		private var _provinceFrom	:int;
-		private var _provinceTo		:int;
-		private var _units			:Array;
+		private var _orders			:Array = new Array();
 		private var _metrics		:MapViewMetrics;
 		
+		private var _units			:Array;
+		
+		private var _arrowView		:ArrowView;
 		private var _armyView		:ArmyBoardView;
 		
-		public function MarchView(map:Map, player:int, provinceFrom:int, provinceTo:int, units:Array, metrics:MapViewMetrics)
+		private var _center1		:Point;
+		private var _center2		:Point;
+		
+		private var _opposite		:Boolean = false;
+		
+		public function MarchView(map:Map, player:int, order:MoveOrder, metrics:MapViewMetrics)
 		{
 			super();
 			
@@ -32,35 +39,90 @@ package empire.army
 			
 			_map			= map;
 			_player			= player;
-			_provinceFrom	= provinceFrom;
-			_provinceTo		= provinceTo;
-			_units			= units;
 			_metrics		= metrics;
 			
-			var c1:IntPoint = _map.provinces[_provinceFrom].getCenter();
-			var c2:IntPoint = _map.provinces[_provinceTo  ].getCenter();
+			_units = new Array(GameUtil.UNIT_TYPE_COUNT);
+			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+				_units[i] = 0;
 			
-			var p1:Point = MapView.getCellCenter(c1.x, c1.y, _metrics);
-			var p2:Point = MapView.getCellCenter(c2.x, c2.y, _metrics);
+			var c1:IntPoint = _map.provinces[order.provinceFrom].getCenter();
+			var c2:IntPoint = _map.provinces[order.provinceTo  ].getCenter();
 			
-			drawArrow(p1, p2);
-			drawArmy (p1, p2);
+			_center1 = MapView.getCellCenter(c1.x, c1.y, _metrics);
+			_center2 = MapView.getCellCenter(c2.x, c2.y, _metrics);
+			
+			drawArrow();
+			addOrder(order);
 		}
 		
-		private function drawArrow(p1:Point, p2:Point):void
+		public function addOrder(order:MoveOrder):void
 		{
-			graphics.beginFill(ColorUtil.brightColor(GameUtil.getOwnerColor(_player), 0.3));
-			GraphicsUtil.drawArrow(graphics, p1.x, p1.y, p2.x, p2.y);
-			graphics.endFill();
+			_orders.push(order);
+			
+			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+				_units[i] += order.units[i];
+			
+			drawArmy();
 		}
 		
-		private function drawArmy(p1:Point, p2:Point):void
+		/**
+		 * Returns true if no orders remaining and march must be destroyed.
+		 */
+		public function removeOrder(order:MoveOrder):Boolean
 		{
+			if (ArrayUtil.removeItem(_orders, order) == -1)
+				return false;
+			
+			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
+				_units[i] -= order.units[i];
+			
+			drawArmy();
+			
+			return _orders.length == 0;
+		}
+		
+		[Bindable]
+		public function get opposite():Boolean
+		{
+			return _opposite;
+		}
+		
+		public function set opposite(value:Boolean):void
+		{
+			if (_opposite == value)
+				return;
+			
+			_opposite = value;
+			
+			drawArrow();
+			locateArmy();
+		}
+		
+		private function drawArrow():void
+		{
+			if (_arrowView)
+				removeChild(_arrowView);
+			
+			_arrowView = new ArrowView(ColorUtil.brightColor(GameUtil.getOwnerColor(_player), 0.3), 1.0, _center1, _center2, _opposite);
+			addChildAt(_arrowView, 0);
+		}
+		
+		private function drawArmy():void
+		{
+			if (_armyView)
+				removeChild(_armyView);
+			
 			_armyView = new ArmyBoardView(_units, null, null, 0, 0);
-			_armyView.x = p1.x * 0.7 + p2.x * 0.3;
-			_armyView.y = p1.y * 0.7 + p2.y * 0.3;
 			
-			addChild(_armyView);
+			locateArmy();
+			
+			addChildAt(_armyView, 1);
+		}
+		
+		private function locateArmy():void
+		{
+			_armyView.x = _center1.x * 0.7 + _center2.x * 0.3 - (_opposite ? 0.1 * (_center1.y - _center2.y) : 0);
+			_armyView.y = _center1.y * 0.7 + _center2.y * 0.3 - (_opposite ? 0.1 * (_center2.x - _center1.x) : 0) + 10;
 		}
 	}
 }

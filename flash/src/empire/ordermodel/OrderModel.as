@@ -45,6 +45,11 @@ package empire.ordermodel
 			return _orders;
 		}
 		
+		public function get moveOrders():Array
+		{
+			return _moveOrders;
+		}
+		
 		public function get provinces():Array
 		{
 			return _provinces;

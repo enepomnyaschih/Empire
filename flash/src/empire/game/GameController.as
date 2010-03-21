@@ -42,6 +42,8 @@ package empire.game
 		private var _selectedProvince:int = -1;
 		private var _selectedUnits:Array = null;
 		
+		private var _marchViews:Dictionary = new Dictionary();
+		
 		public function GameController(game:Game)
 		{
 			super();
@@ -279,9 +281,54 @@ package empire.game
 		
 		private function onMoveOrderAdded(order:MoveOrder):void
 		{
-			_mapController.mapView.addMarchView(new MarchView(
-				_game.map, _game.getProvinceState(_turn, order.provinceFrom).owner,
-				order.provinceFrom, order.provinceTo, order.units, _mapController.mapView.metrics));
+			var directOrderId:String = null;
+			var oppositeOrderId:String = null;
+			
+			var orders:Array = _game.getState(_turn).orderModel.moveOrders;
+			
+			for (var i:int = 0; i < orders.length; ++i)
+			{
+				var curOrder:MoveOrder = orders[i];
+				
+				if (curOrder.provinceFrom == order.provinceFrom &&
+					curOrder.provinceTo   == order.provinceTo &&
+					curOrder.orderId      != order.orderId)
+					directOrderId = curOrder.orderId;
+				
+				if (curOrder.provinceFrom == order.provinceTo &&
+					curOrder.provinceTo   == order.provinceFrom)
+					oppositeOrderId = curOrder.orderId;
+			}
+			
+			var marchView:MarchView;
+			
+			if (directOrderId)
+			{
+				marchView = _marchViews[directOrderId];
+				marchView.addOrder(order);
+			}
+			else
+			{
+				marchView = new MarchView(
+					_game.map, _game.getProvinceState(_turn, order.provinceFrom).owner,
+					order, _mapController.mapView.metrics);
+				
+				_mapController.mapView.addMarchView(marchView);
+			}
+			
+			_marchViews[order.orderId] = marchView;
+			
+			if (oppositeOrderId)
+			{
+				var oppositeView:MarchView = _marchViews[oppositeOrderId];
+				
+				marchView.opposite = true;
+				oppositeView.opposite = true;
+			}
+			else
+			{
+				marchView.opposite = false;
+			}
 		}
 		
 		private function onTrainOrderAdded(order:TrainOrder):void
