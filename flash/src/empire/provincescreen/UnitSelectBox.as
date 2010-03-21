@@ -16,6 +16,15 @@ package empire.provincescreen
 		private var _count		:int;
 		private var _left		:int;
 		
+		/**
+		 * Objects
+		 * 	{
+		 * 		view			: UnitView,
+		 * 		rollOverHandler	: Function,
+		 * 		rollOutHandler	: Function,
+		 * 		clickHandler	: Function
+		 * 	}
+		 */
 		private var _views		:Array;
 		
 		private var _value		:int;
@@ -50,12 +59,19 @@ package empire.provincescreen
 				var imageCls:Class = (i == 0) ? Resources.CANCEL : Resources.UNITS[_unitType];
 				var view:UnitView = new UnitView(imageCls, 0, 0, 0, 0);
 				
-				view.addEventListener(MouseEvent.ROLL_OVER, getUnitRollOverHandler(i), false, 0, true);
-				view.addEventListener(MouseEvent.ROLL_OUT,  getUnitRollOutHandler (i), false, 0, true);
-				view.addEventListener(MouseEvent.CLICK,     getUnitClickHandler   (i), false, 0, true);
+				var data:Object = {
+					view			: view,
+					rollOverHandler	: getUnitRollOverHandler(i),
+					rollOutHandler	: getUnitRollOutHandler (i),
+					clickHandler	: getUnitClickHandler   (i)
+				};
+				
+				view.addEventListener(MouseEvent.ROLL_OVER, data.rollOverHandler,	false, 0, true);
+				view.addEventListener(MouseEvent.ROLL_OUT,  data.rollOutHandler,	false, 0, true);
+				view.addEventListener(MouseEvent.CLICK,     data.clickHandler,		false, 0, true);
 				view.alpha = (i == 0) ? 1.0 : 0.5;
 				
-				_views[i] = view;
+				_views[i] = data;
 				addItem(view);
 			}
 		}
@@ -108,7 +124,7 @@ package empire.provincescreen
 		{
 			for (var i:int = 0; i < _count; ++i)
 			{
-				var view:View = _views[i + 1];
+				var view:View = _views[i + 1].view;
 				var isAlpha :Boolean = _value > i;
 				var isFilter:Boolean = _preview > i;
 				

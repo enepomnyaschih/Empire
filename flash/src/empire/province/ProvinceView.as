@@ -176,7 +176,7 @@ package empire.province
 			else
 				color = ColorUtil.brightColor(GameUtil.getOwnerColor(_owner), 1 - coef * 2);
 			
-			color = ColorUtil.brightColor(color, 1 - _blick / MAX_BLICK);
+			color = ColorUtil.brightColor(color, 1 - 0.5 * _blick / MAX_BLICK);
 			
 			if (_darken)
 				color = ColorUtil.darkColor(color, 0.3);
