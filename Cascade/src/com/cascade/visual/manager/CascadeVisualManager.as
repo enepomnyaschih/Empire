@@ -12,6 +12,7 @@ package com.cascade.visual.manager
 	import com.cascade.visual.action.CascadeVisualActionFactory;
 	import com.cascade.visual.style.CascadeVisualStyleFactory;
 	
+	import flash.display.BlendMode;
 	import flash.events.EventDispatcher;
 	
 	import util.ErrorUtil;
@@ -55,6 +56,7 @@ package com.cascade.visual.manager
 			
 			initParsers();
 			initActions();
+			initStyles();
 		}
 		
 		public static function get instance():CascadeVisualManager

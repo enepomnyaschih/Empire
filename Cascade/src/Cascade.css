@@ -1,0 +1,25 @@
+{
+	backgroundColor	: #00FFFF;
+}
+
+Application Map.mapka .red
+{
+	backgroundColor	: #FF0000;
+}
+
+Application Map.mapka .green
+{
+	backgroundColor	: #00FF00;
+}
+
+Application Map.mapka .blue
+{
+	backgroundColor	: #0000FF;
+}
+
+MegaCanvas.hover
+{
+	borderStyle		: solid;
+	borderThickness	: 5;
+	borderColor		: #000000;
+}

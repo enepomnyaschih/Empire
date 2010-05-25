@@ -3,17 +3,22 @@
 // TODO: implement Parser as ITyped, not as IBaseFactory
 // TODO: reading of .css files
 // TODO: test all source files
+// TODO: secure exceptions interception while reading and else
+// TODO: support commentaries in CSS file
 
 package app
 {
 	import com.cascade.base.element.base.CascadeElement;
 	import com.cascade.base.element.base.ICascadeElement;
+	import com.cascade.base.loader.CascadeLoader;
+	import com.cascade.base.loader.CascadeLoaderEvent;
+	import com.cascade.base.loader.ICascadeLoader;
 	import com.cascade.base.managers.CascadeManager;
-	import com.cascade.base.managers.CascadeRuleManager;
-	import com.cascade.base.managers.ICascadeRuleManager;
 	import com.cascade.mouse.managers.IMouseToolFactoryManager;
 	import com.cascade.mouse.managers.MouseManager;
 	import com.cascade.visual.manager.CascadeVisualManager;
+	
+	import flash.net.URLRequest;
 	
 	import mx.core.UIComponent;
 
@@ -21,6 +26,7 @@ package app
 	{
 		private var _cascadeElement:ICascadeElement;
 		private var _map:Map;
+		private var _loader:ICascadeLoader;
 		
 		public function CascadeApplication()
 		{
@@ -61,13 +67,17 @@ package app
 		
 		private function initCascadeRules():void
 		{
-			var manager:ICascadeRuleManager = CascadeManager.instance.ruleManager;
-			manager.register(CascadeRuleManager.createByString("{ backgroundColor: #00FFFF; }"));
-			manager.register(CascadeRuleManager.createByString("Application Map.mapka .red   { backgroundColor: #FF0000; }"));
-			manager.register(CascadeRuleManager.createByString("Application Map.mapka .green { backgroundColor: #00FF00; }"));
-			manager.register(CascadeRuleManager.createByString("Application Map.mapka .blue  { backgroundColor: #0000FF; }"));
-			manager.register(CascadeRuleManager.createByString("MegaCanvas.hover { borderStyle: solid; borderThickness: 5; borderColor: #000000; }"));
-//			manager.register(CascadeRuleManager.createByString("MegaCanvas.hover { mouseTool: Border 1p; }"));
+			var request:URLRequest = new URLRequest("../src/Cascade.css");
+			request.method = "GET";
+			
+			_loader = new CascadeLoader();
+			_loader.addEventListener(CascadeLoaderEvent.SUCCESS, onCascadeLoadSuccess, false, 0, true);
+			_loader.load(request);
+		}
+		
+		private function onCascadeLoadSuccess(e:CascadeLoaderEvent):void
+		{
+			buildUI();
 		}
 	}
 }

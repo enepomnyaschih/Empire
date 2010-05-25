@@ -22,7 +22,6 @@
 				_application = new CascadeApplication();
 				_application.width  = width;
 				_application.height = height;
-				_application.buildUI();
 				
 				addChild(_application);
 			}
