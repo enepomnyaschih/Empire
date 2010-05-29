@@ -13,6 +13,9 @@ package com.cascade.base.element.base
 		function getElementsChain():Array;
 		function fillElementsChain(chain:Array):void;
 		
+		function get autoValidate():Boolean;
+		function set autoValidate(value:Boolean):void;
+		
 		function get isStyleValid():Boolean;
 		function invalidateStyle():void;
 		function validateStyle():void;

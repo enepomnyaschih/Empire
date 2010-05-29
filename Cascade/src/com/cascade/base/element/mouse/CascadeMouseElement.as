@@ -35,13 +35,17 @@ package com.cascade.base.element.mouse
 		private function onRollOver(e:MouseEvent):void
 		{
 			addStatus(STATUS_HOVER);
-			CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
+			
+			if (!autoValidate)
+				CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
 		}
 		
 		private function onRollOut(e:MouseEvent):void
 		{
 			removeStatus(STATUS_HOVER);
-			CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
+			
+			if (!autoValidate)
+				CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
 		}
 	}
 }

@@ -1,10 +1,10 @@
 // TODO: inherit everything from EventDispatcher
 // TODO: add possibility to configure MouseTools, like { mouseTool: MapMouseTool(1, 2, 3); }
 // TODO: implement Parser as ITyped, not as IBaseFactory
-// TODO: reading of .css files
 // TODO: test all source files
 // TODO: secure exceptions interception while reading and else
 // TODO: support commentaries in CSS file
+// TODO: support default priorities for mouse tools
 
 package app
 {

@@ -27,12 +27,15 @@ package com.cascade.base.element.base
 		private var _styles		:Dictionary = new Dictionary();
 		private var _actions	:Dictionary = new Dictionary();
 		
+		private var _autoValidate:Boolean = true;
+		
 		private var _isStyleValid:Boolean = true;
 		
-		public function CascadeElement(target:UIComponent, name:String)
+		public function CascadeElement(target:UIComponent, name:String, autoValidate:Boolean = true)
 		{
-			_target = target;
-			_name   = name;
+			_target			= target;
+			_name			= name;
+			_autoValidate	= autoValidate;
 			
 			invalidateStyle();
 		}
@@ -84,6 +87,17 @@ package com.cascade.base.element.base
 				parent.fillElementsChain(chain);
 			
 			chain.push(this);
+		}
+		
+		[Bindable]
+		public function get autoValidate():Boolean
+		{
+			return _autoValidate;
+		}
+		
+		public function set autoValidate(value:Boolean):void
+		{
+			_autoValidate = value;
 		}
 		
 		public function setParent(parent:ICascadeElement):void
@@ -191,6 +205,9 @@ package com.cascade.base.element.base
 		{
 			_isStyleValid = false;
 			CascadeManager.instance.elementValidationManager.invalidateElementStyle(this);
+			
+			if (_autoValidate)
+				CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
 		}
 		
 		public function validateStyle():void
@@ -215,7 +232,7 @@ package com.cascade.base.element.base
 			for (var oldStyleName:String in _styles)
 			{
 				var theStyle:ICascadeStyle = newStyles[oldStyleName];
-				var oldAction:ICascadeStyleAction = _actions [oldStyleName];
+				var oldAction:ICascadeStyleAction = _actions[oldStyleName];
 				
 				if (!theStyle)
 					obsoleteStyles.push(oldStyleName);
