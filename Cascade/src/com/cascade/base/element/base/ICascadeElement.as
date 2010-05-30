@@ -10,6 +10,9 @@ package com.cascade.base.element.base
 		function get parent():ICascadeElement;
 		function get name():String;
 		
+		function get isHover():Boolean;
+		function set isHover(value:Boolean):void;
+		
 		function getElementsChain():Array;
 		function fillElementsChain(chain:Array):void;
 		

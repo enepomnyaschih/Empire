@@ -4,6 +4,5 @@ package com.cascade.base.element.mouse
 
 	public interface ICascadeMouseElement extends ICascadeElement
 	{
-		function get isHover():Boolean;
 	}
 }

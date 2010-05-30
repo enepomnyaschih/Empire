@@ -9,8 +9,6 @@ package com.cascade.base.element.mouse
 	
 	public class CascadeMouseElement extends CascadeElement implements ICascadeMouseElement
 	{
-		public static const STATUS_HOVER:String = "hover";
-		
 		public function CascadeMouseElement(target:UIComponent, name:String)
 		{
 			super(target, name);
@@ -27,14 +25,9 @@ package com.cascade.base.element.mouse
 			super.free();
 		}
 		
-		public function get isHover():Boolean
-		{
-			return isStatus(STATUS_HOVER);
-		}
-		
 		private function onRollOver(e:MouseEvent):void
 		{
-			addStatus(STATUS_HOVER);
+			isHover = true;
 			
 			if (!autoValidate)
 				CascadeManager.instance.elementValidationManager.validateAllElementsStyle();
@@ -42,7 +35,7 @@ package com.cascade.base.element.mouse
 		
 		private function onRollOut(e:MouseEvent):void
 		{
-			removeStatus(STATUS_HOVER);
+			isHover = false;
 			
 			if (!autoValidate)
 				CascadeManager.instance.elementValidationManager.validateAllElementsStyle();

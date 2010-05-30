@@ -2,13 +2,17 @@ package com.cascade.base.selector
 {
 	import com.cascade.base.element.base.ICascadeElement;
 	
+	import util.ErrorUtil;
+	
 	public class CascadeSelector implements ICascadeSelector
 	{
 		private var _words:Array;
+		private var _hover:Boolean;
 		
-		public function CascadeSelector(words:Array)
+		public function CascadeSelector(words:Array, hover:Boolean)
 		{
 			_words = words;
+			_hover = hover;
 		}
 
 		public function get words():Array
@@ -18,11 +22,21 @@ package com.cascade.base.selector
 		
 		public function get hover():Boolean
 		{
-			return false;
+			return _hover;
 		}
 		
 		public function fits(elements:Array):Boolean
 		{
+			if (_hover)
+			{
+				if (elements.length == 0)
+					return false;
+				
+				var lastElement:ICascadeElement = elements[elements.length - 1];
+				if (!lastElement.isHover)
+					return false;
+			}
+			
 			var wordIndex:int = 0;
 			for (var elementIndex:int = 0; elementIndex < elements.length; ++elementIndex)
 			{
@@ -41,6 +55,20 @@ package com.cascade.base.selector
 		
 		public static function createByString(source:String):CascadeSelector
 		{
+			var hover:Boolean = false;
+			var modifiers:Array = source.split(":");
+			source = modifiers[0];
+			
+			for (var modifierIndex:int = 1; modifierIndex < modifiers.length; ++modifierIndex)
+			{
+				var modifier:String = modifiers[modifierIndex];
+				switch (modifier)
+				{
+					case "hover": hover = true; break;
+					default: return ErrorUtil.throwMsg("Can't parse '", source, "' as CSS selector: '", modifier, "' is not a modifier.");
+				}
+			}
+			
 			var wordSources:Array = source.split(" ");
 			var words:Array = new Array();
 			for (var wordIndex:int = 0; wordIndex < wordSources.length; ++wordIndex)
@@ -52,7 +80,7 @@ package com.cascade.base.selector
 				words.push(CascadeSelectorWord.createByString(wordSource));
 			}
 			
-			return new CascadeSelector(words);
+			return new CascadeSelector(words, hover);
 		}
 	}
 }

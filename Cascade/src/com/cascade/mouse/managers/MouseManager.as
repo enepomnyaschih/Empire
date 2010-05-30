@@ -95,7 +95,19 @@ package com.cascade.mouse.managers
 		
 		public function updateMouseTool():void
 		{
-			sortActionsByDepth();
+/*			var acts:Array = new Array();
+			for (var actionIndex:int = 0; actionIndex < _actions.length; ++actionIndex)
+			{
+				var ac:ICascadeActionMouseTool = _actions[actionIndex];
+				acts.push(ac.element.name + "." + ac.element.statuses.join("."));
+			}
+			
+			if (acts.length == 5)
+			{
+				ErrorUtil.log("!");
+			}
+			
+			ErrorUtil.log("Active actions: ", acts.join(" "));*/
 			
 			var newAction:ICascadeActionMouseTool;
 			for (var actionIndex:int = 0; actionIndex < _actions.length; ++actionIndex)
@@ -111,7 +123,7 @@ package com.cascade.mouse.managers
 				var curParam:ICascadeParserMouseToolParam = curAction.style.param;
 				var newParam:ICascadeParserMouseToolParam = newAction.style.param;
 				
-				if (newParam.priority <= curParam.priority)
+				if (newParam.priority >= curParam.priority)
 					newAction = curAction;
 			}
 			
@@ -132,7 +144,7 @@ package com.cascade.mouse.managers
 			_activeMouseTool.init();
 		}
 		
-		private function sortActionsByDepth():void
+/*		private function sortActionsByDepth():void
 		{
 			var items:Array = new Array();
 			for (var actionIndex:int = 0; actionIndex < _actions.length; ++actionIndex)
@@ -160,6 +172,6 @@ package com.cascade.mouse.managers
 				result.push(_actions[items[itemIndex].index]);
 			
 			_actions = result;
-		}
+		}*/
 	}
 }

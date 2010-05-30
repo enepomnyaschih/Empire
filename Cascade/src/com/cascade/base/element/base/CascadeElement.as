@@ -16,9 +16,13 @@ package com.cascade.base.element.base
 	
 	public class CascadeElement implements ICascadeElement
 	{
+		public static const STATUS_HOVER:String = "hover";
+		
 		private var _target		:UIComponent;
 		private var _parent		:ICascadeElement;
 		private var _name		:String;
+		
+		private var _isHover	:Boolean;
 		
 		private var _statuses	:Array = new Array();
 		
@@ -66,6 +70,17 @@ package com.cascade.base.element.base
 		public function get name():String
 		{
 			return _name;
+		}
+		
+		public function get isHover():Boolean
+		{
+			return _isHover;
+		}
+		
+		public function set isHover(value:Boolean):void
+		{
+			_isHover = value;
+			setStatus(STATUS_HOVER, value);
 		}
 		
 		// for debug only
@@ -237,7 +252,10 @@ package com.cascade.base.element.base
 				if (!theStyle)
 					obsoleteStyles.push(oldStyleName);
 				else
+				{
 					oldAction.style = theStyle;
+					delete newStyles[oldStyleName];
+				}
 			}
 			
 			// Reset obsolete styles
