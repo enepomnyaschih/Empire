@@ -10,6 +10,8 @@ package com.cascade.base.loader
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import mx.utils.StringUtil;
+	
 	import util.ErrorUtil;
 	
 	public class CascadeLoader extends EventDispatcher implements ICascadeLoader
@@ -44,18 +46,18 @@ package com.cascade.base.loader
 			}
 			catch(error:Error)
 			{
-				fail();
+				fail(error.message);
 			}
 		}
 		
 		private function onIOError(e:IOErrorEvent):void
 		{
-			fail();
+			fail("Input/Output error while loading CSS file.");
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void
 		{
-			fail();
+			fail("Security error while loading CSS file.");
 		}
 		
 		private function read(text:String):void
@@ -65,7 +67,12 @@ package com.cascade.base.loader
 			{
 				var index:int = text.indexOf("}", from) + 1;
 				if (index == 0)
+				{
+					if (StringUtil.trim(text.substr(from)).length != 0)
+						ErrorUtil.throwMsg("Can't parse CSS file: unexpected symbols remaining at the end of file");
+					
 					break;
+				}
 				
 				CascadeManager.instance.ruleManager.register(CascadeRuleManager.createByString(text.substr(from, index - from)));
 				from = index;
@@ -74,9 +81,9 @@ package com.cascade.base.loader
 			dispatchEvent(new CascadeLoaderEvent(CascadeLoaderEvent.SUCCESS));
 		}
 		
-		private function fail():void
+		private function fail(message:String):void
 		{
-			dispatchEvent(new CascadeLoaderEvent(CascadeLoaderEvent.FAILURE));
+			dispatchEvent(new CascadeLoaderEvent(CascadeLoaderEvent.FAILURE, message));
 		}
 	}
 }

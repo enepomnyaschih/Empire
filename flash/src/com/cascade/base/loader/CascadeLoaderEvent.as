@@ -7,14 +7,23 @@ package com.cascade.base.loader
 		public static const SUCCESS:String = "success";
 		public static const FAILURE:String = "failure";
 		
-		public function CascadeLoaderEvent(type:String)
+		private var _message:String;
+		
+		public function CascadeLoaderEvent(type:String, message:String = null)
 		{
 			super(type);
+			
+			_message = message;
+		}
+		
+		public function get message():String
+		{
+			return _message;
 		}
 		
 		override public function clone():Event
 		{
-			return new CascadeLoaderEvent(type);
+			return new CascadeLoaderEvent(type, message);
 		}
 	}
 }

@@ -1,6 +1,6 @@
-// TODO: secure exceptions interception while reading and else
 // TODO: support of "inherit" style values
 // TODO: support commentaries in CSS file
+// TODO: extend color parser and add sample as in thesis
 // TODO: test all source files
 // TODO: inherit everything from EventDispatcher
 // TODO: add possibility to configure MouseTools, like { mouseTool: MapMouseTool(1, 2, 3); }

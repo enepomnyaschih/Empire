@@ -280,7 +280,7 @@ package
 		
 		private function onCssLoadFailure(e:CascadeLoaderEvent):void
 		{
-			Alert.show("Can't load CSS file");
+			Alert.show(e.message);
 		}
 		
 		private function initMouse():void

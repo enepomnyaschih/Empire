@@ -1,6 +1,5 @@
 package com.cascade.mouse.managers
 {
-	import com.cascade.base.element.base.ICascadeElement;
 	import com.cascade.base.managers.CascadeManager;
 	import com.cascade.mouse.action.CascadeActionMouseToolFactory;
 	import com.cascade.mouse.action.ICascadeActionMouseTool;
@@ -140,6 +139,9 @@ package com.cascade.mouse.managers
 			
 			var styleParam:ICascadeParserMouseToolParam = _activeAction.style.param;
 			var mouseToolFactory:IMouseToolFactory = mouseToolFactoryManager.getMouseToolFactory(styleParam.type);
+			if (!mouseToolFactory)
+				ErrorUtil.throwMsg("Mouse tool factory of '", styleParam.type, "' type is not registered.");
+			
 			_activeMouseTool = mouseToolFactory.createMouseTool(_activeAction.element);
 			_activeMouseTool.init();
 		}
