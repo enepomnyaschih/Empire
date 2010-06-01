@@ -1,8 +1,8 @@
 package empire.game
 {
-	import common.mouse.MouseSwitcher;
-	import common.mouse.MouseWrapper;
-	import common.mvc.View;
+	import com.cascade.base.switcher.CascadeSwitcher;
+	import com.cascade.base.switcher.ICascadeSwitcher;
+	import com.mvc.View;
 
 	public class GameView extends View
 	{
@@ -13,7 +13,7 @@ package empire.game
 		 * select	- possible to select provinces and control them
 		 * move		- required to select province to move selected units into
 		 */
-		private var _mouseSwitcher:MouseSwitcher;
+		private var _cascadeSwitcher:ICascadeSwitcher;
 		
 		public function GameView(game:Game)
 		{
@@ -21,12 +21,12 @@ package empire.game
 			
 			_game = game;
 			
-			_mouseSwitcher = new MouseSwitcher(Frame.instance.permanentMouseWrapper, "select");
+			_cascadeSwitcher = new CascadeSwitcher(Frame.instance.permanentCascadeElement, "select");
 		}
 		
-		public function get mouseSwitcher():MouseSwitcher
+		public function get cascadeSwitcher():ICascadeSwitcher
 		{
-			return _mouseSwitcher;
+			return _cascadeSwitcher;
 		}
 	}
 }

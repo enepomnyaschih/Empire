@@ -1,22 +1,31 @@
 package
 {
-	import common.mouse.MouseManager;
-	import common.mouse.MouseWrapper;
+	import com.cascade.base.element.base.CascadeElement;
+	import com.cascade.base.element.base.ICascadeElement;
+	import com.cascade.base.element.mouse.CascadeMouseElement;
+	import com.cascade.base.loader.CascadeLoader;
+	import com.cascade.base.loader.CascadeLoaderEvent;
+	import com.cascade.base.loader.ICascadeLoader;
+	import com.cascade.mouse.managers.MouseManager;
 	
 	import empire.game.Game;
 	import empire.game.GameController;
-	import empire.province.ProvinceDeselectMouseTool;
-	import empire.province.ProvinceSelectMouseTool;
+	import empire.province.ProvinceDeselectMouseToolFactory;
+	import empire.province.ProvinceSelectMouseToolFactory;
 	import empire.provincescreen.ProvinceScreen;
 	
+	import flash.events.EventDispatcher;
 	import flash.net.URLRequest;
 	
+	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.events.ResizeEvent;
 	
 	import ui.IsothropicLayout;
 	import ui.Mask;
+	
+	import util.ErrorUtil;
 
 	public class Frame extends UIComponent
 	{
@@ -93,11 +102,8 @@ package
 		private var _provinceScreenLayout:IsothropicLayout;
 		private var _provinceScreen:ProvinceScreen;
 		
-		private var _permanentMouseWrapper	:MouseWrapper;
-		private var _frameMouseWrapper		:MouseWrapper;
-		
-		private var _provinceSelectMouseTool:ProvinceSelectMouseTool;
-		private var _provinceDeselectMouseTool:ProvinceDeselectMouseTool;
+		private var _permanentCascadeElement	:ICascadeElement;
+		private var _frameCascadeElement		:ICascadeElement;
 		
 		private var _game:Game;
 		private var _gameController:GameController;
@@ -105,61 +111,38 @@ package
 		private var _masterId:String;
 		private var _baseUrl:String;
 		
+		private var _cssLoader:ICascadeLoader;
+		
+		private var _broadcaster:EventDispatcher = new EventDispatcher();
+		
 		public function Frame()
 		{
 			super();
 			
-			initMouse();
-			
-			_mapLayout = new IsothropicLayout();
-			_mapMask = new Mask();
-			_provinceScreenLayout = new IsothropicLayout();
-			_provinceScreen = new ProvinceScreen();
-			
-			addChild(_mapLayout);
-			addChild(_mapMask);
-			addChild(_provinceScreenLayout);
-			
-			_provinceScreenLayout.addChild(_provinceScreen);
-			
-			Application.application.addEventListener(ResizeEvent.RESIZE, this.onAppResize);
-		}
-		
-		public static function init():void
-		{
 			if (_instance)
-				return;
+				ErrorUtil.throwSingletonInstantiated("Frame");
 			
-			_instance = new Frame();
+			_instance = this;
 			
-			_instance.openGame(GAME_INFO_INITIAL);
-			_instance.start("YoGA", "http://localhost");
+			loadCss();
 		}
 		
 		public static function get instance():Frame
 		{
-			init();
+			if (!_instance)
+				new Frame();
+			
 			return _instance;
 		}
 		
-		public function get permanentMouseWrapper():MouseWrapper
+		public function get permanentCascadeElement():ICascadeElement
 		{
-			return _permanentMouseWrapper;
+			return _permanentCascadeElement;
 		}
 		
-		public function get frameMouseWrapper():MouseWrapper
+		public function get frameCascadeElement():ICascadeElement
 		{
-			return _frameMouseWrapper;
-		}
-		
-		public function get provinceSelectMouseTool():ProvinceSelectMouseTool
-		{
-			return _provinceSelectMouseTool;
-		}
-		
-		public function get provinceDeselectMouseTool():ProvinceDeselectMouseTool
-		{
-			return _provinceDeselectMouseTool;
+			return _frameCascadeElement;
 		}
 		
 		public function get masterId():String
@@ -180,6 +163,11 @@ package
 		public function get provinceScreen():ProvinceScreen
 		{
 			return _provinceScreen;
+		}
+		
+		public function get broadcaster():EventDispatcher
+		{
+			return _broadcaster;
 		}
 		
 		public function start(masterId:String, baseUrl:String):void
@@ -237,19 +225,53 @@ package
 			return result;
 		}
 		
+		private function loadCss():void
+		{
+			initMouse();
+			
+			var request:URLRequest = new URLRequest("Empire.css");
+			request.method = "GET";
+			
+			_cssLoader = new CascadeLoader();
+			_cssLoader.addEventListener(CascadeLoaderEvent.SUCCESS, onCssLoadSuccess, false, 0, true);
+			_cssLoader.addEventListener(CascadeLoaderEvent.FAILURE, onCssLoadFailure, false, 0, true);
+			_cssLoader.load(request);
+		}
+		
+		private function onCssLoadSuccess(e:CascadeLoaderEvent):void
+		{
+			_permanentCascadeElement	= new CascadeElement(this, "Permanent");
+			_frameCascadeElement		= new CascadeMouseElement(this, "Frame");
+			
+			_permanentCascadeElement.isHover = true;
+			_permanentCascadeElement.addChild(_frameCascadeElement);
+			
+			_mapLayout = new IsothropicLayout();
+			_mapMask = new Mask();
+			_provinceScreenLayout = new IsothropicLayout();
+			_provinceScreen = new ProvinceScreen();
+			
+			addChild(_mapLayout);
+			addChild(_mapMask);
+			addChild(_provinceScreenLayout);
+			
+			_provinceScreenLayout.addChild(_provinceScreen);
+			
+			Application.application.addEventListener(ResizeEvent.RESIZE, this.onAppResize);
+			
+			openGame(GAME_INFO_INITIAL);
+			start("YoGA", "http://localhost");
+		}
+		
+		private function onCssLoadFailure(e:CascadeLoaderEvent):void
+		{
+			Alert.show("Can't load CSS file");
+		}
+		
 		private function initMouse():void
 		{
-			_permanentMouseWrapper	= new MouseWrapper(null, "Permanent");
-			_frameMouseWrapper		= new MouseWrapper(this, "Frame");
-			
-			_provinceSelectMouseTool = new ProvinceSelectMouseTool();
-			_provinceDeselectMouseTool = new ProvinceDeselectMouseTool();
-			
-			MouseManager.instance.addRule("Permanent.select Province.own",	_provinceSelectMouseTool);
-			MouseManager.instance.addRule("Permanent.move Province.near",	_provinceSelectMouseTool);
-			MouseManager.instance.addRule("Permanent.move",					_provinceDeselectMouseTool);
-			
-			_permanentMouseWrapper.activate();
+			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceSelectMouseToolFactory());
+			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceDeselectMouseToolFactory());
 		}
 		
 		private function onAppResize(e:ResizeEvent):void

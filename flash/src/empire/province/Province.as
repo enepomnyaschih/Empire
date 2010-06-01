@@ -1,7 +1,7 @@
 package empire.province
 {
-	import common.geom.IntPoint;
-	import common.mvc.Model;
+	import com.geom.IntPoint;
+	import com.mvc.Model;
 
 	public class Province extends Model
 	{

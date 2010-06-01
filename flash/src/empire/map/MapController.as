@@ -1,6 +1,6 @@
 package empire.map
 {
-	import common.mvc.Controller;
+	import com.mvc.Controller;
 	
 	import empire.game.Game;
 	import empire.province.ProvinceController;

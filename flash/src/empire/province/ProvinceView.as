@@ -1,8 +1,9 @@
 package empire.province
 {
-	import common.geom.IntPoint;
-	import common.mouse.MouseWrapper;
-	import common.mvc.View;
+	import com.cascade.base.element.mouse.CascadeMouseElement;
+	import com.cascade.base.element.mouse.ICascadeMouseElement;
+	import com.geom.IntPoint;
+	import com.mvc.View;
 	
 	import empire.army.ArmyBoardView;
 	import empire.army.ProvinceBoardView;
@@ -52,7 +53,7 @@ package empire.province
 		
 		private var _metrics:MapViewMetrics;
 		
-		private var _mouseWrapper:MouseWrapper;
+		private var _cascadeElement:ICascadeMouseElement;
 		
 		
 		
@@ -69,16 +70,16 @@ package empire.province
 			
 			_metrics = metrics;
 			
-			_mouseWrapper = new MouseWrapper(this, "Province");
+			_cascadeElement = new CascadeMouseElement(this, "Province");
 			
 			invalidateGraphics();
 			
 			addBoardView();
 		}
 		
-		public function get mouseWrapper():MouseWrapper
+		public function get cascadeElement():ICascadeMouseElement
 		{
-			return _mouseWrapper;
+			return _cascadeElement;
 		}
 		
 		public function get game():Game
@@ -276,18 +277,18 @@ package empire.province
 			
 			if (memberId == Frame.instance.masterId)
 			{
-				_mouseWrapper.addStatus("own");
+				_cascadeElement.addStatus("own");
 			}
 			else
 			{
-				_mouseWrapper.addStatus("foe");
+				_cascadeElement.addStatus("foe");
 			}
 		}
 		
 		private function freeOwner():void
 		{
-			_mouseWrapper.removeStatus("own");
-			_mouseWrapper.removeStatus("foe");
+			_cascadeElement.removeStatus("own");
+			_cascadeElement.removeStatus("foe");
 		}
 		
 		private function switchOrderModel():void

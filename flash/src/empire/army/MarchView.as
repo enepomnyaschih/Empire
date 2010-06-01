@@ -1,7 +1,7 @@
 package empire.army
 {
-	import common.geom.IntPoint;
-	import common.mvc.View;
+	import com.geom.IntPoint;
+	import com.mvc.View;
 	
 	import empire.game.GameUtil;
 	import empire.map.Map;

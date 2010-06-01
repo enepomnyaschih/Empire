@@ -6,15 +6,26 @@ package util
 	{
 		public static const MUST_OVERRIDE:String = "Method is not implemented in superclass and must be overridden";
 		
-		public static function log(msg:*):void
+		public static function log(... args):void
 		{
-			ExternalInterface.call("console.log", msg);
+			ExternalInterface.call.apply(null, ["console.log"].concat(args));
 		}
 		
-		public static function throwMsg(msg:*):*
+		public static function throwMsg(... args):*
 		{
-			log(msg);
-			throw new Error(msg);
+			log.apply(null, args);
+			throw new Error(args.join(" "));
 		}
+		
+		public static function throwMustOverride():*
+		{
+			return throwMsg(MUST_OVERRIDE);
+		}
+		
+		public static function throwSingletonInstantiated(type:String):*
+		{
+			return throwMsg(type + " singleton is instantiated already.");
+		}
+
 	}
 }

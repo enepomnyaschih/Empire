@@ -1,6 +1,6 @@
 package ui
 {
-	import common.mvc.View;
+	import com.mvc.View;
 	
 	import flash.display.DisplayObject;
 

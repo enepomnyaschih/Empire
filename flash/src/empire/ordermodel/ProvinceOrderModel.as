@@ -1,6 +1,6 @@
 package empire.ordermodel
 {
-	import common.mvc.Model;
+	import com.mvc.Model;
 	
 	import empire.game.Game;
 	import empire.game.GameUtil;

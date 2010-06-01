@@ -1,7 +1,8 @@
 package empire.game
 {
-	import common.mvc.Controller;
-	import common.mvc.ViewManager;
+	import com.cascade.base.managers.CascadeManager;
+	import com.mvc.Controller;
+	import com.mvc.ViewManager;
 	
 	import empire.army.MarchView;
 	import empire.map.MapController;
@@ -13,11 +14,11 @@ package empire.game
 	import empire.province.ProvinceController;
 	import empire.province.ProvinceDeselectMouseTool;
 	import empire.province.ProvinceSelectMouseTool;
+	import empire.province.ProvinceSelectedEvent;
 	import empire.province.ProvinceView;
 	import empire.provincescreen.ProvinceScreen;
 	
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
 	
@@ -59,8 +60,8 @@ package empire.game
 			_game.addEventListener(Game.EVENT_PLAYER_LEFT,		onPlayerLeft,	false, 0, true);
 			
 			provinceScreen.addEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked, false, 0, true);
-			provinceSelectMouseTool.addEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected, false, 0, true);
-			provinceDeselectMouseTool.addEventListener(MouseEvent.CLICK, onProvinceDeselected, false, 0, true);
+			Frame.instance.broadcaster.addEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected, false, 0, true);
+			Frame.instance.broadcaster.addEventListener(ProvinceDeselectMouseTool.EVENT_DESELECTED, onProvinceDeselected, false, 0, true);
 			
 			_orderAddedHandlers[MoveOrder .TYPE] = onMoveOrderAdded;
 			_orderAddedHandlers[TrainOrder.TYPE] = onTrainOrderAdded;
@@ -77,12 +78,17 @@ package empire.game
 			_mainTicker.stop();
 			
 			provinceScreen.removeEventListener(ProvinceScreen.EVENT_MARCH_CLICKED, onMarchClicked);
-			provinceSelectMouseTool.removeEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected);
+			Frame.instance.broadcaster.removeEventListener(ProvinceSelectMouseTool.EVENT_SELECTED, onProvinceSelected);
 		}
 		
 		public function get gameView():GameView
 		{
 			return _gameView;
+		}
+		
+		public function get mapController():MapController
+		{
+			return _mapController;
 		}
 		
 		public function switchState(turn:int):void
@@ -91,7 +97,7 @@ package empire.game
 			
 			_turn = turn;
 			_mapController.switchState(turn);
-			_gameView.mouseSwitcher.status = "select";
+			_gameView.cascadeSwitcher.status = "select";
 			
 			initOrderModel();
 		}
@@ -105,11 +111,11 @@ package empire.game
 			
 			if (province == -1)
 			{
-				_gameView.mouseSwitcher.status = "select";
+				_gameView.cascadeSwitcher.status = "select";
 				return;
 			}
 			
-			_gameView.mouseSwitcher.status = "move";
+			_gameView.cascadeSwitcher.status = "move";
 			
 			var commonSpeed:int = 0;
 			for (var i:int = 0; i < GameUtil.UNIT_TYPE_COUNT; ++i)
@@ -129,16 +135,6 @@ package empire.game
 			return Frame.instance.provinceScreen;
 		}
 		
-		private function get provinceSelectMouseTool():ProvinceSelectMouseTool
-		{
-			return Frame.instance.provinceSelectMouseTool;
-		}
-		
-		private function get provinceDeselectMouseTool():ProvinceDeselectMouseTool
-		{
-			return Frame.instance.provinceDeselectMouseTool;
-		}
-		
 		private function onGameJoined(e:Event):void
 		{
 		}
@@ -154,6 +150,8 @@ package empire.game
 		private function onMapGenerated(e:Event):void
 		{
 			_mapController = new MapController(_game);
+			
+			Frame.instance.frameCascadeElement.addChild(_mapController.mapView.cascadeElement);
 			
 			_gameView.addChild(_mapController.mapView);
 			_gameView.width  = _mapController.mapView.initialWidth;
@@ -361,11 +359,11 @@ package empire.game
 					neighbours[neighbourIndex] != i)
 				{
 					provinceController.provinceView.darken = true;
-					provinceController.provinceView.mouseWrapper.addStatus("far");
+					provinceController.provinceView.cascadeElement.addStatus("far");
 				}
 				else
 				{
-					provinceController.provinceView.mouseWrapper.addStatus("near");
+					provinceController.provinceView.cascadeElement.addStatus("near");
 					++neighbourIndex;
 				}
 			}
@@ -377,14 +375,14 @@ package empire.game
 			{
 				var provinceController:ProvinceController = _mapController.provinceControllers.getProvinceControllerAt(i);
 				provinceController.provinceView.darken = false;
-				provinceController.provinceView.mouseWrapper.removeStatus("near");
-				provinceController.provinceView.mouseWrapper.removeStatus("far");
+				provinceController.provinceView.cascadeElement.removeStatus("near");
+				provinceController.provinceView.cascadeElement.removeStatus("far");
 			}
 		}
 		
-		private function onProvinceSelected(e:Event):void
+		private function onProvinceSelected(e:ProvinceSelectedEvent):void
 		{
-			var target:ProvinceView = provinceSelectMouseTool.target;
+			var target:ProvinceView = e.provinceView;
 			if (target.game != _game)
 				return;
 			

@@ -1,0 +1,14 @@
+Permanent.select Province.own:hover
+{
+	mouseTool: ProvinceSelect 1p;
+}
+
+Permanent.move:hover
+{
+	mouseTool: ProvinceDeselect 2p;
+}
+
+Permanent.move Province.near:hover
+{
+	mouseTool: ProvinceSelect 1p;
+}

@@ -1,28 +1,34 @@
 package empire.province
 {
-	import common.mouse.MouseTool;
+	import com.cascade.mouse.mousetool.MouseTool;
 	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	public class ProvinceDeselectMouseTool extends MouseTool
 	{
-		override public function activate():void
+		public static const TYPE:String = "ProvinceDeselect";
+		
+		public static const EVENT_DESELECTED:String = "deselected";
+		
+		override public function get type():String
 		{
-			super.activate();
-			
+			return TYPE;
+		}
+		
+		override public function init():void
+		{
 			Frame.instance.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 		}
 		
-		override public function deactivate():void
+		override public function free():void
 		{
-			super.deactivate();
-			
 			Frame.instance.removeEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		private function onClick(e:MouseEvent):void
 		{
-			dispatchEvent(e.clone());
+			Frame.instance.broadcaster.dispatchEvent(new Event(EVENT_DESELECTED));
 		}
 	}
 }

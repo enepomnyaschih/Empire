@@ -1,6 +1,6 @@
 package empire.province
 {
-	import common.collection.Collection;
+	import com.collections.Collection;
 
 	public class ProvinceControllerCollection extends Collection
 	{

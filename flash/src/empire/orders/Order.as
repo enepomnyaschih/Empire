@@ -1,6 +1,6 @@
 package empire.orders
 {
-	import common.mvc.Model;
+	import com.mvc.Model;
 	
 	import util.ErrorUtil;
 

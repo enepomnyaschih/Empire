@@ -1,6 +1,6 @@
 package empire.game
 {
-	import common.mvc.Model;
+	import com.mvc.Model;
 	
 	import empire.map.Map;
 	import empire.map.MapState;

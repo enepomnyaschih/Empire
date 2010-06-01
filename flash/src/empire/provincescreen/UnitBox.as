@@ -1,6 +1,6 @@
 package empire.provincescreen
 {
-	import common.mvc.View;
+	import com.mvc.View;
 	
 	import util.ColorUtil;
 

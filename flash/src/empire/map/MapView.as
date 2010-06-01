@@ -1,6 +1,8 @@
 package empire.map
 {
-	import common.mvc.View;
+	import com.cascade.base.element.mouse.CascadeMouseElement;
+	import com.cascade.base.element.mouse.ICascadeMouseElement;
+	import com.mvc.View;
 	
 	import empire.army.MarchView;
 	import empire.province.ProvinceView;
@@ -24,6 +26,8 @@ package empire.map
 		private var _provinceViewContainer:View = new View();
 		private var _marchViewContainer:View = new View();
 		
+		private var _cascadeElement:ICascadeMouseElement;
+		
 		public function MapView(map:Map)
 		{
 			super();
@@ -35,6 +39,8 @@ package empire.map
 			
 			_marchViewContainer.mouseChildren = false;
 			_marchViewContainer.mouseEnabled = false;
+			
+			_cascadeElement = new CascadeMouseElement(this, "Map");
 		}
 		
 		public function get map():Map
@@ -45,6 +51,11 @@ package empire.map
 		public function get metrics():MapViewMetrics
 		{
 			return _metrics;
+		}
+		
+		public function get cascadeElement():ICascadeMouseElement
+		{
+			return _cascadeElement;
 		}
 		
 		public function updateMetrics():void
@@ -60,6 +71,7 @@ package empire.map
 		
 		public function addProvinceView(provinceView:ProvinceView):void
 		{
+			_cascadeElement.addChild(provinceView.cascadeElement);
 			_provinceViewContainer.addChild(provinceView);
 		}
 		

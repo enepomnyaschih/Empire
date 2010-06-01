@@ -1,6 +1,6 @@
 package empire.player
 {
-	import common.mvc.Model;
+	import com.mvc.Model;
 
 	public class PlayerState extends Model
 	{

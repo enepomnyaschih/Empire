@@ -1,6 +1,6 @@
 package empire.army
 {
-	import common.mvc.View;
+	import com.mvc.View;
 	
 	import flash.geom.Point;
 	

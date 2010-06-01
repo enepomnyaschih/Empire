@@ -1,7 +1,7 @@
 package empire.map
 {
-	import common.collection.Queue;
-	import common.mvc.Model;
+	import com.collections.Queue;
+	import com.mvc.Model;
 	
 	import empire.province.Province;
 	import empire.province.ProvinceState;

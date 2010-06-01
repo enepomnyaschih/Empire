@@ -1,6 +1,6 @@
 package ui
 {
-	import common.mvc.View;
+	import com.mvc.View;
 	
 	import mx.events.FlexEvent;
 	import mx.events.ResizeEvent;

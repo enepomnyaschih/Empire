@@ -1,6 +1,6 @@
 package empire.army
 {
-	import common.mvc.View;
+	import com.mvc.View;
 
 	public class UnitBoardView extends View
 	{

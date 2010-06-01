@@ -1,22 +1,25 @@
 package empire.province
 {
-	import common.mouse.MouseManager;
-	import common.mouse.MouseTool;
+	import com.cascade.mouse.mousetool.MouseTool;
 	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	public class ProvinceSelectMouseTool extends MouseTool
 	{
+		public static const TYPE:String = "ProvinceSelect";
+		
 		public static const EVENT_SELECTED:String = "selected";
 		
 		private var _target:ProvinceView;
 		
-		override public function activate():void
+		override public function get type():String
 		{
-			super.activate();
-			
-			_target = MouseManager.instance.getActiveTarget("Province") as ProvinceView;
+			return TYPE;
+		}
+		
+		override public function init():void
+		{
+			_target = element.target as ProvinceView;
 			if (!_target)
 				return;
 			
@@ -24,10 +27,8 @@ package empire.province
 			_target.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 		}
 		
-		override public function deactivate():void
+		override public function free():void
 		{
-			super.deactivate();
-			
 			if (!_target)
 				return;
 			
@@ -42,7 +43,7 @@ package empire.province
 		
 		private function onClick(e:MouseEvent):void
 		{
-			dispatchEvent(new Event(EVENT_SELECTED));
+			Frame.instance.broadcaster.dispatchEvent(new ProvinceSelectedEvent(EVENT_SELECTED, ProvinceView(element.target)));
 		}
 	}
 }
