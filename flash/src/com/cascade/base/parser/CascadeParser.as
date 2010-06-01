@@ -1,11 +1,16 @@
 package com.cascade.base.parser
 {
-	import com.factory.BaseFactory;
+	import flash.events.EventDispatcher;
 	
 	import util.ErrorUtil;
 	
-	public class CascadeParser extends BaseFactory implements ICascadeParser
+	public class CascadeParser extends EventDispatcher implements ICascadeParser
 	{
+		virtual public function get type():String
+		{
+			return ErrorUtil.throwMustOverride();
+		}
+		
 		virtual public function parse(source:String):*
 		{
 			return ErrorUtil.throwMustOverride();

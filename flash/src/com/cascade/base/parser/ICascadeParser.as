@@ -1,8 +1,8 @@
 package com.cascade.base.parser
 {
-	import com.factory.IBaseFactory;
+	import com.ITyped;
 	
-	public interface ICascadeParser extends IBaseFactory
+	public interface ICascadeParser extends ITyped
 	{
 		function parse(source:String):*;
 		function format(value:*):String;

@@ -1,9 +1,9 @@
 package com.cascade.base.managers
 {
 	import com.cascade.base.parser.ICascadeParser;
-	import com.factory.IFactoryManager;
+	import com.manager.IManager;
 
-	public interface ICascadeParserManager extends IFactoryManager
+	public interface ICascadeParserManager extends IManager
 	{
 		function getParser(type:String):ICascadeParser;
 	}

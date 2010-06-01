@@ -1,4 +1,12 @@
 // TODO: add custom element styles management
+// TODO: support default priorities for mouse tools
+// TODO: support enumerating multiple selectors for one styleset (selector, selector { styleset })
+// TODO: secure exceptions interception while reading and else
+// TODO: support of "inherit" style values
+// TODO: support commentaries in CSS file
+// TODO: test all source files
+// TODO: inherit everything from EventDispatcher
+// TODO: add possibility to configure MouseTools, like { mouseTool: MapMouseTool(1, 2, 3); }
 
 package com.cascade.base.element.base
 {
