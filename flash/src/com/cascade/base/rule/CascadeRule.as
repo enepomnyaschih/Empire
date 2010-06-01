@@ -6,20 +6,20 @@ package com.cascade.base.rule
 	
 	public class CascadeRule implements ICascadeRule
 	{
-		private var _selector:ICascadeSelector;
+		private var _selectors:Array;
 		private var _styles:Dictionary;
 		private var _priority:Number;
 		
-		public function CascadeRule(selector:ICascadeSelector, styles:Dictionary, priority:Number)
+		public function CascadeRule(selectors:Array, styles:Dictionary, priority:Number)
 		{
-			_selector	= selector;
+			_selectors	= selectors;
 			_styles		= styles;
 			_priority	= priority;
 		}
 		
-		public function get selector():ICascadeSelector
+		public function get selectors():Array
 		{
-			return _selector;
+			return _selectors;
 		}
 		
 		public function get styles():Dictionary

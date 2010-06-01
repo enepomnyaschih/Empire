@@ -6,7 +6,7 @@ package com.cascade.base.rule
 	
 	public interface ICascadeRule
 	{
-		function get selector():ICascadeSelector;
+		function get selectors():Array;
 		function get styles():Dictionary;
 		function get priority():Number;
 	}

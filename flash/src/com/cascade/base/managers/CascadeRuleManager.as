@@ -28,13 +28,19 @@ package com.cascade.base.managers
 		{
 			var styleFactoryManager	:ICascadeStyleFactoryManager	= CascadeManager.instance.styleFactoryManager;
 			
-			var beginIndex		:int = source.indexOf("{");
-			var endIndex		:int = source.indexOf("}");
-			var selectorSource	:String = StringUtil.trim(source.substr(0, beginIndex));
-			var selector		:ICascadeSelector = CascadeSelector.createByString(selectorSource);
-			var bodySource		:String = source.substr(beginIndex + 1, endIndex - beginIndex - 1);
-			var styleSources	:Array = bodySource.split(";");
-			var styles			:Dictionary = new Dictionary();
+			var beginIndex			:int = source.indexOf("{");
+			var endIndex			:int = source.indexOf("}");
+			
+			var multiSelectorSource	:String = StringUtil.trim(source.substr(0, beginIndex));
+			var selectorSources		:Array = multiSelectorSource.split(",");
+			var selectors			:Array = new Array();
+			
+			for (var selectorIndex:int = 0; selectorIndex < selectorSources.length; ++selectorIndex)
+				selectors.push(CascadeSelector.createByString(selectorSources[selectorIndex]));
+			
+			var bodySource			:String = source.substr(beginIndex + 1, endIndex - beginIndex - 1);
+			var styleSources		:Array = bodySource.split(";");
+			var styles				:Dictionary = new Dictionary();
 			
 			for (var styleIndex:int = 0; styleIndex < styleSources.length; ++styleIndex)
 			{
@@ -50,7 +56,7 @@ package com.cascade.base.managers
 				styles[styleName] = styleFactory.createStyle(styleValue);
 			}
 			
-			return new CascadeRule(selector, styles, 0);
+			return new CascadeRule(selectors, styles, 0);
 		}
 	}
 }

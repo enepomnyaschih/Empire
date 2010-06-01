@@ -59,7 +59,7 @@ package com.cascade.base.selector
 		{
 			var hover:Boolean = false;
 			var modifiers:Array = source.split(":");
-			source = modifiers[0];
+			source = StringUtil.trim(modifiers[0]);
 			
 			for (var modifierIndex:int = 1; modifierIndex < modifiers.length; ++modifierIndex)
 			{

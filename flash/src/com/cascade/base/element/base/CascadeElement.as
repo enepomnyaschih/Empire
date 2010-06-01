@@ -1,5 +1,3 @@
-// TODO: support default priorities for mouse tools
-// TODO: support enumerating multiple selectors for one styleset (selector, selector { styleset })
 // TODO: secure exceptions interception while reading and else
 // TODO: support of "inherit" style values
 // TODO: support commentaries in CSS file
@@ -12,6 +10,7 @@ package com.cascade.base.element.base
 	import com.cascade.base.actions.style.ICascadeStyleAction;
 	import com.cascade.base.managers.CascadeManager;
 	import com.cascade.base.rule.ICascadeRule;
+	import com.cascade.base.selector.ICascadeSelector;
 	import com.cascade.base.styles.base.ICascadeStyle;
 	
 	import flash.utils.Dictionary;
@@ -270,8 +269,15 @@ package com.cascade.base.element.base
 			for (var ruleIndex:int = 0; ruleIndex < rules.length; ++ruleIndex)
 			{
 				var rule:ICascadeRule = rules[ruleIndex];
-				if (rule.selector.fits(elements))
-					ConfigUtil.apply(newStyles, rule.styles);
+				for (var selectorIndex:int = 0; selectorIndex < rule.selectors.length; ++selectorIndex)
+				{
+					var selector:ICascadeSelector = rule.selectors[selectorIndex];
+					if (selector.fits(elements))
+					{
+						ConfigUtil.apply(newStyles, rule.styles);
+						break;
+					}
+				}
 			}
 			
 			// Find and remember obsolete styles
