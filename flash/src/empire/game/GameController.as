@@ -1,6 +1,6 @@
 package empire.game
 {
-	import com.cascade.base.managers.CascadeManager;
+	import com.cascade.visual.style.CascadeVisualStyle;
 	import com.mvc.Controller;
 	import com.mvc.ViewManager;
 	
@@ -149,6 +149,7 @@ package empire.game
 		
 		private function onMapGenerated(e:Event):void
 		{
+//			Frame.instance.cce.setCustomStyle(new CascadeVisualStyle("backgroundColor", "backgroundColor", 0x0000FF));
 			_mapController = new MapController(_game);
 			
 			Frame.instance.frameCascadeElement.addChild(_mapController.mapView.cascadeElement);

@@ -12,3 +12,14 @@ Permanent.move Province.near:hover
 {
 	mouseTool: ProvinceSelect 1p;
 }
+
+ccc
+{
+	backgroundColor: #00FF00;
+	backgroundAlpha: 0.5;
+}
+
+ccc:hover
+{
+	backgroundAlpha: 1.0;
+}

@@ -1,4 +1,3 @@
-// TODO: add custom element styles management
 // TODO: support default priorities for mouse tools
 // TODO: support enumerating multiple selectors for one styleset (selector, selector { styleset })
 // TODO: secure exceptions interception while reading and else
@@ -36,8 +35,9 @@ package com.cascade.base.element.base
 		
 		private var _children	:Array = new Array();
 		
-		private var _styles		:Dictionary = new Dictionary();
-		private var _actions	:Dictionary = new Dictionary();
+		private var _styles			:Dictionary = new Dictionary();
+		private var _actions		:Dictionary = new Dictionary();
+		private var _customStyles	:Dictionary = new Dictionary();
 		
 		private var _autoValidate:Boolean = true;
 		
@@ -95,6 +95,30 @@ package com.cascade.base.element.base
 		public function get statuses():Array
 		{
 			return _statuses;
+		}
+		
+		public function getCustomStyle(styleName:String):ICascadeStyle
+		{
+			return _customStyles[styleName];
+		}
+		
+		public function setCustomStyle(style:ICascadeStyle):void
+		{
+			var styleName:String = style.styleName;
+			if (!style)
+			{
+				resetCustomStyle(styleName);
+				return;
+			}
+			
+			_customStyles[styleName] = style;
+			updateStyle(styleName);
+		}
+		
+		public function resetCustomStyle(styleName:String):void
+		{
+			delete _customStyles[styleName];
+			updateStyle(styleName);
 		}
 		
 		public function getElementsChain():Array
@@ -240,6 +264,7 @@ package com.cascade.base.element.base
 			var elements:Array = getElementsChain();
 			var rules:Array = CascadeManager.instance.ruleManager.rules;
 			var newStyles:Dictionary = new Dictionary();
+			var updatedStyles:Dictionary = new Dictionary();
 			
 			// Determine new styles to apply
 			for (var ruleIndex:int = 0; ruleIndex < rules.length; ++ruleIndex)
@@ -249,43 +274,29 @@ package com.cascade.base.element.base
 					ConfigUtil.apply(newStyles, rule.styles);
 			}
 			
-			// Find and remember/update obsolete styles
+			// Find and remember obsolete styles
 			var obsoleteStyles:Array = new Array();
-			
 			for (var oldStyleName:String in _styles)
 			{
-				var theStyle:ICascadeStyle = newStyles[oldStyleName];
-				var oldAction:ICascadeStyleAction = _actions[oldStyleName];
-				
-				if (!theStyle)
+				updatedStyles[oldStyleName] = true;
+				if (!newStyles[oldStyleName])
 					obsoleteStyles.push(oldStyleName);
-				else
-				{
-					oldAction.style = theStyle;
-					delete newStyles[oldStyleName];
-				}
 			}
 			
 			// Reset obsolete styles
 			for (var obsoleteStyleIndex:int = 0; obsoleteStyleIndex < obsoleteStyles.length; ++obsoleteStyleIndex)
-			{
-				var obsoleteStyleName:String = obsoleteStyles[obsoleteStyleIndex];
-				var obsoleteAction:ICascadeStyleAction = _actions[obsoleteStyleName];
-				obsoleteAction.free();
-				
-				delete _styles [obsoleteStyleName];
-				delete _actions[obsoleteStyleName];
-			}
+				delete _styles[obsoleteStyles[obsoleteStyleIndex]];
 			
-			// Activate new styles
+			// Remember new styles
 			for (var newStyleName:String in newStyles)
 			{
-				var newStyle:ICascadeStyle = newStyles[newStyleName];
-				var newAction:ICascadeStyleAction = newStyle.createAction(this);
-				
-				_styles [newStyleName] = newStyle;
-				_actions[newStyleName] = newAction;
+				updatedStyles[newStyleName] = true;
+				_styles[newStyleName] = newStyles[newStyleName];
 			}
+			
+			// Update actions
+			for (var updatedStyleName:String in updatedStyles)
+				updateStyle(updatedStyleName);
 			
 			// Validate children recursively
 			for (var childIndex:int = 0; childIndex < _children.length; ++childIndex)
@@ -298,6 +309,29 @@ package com.cascade.base.element.base
 		public function toString():String
 		{
 			return (_name || "") + (_statuses.length ? ("." + _statuses.join(".")) : "");
+		}
+		
+		private function updateStyle(styleName:String):void
+		{
+			var newStyle:ICascadeStyle = _customStyles[styleName];
+			if (!newStyle)
+				newStyle = _styles[styleName];
+			
+			var oldAction:ICascadeStyleAction = _actions[styleName];
+			if (!oldAction)
+			{
+				_actions[styleName] = newStyle.createAction(this);
+				return;
+			}
+			
+			if (newStyle)
+			{
+				oldAction.style = newStyle;
+				return;
+			}
+			
+			oldAction.free();
+			delete _actions[styleName];
 		}
 	}
 }

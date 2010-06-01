@@ -2,6 +2,8 @@ package com.cascade.base.selector
 {
 	import com.cascade.base.element.base.ICascadeElement;
 	
+	import mx.utils.StringUtil;
+	
 	import util.ErrorUtil;
 	
 	public class CascadeSelector implements ICascadeSelector
@@ -61,7 +63,7 @@ package com.cascade.base.selector
 			
 			for (var modifierIndex:int = 1; modifierIndex < modifiers.length; ++modifierIndex)
 			{
-				var modifier:String = modifiers[modifierIndex];
+				var modifier:String = StringUtil.trim(modifiers[modifierIndex]);
 				switch (modifier)
 				{
 					case "hover": hover = true; break;

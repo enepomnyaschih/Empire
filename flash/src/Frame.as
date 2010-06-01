@@ -7,6 +7,8 @@ package
 	import com.cascade.base.loader.CascadeLoaderEvent;
 	import com.cascade.base.loader.ICascadeLoader;
 	import com.cascade.mouse.managers.MouseManager;
+	import com.cascade.visual.manager.CascadeVisualManager;
+	import com.cascade.visual.style.CascadeVisualStyle;
 	
 	import empire.game.Game;
 	import empire.game.GameController;
@@ -17,6 +19,7 @@ package
 	import flash.events.EventDispatcher;
 	import flash.net.URLRequest;
 	
+	import mx.containers.Canvas;
 	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.core.UIComponent;
@@ -123,6 +126,8 @@ package
 				ErrorUtil.throwSingletonInstantiated("Frame");
 			
 			_instance = this;
+			
+			CascadeVisualManager.instance;
 			
 			loadCss();
 		}
@@ -238,11 +243,21 @@ package
 			_cssLoader.load(request);
 		}
 		
+//		public var cce:ICascadeElement;
+		
 		private function onCssLoadSuccess(e:CascadeLoaderEvent):void
 		{
 			_permanentCascadeElement	= new CascadeElement(this, "Permanent");
 			_frameCascadeElement		= new CascadeMouseElement(this, "Frame");
 			
+/*			var ccc:Canvas = new Canvas();
+			ccc.width = 100;
+			ccc.height = 100;
+			
+			cce = new CascadeMouseElement(ccc, "ccc");
+			_frameCascadeElement.addChild(cce);
+			addChild(ccc);
+*/			
 			_permanentCascadeElement.isHover = true;
 			_permanentCascadeElement.addChild(_frameCascadeElement);
 			

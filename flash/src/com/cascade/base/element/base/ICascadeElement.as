@@ -1,6 +1,7 @@
 package com.cascade.base.element.base
 {
 	import com.IFreeable;
+	import com.cascade.base.styles.base.ICascadeStyle;
 	
 	import mx.core.UIComponent;
 	
@@ -12,6 +13,10 @@ package com.cascade.base.element.base
 		
 		function get isHover():Boolean;
 		function set isHover(value:Boolean):void;
+		
+		function getCustomStyle(styleName:String):ICascadeStyle;
+		function setCustomStyle(style:ICascadeStyle):void;
+		function resetCustomStyle(styleName:String):void;
 		
 		function getElementsChain():Array;
 		function fillElementsChain(chain:Array):void;

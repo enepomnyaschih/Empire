@@ -85,6 +85,7 @@ package com.cascade.visual.manager
 		private function initStyles():void
 		{
 			var manager:ICascadeStyleFactoryManager = CascadeManager.instance.styleFactoryManager;
+			manager.register(new CascadeVisualStyleFactory("backgroundAlpha",	"backgroundAlpha",	CascadeFloatParser.TYPE));
 			manager.register(new CascadeVisualStyleFactory("backgroundColor",	"backgroundColor",	CascadeColorParser.TYPE));
 			manager.register(new CascadeVisualStyleFactory("baseline",			"baseline",			CascadeFloatParser.TYPE));
 			manager.register(new CascadeVisualStyleFactory("borderColor",		"borderColor",		CascadeColorParser.TYPE));
