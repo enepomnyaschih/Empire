@@ -34,6 +34,8 @@ namespace Echo.Compilation
             operations.Add(new OperationInfo(">=", 3, false));
             operations.Add(new OperationInfo(">", 3, false));
             operations.Add(new OperationInfo("<", 3, false));
+            operations.Add(new OperationInfo("and", 4, false));
+            operations.Add(new OperationInfo("or", 5, false));
         }
 
         public Expression Compile(ArrayList block)
@@ -50,7 +52,7 @@ namespace Echo.Compilation
             stack = new Stack<Lexem>();
             record = new ArrayList();
 
-            stack.Push(new Lexem(Lexem.Types.LBRACKET, "("));
+            stack.Push(new Lexem(Lexem.Types.LBRACKET, "(", 0));
             for (int i = 0; i < block.Count; ++i)
             {
                 Lexem lexem = (Lexem)block[i];
@@ -67,7 +69,7 @@ namespace Echo.Compilation
 
                         OperationInfo op = GetOperation(lexem.Value);
                         if (!op.Unary)
-                            throw new CompilationException("Value, unary operation or left bracket expected.", 0);
+                            throw new CompilationException("Value, unary operation or left bracket expected.", lexem.LineIndex);
 
                         stack.Push(lexem);
                     }
@@ -78,7 +80,7 @@ namespace Echo.Compilation
                     }
                     else
                     {
-                        throw new CompilationException("Value, unary operation or left bracket expected.", 0);
+                        throw new CompilationException("Value, unary operation or left bracket expected.", lexem.LineIndex);
                     }
                 }
                 else
@@ -91,7 +93,7 @@ namespace Echo.Compilation
                     {
                         OperationInfo op = GetOperation(lexem.Value);
                         if (op.Unary)
-                            throw new CompilationException("Binary operation or right bracket expected.", 0);
+                            throw new CompilationException("Binary operation or right bracket expected.", lexem.LineIndex);
 
                         while (true)
                         {
@@ -111,16 +113,17 @@ namespace Echo.Compilation
                     }
                     else
                     {
-                        throw new CompilationException("Binary operation or right bracket expected.", 0);
+                        throw new CompilationException("Binary operation or right bracket expected.", lexem.LineIndex);
                     }
                 }
             }
 
+            if (wasOperator)
+                throw new CompilationException("Value, unary operation or left bracket expected.", ((Lexem)block[0]).LineIndex);
+
             PurgeBracket();
             if (stack.Count != 0)
-                throw new CompilationException("More left brackets then right brackets.", 0);
-
-
+                throw new CompilationException("More left brackets then right brackets.", ((Lexem)block[0]).LineIndex);
         }
 
         private void PurgeBracket()
@@ -134,7 +137,7 @@ namespace Echo.Compilation
         private Lexem PeekStack()
         {
             if (stack.Count == 0)
-                throw new CompilationException("More right brackets then left brackets.", 0);
+                throw new CompilationException("More right brackets then left brackets.", ((Lexem)block[0]).LineIndex);
 
             return stack.Peek();
         }
@@ -152,7 +155,7 @@ namespace Echo.Compilation
                 if (operations[i].Symbol == symbol)
                     return operations[i];
 
-            throw new CompilationException("Unknown operator detected: '" + symbol + "'.", 0);
+            throw new CompilationException("Unknown operator detected: '" + symbol + "'.", ((Lexem)block[0]).LineIndex);
         }
 
         private bool IsValueType(Lexem.Types type)
@@ -209,6 +212,8 @@ namespace Echo.Compilation
                             case ">"        : stack.Push(new MoreExpression         (a, b)); break;
                             case "<="       : stack.Push(new LessOrEqualExpression  (a, b)); break;
                             case ">="       : stack.Push(new MoreOrEqualExpression  (a, b)); break;
+                            case "and"      : stack.Push(new AndExpression          (a, b)); break;
+                            case "or"       : stack.Push(new OrExpression           (a, b)); break;
                         }
                     }
                 }

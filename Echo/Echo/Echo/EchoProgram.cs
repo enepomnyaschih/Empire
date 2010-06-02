@@ -12,6 +12,10 @@ namespace Echo
     {
         static void Main(string[] args)
         {
+            /**
+             * Ниже идет код, аналогичный предоставленной в примере программе.
+             */
+
             /*
             Program program = new Program();
             program.Blocks.Add(new Block(new WriteTextCommand("x=", false), 0));
@@ -58,7 +62,7 @@ namespace Echo
 
             if (args.Length != 1)
             {
-                Console.WriteLine("USAGE: EchoProgram <source_file>");
+                Console.WriteLine("USAGE: Echo <source_file>");
                 return;
             }
 
@@ -70,6 +74,7 @@ namespace Echo
             }
             catch (Exception e)
             {
+                Console.WriteLine();
                 Console.WriteLine(e.Message);
                 return;
             }
@@ -82,10 +87,12 @@ namespace Echo
             }
             catch (CompilationException e)
             {
+                Console.WriteLine();
                 if (e.Line == -1)
                     Console.WriteLine("Compilation error: " + e.Message);
                 else
                     Console.WriteLine("Compilation error, line " + e.Line.ToString() + ": " + e.Message);
+                return;
             }
 
             new Processor().Execute(program);

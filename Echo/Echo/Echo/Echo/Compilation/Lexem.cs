@@ -22,11 +22,13 @@ namespace Echo.Compilation
 
         private Types type;
         private string value;
+        private int lineIndex;
 
-        public Lexem(Types type, string value)
+        public Lexem(Types type, string value, int lineIndex)
         {
             this.type = type;
             this.value = value;
+            this.lineIndex = lineIndex;
         }
 
         public Types Type
@@ -52,6 +54,19 @@ namespace Echo.Compilation
             set
             {
                 this.value = value;
+            }
+        }
+
+        public int LineIndex
+        {
+            get
+            {
+                return lineIndex;
+            }
+
+            set
+            {
+                lineIndex = value;
             }
         }
     }

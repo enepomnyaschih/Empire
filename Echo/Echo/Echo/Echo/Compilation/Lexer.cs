@@ -33,7 +33,7 @@ namespace Echo.Compilation
 
             state = 0;
             start = 0;
-            lineIndex = 0;
+            lineIndex = 1;
             lastOperatorSymbol = (char)0;
 
             for (symbolIndex = 0; symbolIndex < source.Length; ++symbolIndex)
@@ -91,10 +91,16 @@ namespace Echo.Compilation
                 case 1:
                     string s = source.Substring(start, symbolIndex - start);
                     if (s == "and" || s == "or" || s == "not" || s == "round" || s == "trunc")
-                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, s));
+                    {
+                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, s, lineIndex));
+                        break;
+                    }
 
                     if (s == "true" || s == "false")
-                        lexems.Add(new Lexem(Lexem.Types.BOOL, s));
+                    {
+                        lexems.Add(new Lexem(Lexem.Types.BOOL, s, lineIndex));
+                        break;
+                    }
 
                     if (TryParseInt(s))
                         break;
@@ -108,17 +114,17 @@ namespace Echo.Compilation
                     if (IsNumber(s[0]))
                         throw new CompilationException("Identifier can't start from number.", lineIndex);
 
-                    lexems.Add(new Lexem(Lexem.Types.IDENTIFIER, s));
+                    lexems.Add(new Lexem(Lexem.Types.IDENTIFIER, s, lineIndex));
                     break;
 
                 case 2:
                     if (lastOperatorSymbol == ':')
                         throw new CompilationException("'=' expected after ':'", lineIndex);
-                    lexems.Add(new Lexem(Lexem.Types.OPERATOR, lastOperatorSymbol.ToString()));
+                    lexems.Add(new Lexem(Lexem.Types.OPERATOR, lastOperatorSymbol.ToString(), lineIndex));
                     break;
 
                 case 3:
-                    lexems.Add(new Lexem(Lexem.Types.STRING, source.Substring(start + 1, symbolIndex - start - 1)));
+                    lexems.Add(new Lexem(Lexem.Types.STRING, source.Substring(start + 1, symbolIndex - start - 1), lineIndex));
                     break;
             }
 
@@ -134,7 +140,7 @@ namespace Echo.Compilation
                     if (lastOperatorSymbol == '<' && symbol == '>')
                     {
                         lastOperatorSymbol = (char)0;
-                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, "<>"));
+                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, "<>", lineIndex));
                         state = 0;
                         break;
                     }
@@ -142,7 +148,7 @@ namespace Echo.Compilation
                     if (lastOperatorSymbol == '<' && symbol == '=')
                     {
                         lastOperatorSymbol = (char)0;
-                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, "<="));
+                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, "<=", lineIndex));
                         state = 0;
                         break;
                     }
@@ -150,7 +156,7 @@ namespace Echo.Compilation
                     if (lastOperatorSymbol == '>' && symbol == '=')
                     {
                         lastOperatorSymbol = (char)0;
-                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, ">="));
+                        lexems.Add(new Lexem(Lexem.Types.OPERATOR, ">=", lineIndex));
                         state = 0;
                         break;
                     }
@@ -158,7 +164,7 @@ namespace Echo.Compilation
                     if (lastOperatorSymbol == ':' && symbol == '=')
                     {
                         lastOperatorSymbol = (char)0;
-                        lexems.Add(new Lexem(Lexem.Types.ASSIGNMENT, ":="));
+                        lexems.Add(new Lexem(Lexem.Types.ASSIGNMENT, ":=", lineIndex));
                         state = 0;
                         break;
                     }
@@ -183,7 +189,7 @@ namespace Echo.Compilation
                     if (symbol == ')')
                         type = Lexem.Types.RBRACKET;
 
-                    lexems.Add(new Lexem(type, symbol.ToString()));
+                    lexems.Add(new Lexem(type, symbol.ToString(), lineIndex));
 
                     state = 0;
                     break;
@@ -241,8 +247,12 @@ namespace Echo.Compilation
             {
                 return false;
             }
+            catch (OverflowException)
+            {
+                return false;
+            }
 
-            lexems.Add(new Lexem(Lexem.Types.INT, s));
+            lexems.Add(new Lexem(Lexem.Types.INT, s, lineIndex));
             return true;
         }
 
@@ -257,7 +267,7 @@ namespace Echo.Compilation
                 return false;
             }
 
-            lexems.Add(new Lexem(Lexem.Types.REAL, s));
+            lexems.Add(new Lexem(Lexem.Types.REAL, s, lineIndex));
             return true;
         }
     }

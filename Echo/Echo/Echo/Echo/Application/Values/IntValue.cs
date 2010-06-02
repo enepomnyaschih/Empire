@@ -56,14 +56,20 @@ namespace Echo.Application
             switch (y.Type)
             {
                 case IntValue.TYPE:
-                    int yVal = ((IntValue)y).Val;
-                    if (Val % yVal == 0)
-                        return new IntValue(Val / yVal);
+                    int yiVal = ((IntValue)y).Val;
+                    if (yiVal == 0)
+                        throw new CommandRunException("Division by zero.");
+                    else if (Val % yiVal == 0)
+                        return new IntValue(Val / yiVal);
                     else
-                        return new RealValue((double)Val / (double)yVal);
+                        return new RealValue((double)Val / (double)yiVal);
 
                 case RealValue.TYPE:
-                    return new RealValue((double)Val / ((RealValue)y).Val);
+                    double ydVal = ((RealValue)y).Val;
+                    if (ydVal == 0)
+                        throw new CommandRunException("Division by zero.");
+
+                    return new RealValue((double)Val / ydVal);
             }
 
             ThrowBinaryOperationException(y, "/");
@@ -74,7 +80,12 @@ namespace Echo.Application
         {
             switch (y.Type)
             {
-                case IntValue.TYPE: return new IntValue(Val % ((IntValue)y).Val);
+                case IntValue.TYPE:
+                    int yVal = ((IntValue)y).Val;
+                    if (yVal == 0)
+                        throw new CommandRunException("Division by zero.");
+
+                    return new IntValue(Val % yVal);
             }
 
             ThrowBinaryOperationException(y, "%");

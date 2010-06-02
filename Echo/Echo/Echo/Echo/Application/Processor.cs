@@ -103,6 +103,10 @@ namespace Echo.Application
             {
                 return null;
             }
+            catch (OverflowException)
+            {
+                return null;
+            }
 
             return new IntValue(value);
         }
@@ -131,6 +135,7 @@ namespace Echo.Application
             }
             catch (CommandRunException e)
             {
+                Console.WriteLine();
                 Console.WriteLine("Runtime error, line " + Block.LineIndex.ToString() + ": " + e.Message);
             }
         }

@@ -10,12 +10,21 @@ namespace Echo.Compilation
     {
         public Program Compile(string source)
         {
+            /*
             Console.WriteLine(source);
             Console.WriteLine("----");
+             */
+
             string preCompiledSource    = new PreCompiler() .Compile(source);
+
+            /*
             Console.WriteLine(preCompiledSource);
             Console.WriteLine("----");
+             */
+
             ArrayList lexems            = new Lexer()       .Compile(preCompiledSource);
+
+            /*
             for (int i = 0; i < lexems.Count; ++i)
             {
                 Lexem lexem = (Lexem)lexems[i];
@@ -35,6 +44,8 @@ namespace Echo.Compilation
 
                 Console.WriteLine(lexem.Value);
             }
+             */
+
             return new Builder().Compile(lexems);
         }
     }

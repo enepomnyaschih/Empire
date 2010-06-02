@@ -21,10 +21,10 @@ namespace Echo.Compilation
             blocks = SplitBySemicolon(lexems);
             for (blockIndex = 0; blockIndex < blocks.Count; ++blockIndex)
             {
-                Command command = BuildBlock((ArrayList)blocks[blockIndex]);
-                // TODO: номера строчек в программе
+                ArrayList block = (ArrayList)blocks[blockIndex];
+                Command command = BuildBlock(block);
                 if (null != command)
-                    program.Blocks.Add(new Block(command, 0));
+                    program.Blocks.Add(new Block(command, ((Lexem)block[0]).LineIndex));
             }
 
             return program;
@@ -50,6 +50,9 @@ namespace Echo.Compilation
                 result.Add(ArrayListUtil.Sub(lexems, from, index - from));
                 from = index + 1;
             }
+
+            if (from != lexems.Count)
+                throw new CompilationException("Unexpected and of file.", -1);
 
             return result;
         }
@@ -81,8 +84,7 @@ namespace Echo.Compilation
             if (null != result)
                 return result;
 
-            // TODO: номера строчек ошибок семантической компиляции
-            throw new CompilationException("Can't understand what the instruction means.", -1);
+            throw new CompilationException("Can't understand what the instruction means.", GetLexem(block, 0).LineIndex);
         }
 
         private Command BuildBlockIf(ArrayList block)
@@ -100,7 +102,7 @@ namespace Echo.Compilation
             }
 
             if (thenIndex == block.Count)
-                throw new CompilationException("'then' expected.", 0);
+                throw new CompilationException("'then' expected.", GetLexem(block, 0).LineIndex);
 
             Expression expression = BuildExpression(ArrayListUtil.Sub(block, 1, thenIndex - 1));
             Command thenCommand = BuildBlock(ArrayListUtil.Sub(block, thenIndex + 1, block.Count - thenIndex - 1));
@@ -128,11 +130,11 @@ namespace Echo.Compilation
 
             if (GetLexem(block, 1).Type != Lexem.Types.LBRACKET ||
                 GetLexem(block, 1).Value != "(")
-                throw new CompilationException("'(' expected.", 0);
+                throw new CompilationException("'(' expected.", GetLexem(block, 0).LineIndex);
 
             if (GetLexem(block, block.Count - 1).Type != Lexem.Types.RBRACKET ||
                 GetLexem(block, block.Count - 1).Value != ")")
-                throw new CompilationException("')' expected.", 0);
+                throw new CompilationException("')' expected.", GetLexem(block, 0).LineIndex);
 
             if (block.Count == 4 && GetLexem(block, 2).Type == Lexem.Types.STRING)
                 return new WriteTextCommand(GetLexem(block, 2).Value, breakLine);
@@ -148,15 +150,15 @@ namespace Echo.Compilation
 
             if (GetLexem(block, 1).Type != Lexem.Types.LBRACKET ||
                 GetLexem(block, 1).Value != "(")
-                throw new CompilationException("'(' expected.", 0);
+                throw new CompilationException("'(' expected.", GetLexem(block, 0).LineIndex);
 
             if (GetLexem(block, block.Count - 1).Type != Lexem.Types.RBRACKET ||
                 GetLexem(block, block.Count - 1).Value != ")")
-                throw new CompilationException("')' expected.", 0);
+                throw new CompilationException("')' expected.", GetLexem(block, 0).LineIndex);
 
             if (block.Count != 4 ||
                 GetLexem(block, 2).Type != Lexem.Types.IDENTIFIER)
-                throw new CompilationException("Identifier expected.", 0);
+                throw new CompilationException("Identifier expected.", GetLexem(block, 0).LineIndex);
 
             return new ReadCommand(GetLexem(block, 2).Value);
         }
@@ -168,7 +170,7 @@ namespace Echo.Compilation
 
             if (GetLexem(block, 1).Type != Lexem.Types.ASSIGNMENT ||
                 GetLexem(block, 1).Value != ":=")
-                throw new CompilationException("':=' expected.", 0);
+                throw new CompilationException("':=' expected.", GetLexem(block, 0).LineIndex);
 
             return new AssignmentCommand(GetLexem(block, 0).Value, BuildExpression(ArrayListUtil.Sub(block, 2, block.Count - 2)));
         }
@@ -181,7 +183,7 @@ namespace Echo.Compilation
         private Lexem GetLexem(ArrayList block, int index)
         {
             if (index >= block.Count)
-                return new Lexem(Lexem.Types.SEMICOLON, ";");
+                return new Lexem(Lexem.Types.SEMICOLON, ";", 0);
 
             return (Lexem)block[index];
         }

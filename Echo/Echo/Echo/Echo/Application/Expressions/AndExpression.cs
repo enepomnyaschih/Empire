@@ -9,6 +9,12 @@ namespace Echo.Application
         private Expression x;
         private Expression y;
 
+        public AndExpression(Expression x, Expression y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
         public Expression X
         {
             get

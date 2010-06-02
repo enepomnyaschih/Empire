@@ -8,7 +8,6 @@ namespace Echo.Compilation
     {
         public string Compile(string source)
         {
-            // TODO: учитывать переносы строк в комментариях
             StringBuilder builder = new StringBuilder();
             int from = 0;
             while (true)
