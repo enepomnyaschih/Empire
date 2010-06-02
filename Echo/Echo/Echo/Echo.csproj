@@ -1,0 +1,112 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2FE45CDC-E74E-42AB-84A2-5997B2CFC3C3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Echo</RootNamespace>
+    <AssemblyName>Echo</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Com\ITyped.cs" />
+    <Compile Include="Echo\Application\Program.cs" />
+    <Compile Include="Echo\Application\ArithmeticOperations\DivideOperation.cs" />
+    <Compile Include="Echo\Application\Commands\AssignmentCommand.cs" />
+    <Compile Include="Echo\Application\Commands\Command.cs" />
+    <Compile Include="Echo\Application\Commands\ConditionCommand.cs" />
+    <Compile Include="Echo\Application\Commands\ReadCommand.cs" />
+    <Compile Include="Echo\Application\Commands\WriteCommand.cs" />
+    <Compile Include="Echo\Application\Commands\WriteExpressionCommand.cs" />
+    <Compile Include="Echo\Application\Commands\WriteTextCommand.cs" />
+    <Compile Include="Echo\Application\ComparingOperations\ComparingOperation.cs" />
+    <Compile Include="Echo\Application\ComparingOperations\EqualOperation.cs" />
+    <Compile Include="Echo\Application\ComparingOperations\NotEqualOperation.cs" />
+    <Compile Include="Echo\Application\CommandRunException.cs" />
+    <Compile Include="Echo\Application\Expressions\AndExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\BackExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\DivExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\EqualExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\Expression.cs" />
+    <Compile Include="Echo\Application\Expressions\LessExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\LessOrEqualExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\MinusExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\ModExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\MoreExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\MoreOrEqualExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\MultExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\NotEqualExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\NotExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\OrExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\PlusExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\RoundExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\TruncExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\ValueExpression.cs" />
+    <Compile Include="Echo\Application\Expressions\VarExpression.cs" />
+    <Compile Include="Echo\Application\ArithmeticOperations\MinusOperation.cs" />
+    <Compile Include="Echo\Application\ArithmeticOperations\MultOperation.cs" />
+    <Compile Include="Echo\Application\ArithmeticOperations\ArithmeticOperation.cs" />
+    <Compile Include="Echo\Application\ArithmeticOperations\PlusOperation.cs" />
+    <Compile Include="Echo\Application\Block.cs" />
+    <Compile Include="Echo\Application\LogicalOperations\AndOperation.cs" />
+    <Compile Include="Echo\Application\LogicalOperations\LogicalOperation.cs" />
+    <Compile Include="Echo\Application\LogicalOperations\OrOperation.cs" />
+    <Compile Include="Echo\Application\Operation.cs" />
+    <Compile Include="Echo\Application\OrderingOperations\LessOperation.cs" />
+    <Compile Include="Echo\Application\OrderingOperations\LessOrEqualOperation.cs" />
+    <Compile Include="Echo\Application\OrderingOperations\MoreOperation.cs" />
+    <Compile Include="Echo\Application\OrderingOperations\MoreOrEqualOperation.cs" />
+    <Compile Include="Echo\Application\OrderingOperations\OrderingOperation.cs" />
+    <Compile Include="Echo\Application\Processor.cs" />
+    <Compile Include="Echo\Application\Values\BoolValue.cs" />
+    <Compile Include="Echo\Application\Values\IntValue.cs" />
+    <Compile Include="Echo\Application\Values\RealValue.cs" />
+    <Compile Include="Echo\Application\Values\Value.cs" />
+    <Compile Include="Echo\Compilation\Builder.cs" />
+    <Compile Include="Echo\Compilation\Calculator.cs" />
+    <Compile Include="Echo\Compilation\CompilationException.cs" />
+    <Compile Include="Echo\Compilation\Compiler.cs" />
+    <Compile Include="EchoProgram.cs" />
+    <Compile Include="Echo\Compilation\Lexem.cs" />
+    <Compile Include="Echo\Compilation\Lexer.cs" />
+    <Compile Include="Echo\Compilation\OperationInfo.cs" />
+    <Compile Include="Echo\Compilation\PreCompiler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\ArrayListUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="input.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
