@@ -19,6 +19,17 @@ namespace Echo.Compilation
                 builder.Append(source.Substring(from, index - from));
                 builder.Append(" ");
                 from = source.IndexOf('}', index) + 1;
+
+                int lineBreakIndex = index;
+                while (true)
+                {
+                    lineBreakIndex = source.IndexOf('\n', lineBreakIndex + 1);
+                    if (lineBreakIndex == -1 || lineBreakIndex >= from)
+                        break;
+
+                    builder.Append("\n");
+                }
+
                 if (from == 0)
                     throw new CompilationException("Unclosed comment detected.", -1);
             }
