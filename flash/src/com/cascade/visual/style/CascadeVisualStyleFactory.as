@@ -28,14 +28,14 @@ package com.cascade.visual.style
 			return _flexStyleName;
 		}
 		
-		override public function get styleCls():Class
+		override public function get cls():Class
 		{
 			return CascadeVisualStyle;
 		}
 		
 		override public function createStyle(source:String):ICascadeStyle
 		{
-			return new styleCls(_styleName, _flexStyleName, parser.parse(source));
+			return new cls(_styleName, _flexStyleName, parser.parse(source));
 		}
 		
 		override protected function get parserType():String

@@ -23,7 +23,6 @@ package empire.province
 			if (!_target)
 				return;
 			
-			_target.isBlick = true;
 			_target.addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 		}
 		
@@ -32,7 +31,6 @@ package empire.province
 			if (!_target)
 				return;
 			
-			_target.isBlick = false;
 			_target.removeEventListener(MouseEvent.CLICK, onClick);
 		}
 		

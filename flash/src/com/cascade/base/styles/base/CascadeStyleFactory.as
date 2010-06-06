@@ -18,14 +18,9 @@ package com.cascade.base.styles.base
 			return CascadeManager.instance.parserManager.getParser(parserType);
 		}
 		
-		virtual public function get styleCls():Class
-		{
-			return ErrorUtil.throwMustOverride();
-		}
-		
 		public function createStyle(source:String):ICascadeStyle
 		{
-			return new styleCls(parser.parse(source));
+			return new cls(parser.parse(source));
 		}
 		
 		virtual protected function get parserType():String

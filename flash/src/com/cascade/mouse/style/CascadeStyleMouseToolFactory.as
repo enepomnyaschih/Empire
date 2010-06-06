@@ -10,7 +10,7 @@ package com.cascade.mouse.style
 			return CascadeStyleMouseTool.STYLE_NAME;
 		}
 		
-		override public function get styleCls():Class
+		override public function get cls():Class
 		{
 			return CascadeStyleMouseTool;
 		}

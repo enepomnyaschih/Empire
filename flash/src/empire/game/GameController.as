@@ -359,7 +359,6 @@ package empire.game
 				if (neighbourIndex == neighbours.length ||
 					neighbours[neighbourIndex] != i)
 				{
-					provinceController.provinceView.darken = true;
 					provinceController.provinceView.cascadeElement.addStatus("far");
 				}
 				else
@@ -375,7 +374,6 @@ package empire.game
 			for (var i:int = 0; i < _mapController.provinceControllers.length; ++i)
 			{
 				var provinceController:ProvinceController = _mapController.provinceControllers.getProvinceControllerAt(i);
-				provinceController.provinceView.darken = false;
 				provinceController.provinceView.cascadeElement.removeStatus("near");
 				provinceController.provinceView.cascadeElement.removeStatus("far");
 			}

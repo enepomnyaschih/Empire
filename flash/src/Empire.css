@@ -7,15 +7,10 @@ Permanent.select Province.own:hover,
 Permanent.move Province.near:hover
 {
 	mouseTool: ProvinceSelect 1p;
+	blinkEffect: true;
 }
 
-ccc
+Province.far
 {
-	backgroundColor: #00FF00;
-	backgroundAlpha: 0.5;
-}
-
-ccc:hover
-{
-	backgroundAlpha: 1.0;
+	darkenEffect: true;
 }

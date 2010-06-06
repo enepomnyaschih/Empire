@@ -7,6 +7,8 @@ package empire.province
 	
 	import empire.army.ArmyBoardView;
 	import empire.army.ProvinceBoardView;
+	import empire.effects.blink.IBlinkable;
+	import empire.effects.darken.IDarkenable;
 	import empire.game.Game;
 	import empire.game.GameUtil;
 	import empire.map.Map;
@@ -21,7 +23,7 @@ package empire.province
 	import util.Dir6;
 	import util.GraphicsUtil;
 
-	public class ProvinceView extends View
+	public class ProvinceView extends View implements IBlinkable, IDarkenable
 	{
 		private static const MAX_TRANSITION_PROGRESS:int = 50;
 		private static const MAX_BLICK:int = 20;
@@ -138,12 +140,12 @@ package empire.province
 		}
 		
 		[Bindable]
-		public function get darken():Boolean
+		public function get isDarken():Boolean
 		{
 			return _darken;
 		}
 		
-		public function set darken(value:Boolean):void
+		public function set isDarken(value:Boolean):void
 		{
 			_darken = value;
 		}

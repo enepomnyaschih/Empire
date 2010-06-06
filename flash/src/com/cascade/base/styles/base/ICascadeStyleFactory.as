@@ -8,8 +8,6 @@ package com.cascade.base.styles.base
 		function get styleName():String;
 		function get parser():ICascadeParser;
 		
-		function get styleCls():Class;
-		
 		function createStyle(source:String):ICascadeStyle;
 	}
 }

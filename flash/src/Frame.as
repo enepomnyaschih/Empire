@@ -6,10 +6,14 @@ package
 	import com.cascade.base.loader.CascadeLoader;
 	import com.cascade.base.loader.CascadeLoaderEvent;
 	import com.cascade.base.loader.ICascadeLoader;
+	import com.cascade.base.managers.CascadeManager;
 	import com.cascade.mouse.managers.MouseManager;
 	import com.cascade.visual.manager.CascadeVisualManager;
-	import com.cascade.visual.style.CascadeVisualStyle;
 	
+	import empire.effects.blink.BlinkEffectActionFactory;
+	import empire.effects.blink.BlinkEffectStyleFactory;
+	import empire.effects.darken.DarkenEffectActionFactory;
+	import empire.effects.darken.DarkenEffectStyleFactory;
 	import empire.game.Game;
 	import empire.game.GameController;
 	import empire.province.ProvinceDeselectMouseToolFactory;
@@ -19,7 +23,6 @@ package
 	import flash.events.EventDispatcher;
 	import flash.net.URLRequest;
 	
-	import mx.containers.Canvas;
 	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.core.UIComponent;
@@ -127,8 +130,8 @@ package
 			
 			_instance = this;
 			
-			CascadeVisualManager.instance;
-			
+			initMouse();
+			initCss();
 			loadCss();
 		}
 		
@@ -230,10 +233,25 @@ package
 			return result;
 		}
 		
+		private function initMouse():void
+		{
+			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceSelectMouseToolFactory());
+			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceDeselectMouseToolFactory());
+		}
+		
+		private function initCss():void
+		{
+			CascadeVisualManager.instance;
+			
+			CascadeManager.instance.actionFactoryManager.register(new BlinkEffectActionFactory());
+			CascadeManager.instance.styleFactoryManager .register(new BlinkEffectStyleFactory());
+			
+			CascadeManager.instance.actionFactoryManager.register(new DarkenEffectActionFactory());
+			CascadeManager.instance.styleFactoryManager .register(new DarkenEffectStyleFactory());
+		}
+		
 		private function loadCss():void
 		{
-			initMouse();
-			
 			var request:URLRequest = new URLRequest("Empire.css");
 			request.method = "GET";
 			
@@ -281,12 +299,6 @@ package
 		private function onCssLoadFailure(e:CascadeLoaderEvent):void
 		{
 			Alert.show(e.message);
-		}
-		
-		private function initMouse():void
-		{
-			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceSelectMouseToolFactory());
-			MouseManager.instance.mouseToolFactoryManager.register(new ProvinceDeselectMouseToolFactory());
 		}
 		
 		private function onAppResize(e:ResizeEvent):void
